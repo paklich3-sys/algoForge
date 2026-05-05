@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Host: algoforge.ru
+Sitemap: https://algoforge.ru/sitemap.xml

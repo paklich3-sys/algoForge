@@ -4,10 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Автоматизация для трейдинга и бизнеса: криптоботы, API, десктоп, веб и мобильные приложения под ключ. Связь через Telegram.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://unpkg.com; connect-src 'self' https:; frame-src 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=()">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="canonical" href="https://algoforge.ru/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AlgoForge — Алгоритмы. Боты. Софт. Сайты.">
+    <meta property="og:description" content="Автоматизация для трейдинга и бизнеса: криптоботы, API, десктоп, веб и мобильные приложения под ключ.">
+    <meta property="og:url" content="https://algoforge.ru/">
+    <meta property="og:site_name" content="AlgoForge">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AlgoForge — Алгоритмы. Боты. Софт. Сайты.">
+    <meta name="twitter:description" content="Автоматизация для трейдинга и бизнеса: криптоботы, API, десктоп, веб и мобильные приложения под ключ.">
+    <meta name="twitter:image" content="https://algoforge.ru/favicon.png?v=4">
     <meta name="theme-color" content="#0d0d12">
     <link rel="icon" href="favicon.png?v=4" type="image/png">
     <link rel="apple-touch-icon" href="favicon.png?v=4">
     <title>AlgoForge — Алгоритмы. Боты. Софт. Сайты.</title>
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "AlgoForge",
+            "url": "https://algoforge.ru/",
+            "logo": "https://algoforge.ru/logo-v3.png?v=1",
+            "sameAs": [
+                "https://t.me/Algo_Forge_S"
+            ]
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -760,7 +788,7 @@
 
                     <form id="contact-form" class="max-w-lg mx-auto space-y-4 mb-8">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input id="contact-name" name="name" type="text" required placeholder="Имя" data-i18n-attr-placeholder="form.name" autocomplete="name" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm">
+                            <input id="contact-name" name="name" type="text" required maxlength="80" placeholder="Имя" data-i18n-attr-placeholder="form.name" autocomplete="name" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm">
                             <input id="contact-telegram" name="clientTelegram" type="text" required maxlength="33" minlength="5" autocomplete="off" placeholder="Ваш Telegram (@username)" data-i18n-attr-placeholder="form.tg" title="Латиница, 5–32 символа, с @ или без" data-i18n-attr-title="form.tg_title" pattern="^@?[a-zA-Z][a-zA-Z0-9_]{4,31}$" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm font-mono">
                         </div>
                         <div class="relative z-20" id="custom-type-root">
@@ -779,7 +807,7 @@
                                 <button type="button" data-i18n="form.type.other" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="other" role="option">Другое</button>
                             </div>
                         </div>
-                        <textarea id="contact-message" name="message" required minlength="10" placeholder="Опишите ваш проект..." data-i18n-attr-placeholder="form.message" rows="4" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors resize-none text-sm"></textarea>
+                        <textarea id="contact-message" name="message" required minlength="10" maxlength="2000" placeholder="Опишите ваш проект..." data-i18n-attr-placeholder="form.message" rows="4" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors resize-none text-sm"></textarea>
                         <button type="submit" class="w-full px-8 py-4 rounded-xl bg-gradient-to-r from-neon-green to-accent-400 text-black font-bold text-base hover:shadow-2xl hover:shadow-neon-green/20 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
                             <span data-i18n="form.submit">Отправить заявку</span>
                             <i data-lucide="send" class="w-5 h-5"></i>

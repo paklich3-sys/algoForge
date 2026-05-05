@@ -23,6 +23,24 @@ function normalizeTelegramUser(raw) {
     return String(raw).trim().replace(/^@+/, '');
 }
 
+function normalizeEmail(raw) {
+    const mail = (raw || '').trim();
+    if (!mail) return '';
+    // Simple safe check for mailto link rendering.
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? mail : '';
+}
+
+function sanitizeHttpUrl(raw) {
+    if (!raw) return '';
+    try {
+        const url = new URL(String(raw).trim());
+        if (url.protocol !== 'https:' && url.protocol !== 'http:') return '';
+        return url.toString();
+    } catch (e) {
+        return '';
+    }
+}
+
 const I18N = {
     ru: {
         titleSuffix: 'Алгоритмы. Боты. Софт. Сайты.',
@@ -373,7 +391,7 @@ function applyLanguage(lang) {
 function applySiteConfig() {
     const c = getSiteConfig();
     const tg = normalizeTelegramUser(c.telegramUsername);
-    const mail = (c.email || '').trim();
+    const mail = normalizeEmail(c.email);
     const tgUrl = tg ? 'https://t.me/' + tg : '#';
 
     document.title = getLocalizedTitle(c.brandName);
@@ -405,7 +423,7 @@ function applySiteConfig() {
         el.href = tgUrl;
     });
 
-    const gh = (c.githubUrl || '').trim();
+    const gh = sanitizeHttpUrl(c.githubUrl);
     const ghLine = document.querySelector('[data-site-github-line]');
     const ghFooterA = document.querySelector('[data-site-github-link-footer]');
     const ghSocial = document.querySelector('[data-site-social-github]');
