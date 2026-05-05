@@ -23,13 +23,360 @@ function normalizeTelegramUser(raw) {
     return String(raw).trim().replace(/^@+/, '');
 }
 
+const I18N = {
+    ru: {
+        titleSuffix: 'Алгоритмы. Боты. Софт. Сайты.',
+        telegramLabel: 'Telegram',
+        langButton: 'EN',
+        langAriaSwitch: 'Переключить язык на английский',
+        navAriaLogo: 'AlgoForge — на главную',
+
+        'nav.services': 'Услуги',
+        'nav.about': 'О нас',
+        'nav.process': 'Процесс',
+        'nav.tech': 'Технологии',
+        'nav.portfolio': 'Портфолио',
+        'nav.faq': 'FAQ',
+        'nav.contact': 'Связаться',
+
+        'hero.badge': 'Принимаем новые проекты',
+        'hero.title': 'Автоматизация, которая делает <span class="gradient-text glow-green">деньги</span>.<span class="block mt-1 sm:mt-2">От криптоботов до энтерпрайза.</span>',
+        'hero.aria': 'Автоматизация, которая делает деньги. От криптоботов до энтерпрайза.',
+        'hero.lead': 'Разрабатываем инфраструктуру для трейдинга и бизнеса. API-интеграции, десктоп, веб и мобильные приложения под ключ. Чистый код и математическая точность в каждом алгоритме.',
+        'hero.cta_primary': 'Начать проект',
+        'hero.cta_secondary': 'Наши услуги',
+        'hero.scroll': 'scroll',
+
+        'services.badge': 'УСЛУГИ',
+        'services.title': 'Что мы <span class="gradient-text">создаём</span>',
+        'services.subtitle': 'Полный спектр разработки — от архитектуры до релиза на серверах',
+        'services.s1.title': 'Торговые алгоритмы',
+        'services.s1.desc': 'Разработка HFT и алгоритмических торговых систем для криптобирж и традиционных рынков. Выстраивание логики исполнения ордеров, внедрение риск-менеджмента и деплой.',
+        'services.s2.title': 'Торговые боты',
+        'services.s2.desc': 'Автоматизация торговых процессов: арбитражные, маркетмейкерские, DCA и Grid-боты. Роботы работают 24/7, обеспечивая миллисекундную реакцию на изменения рынка без эмоций и ошибок.',
+        'services.s3.title': 'API интеграции',
+        'services.s3.desc': 'Подключение к любым биржам, торговым площадкам и сервисам. Обеспечиваем бесперебойный потоковый обмен данными. Binance, Bybit, OKX и десятки других API.',
+        'services.s4.title': 'Десктопный софт',
+        'services.s4.desc': 'Отказоустойчивые приложения для Windows и Linux. Торговые терминалы, дашборды, аналитические инструменты и утилиты, способные обрабатывать реал-тайм данные без фризов.',
+        'services.s5.title': 'Веб-разработка',
+        'services.s5.desc': 'Landing pages, корпоративные сайты, SaaS-платформы и сложные дашборды. Современный стек, микросервисная архитектура и готовность к высоким нагрузкам.',
+        'services.s6.title': 'Мобильные приложения',
+        'services.s6.desc': 'Разработка нативных и кроссплатформенных приложений для Android. Финтех-инструменты, трейдинг и управление бизнес-процессами прямо в телефоне.',
+
+        'about.badge': 'О КОМПАНИИ',
+        'about.title': 'Мы — <span class="gradient-text">команда</span>, которой доверяют',
+        'about.lead': 'AlgoForge — команда инженеров и продуктовых специалистов с профильным опытом в FinTech и разработке софта. Мы не просто пишем код, а проектируем надежную архитектуру под конкретную бизнес-задачу.',
+        'about.desc': 'Каждый проект начинается с анализа логики и требований. Мы глубоко погружаемся в вашу предметную область, продумываем технические решения и только потом приступаем к реализации. Результат — стабильный продукт, готовый к работе.',
+        'about.tag1': 'NDA защита',
+        'about.tag2': 'точные сроки',
+        'about.tag3': '24/7 поддержка',
+        'about.stat_projects': 'ПРОЕКТОВ',
+        'about.stat_years': 'ЛЕТ ОПЫТА',
+        'about.stat_engineers': 'ИНЖЕНЕРОВ',
+        'about.stat_uptime': 'UPTIME',
+
+        'process.badge': 'ПРОЦЕСС',
+        'process.title': 'Как мы <span class="gradient-text">работаем</span>',
+        'process.subtitle': 'Системный подход и прозрачный трекинг на каждом этапе',
+        'process.p1.title': 'Аналитика и требования',
+        'process.p1.desc': 'Изучаем бизнес-задачи и технические ограничения. Составляем подробное техническое задание без «слепых зон» и подбираем оптимальный стек технологий.',
+        'process.p2.title': 'Проектирование и дизайн',
+        'process.p2.desc': 'Создаём архитектуру будущего решения. Для визуальных продуктов — отрисовываем UI/UX прототипы. Вы утверждаете логику и внешний вид до старта разработки.',
+        'process.p3.title': 'Разработка и код-ревью',
+        'process.p3.desc': 'Работаем спринтами с регулярными демо-релизами. Практикуем строгий код-ревью, модульное тестирование и стандарты чистого кода для обеспечения стабильности системы.',
+        'process.p4.title': 'Запуск и поддержка',
+        'process.p4.desc': 'Разворачиваем продукт на серверах, настраиваем CI/CD и мониторинг. После релиза обеспечиваем техническую поддержку, быстрые фиксы и дальнейшее масштабирование.',
+
+        'tech.badge': 'ТЕХНОЛОГИИ',
+        'tech.title': 'Наш <span class="gradient-text">стек</span>',
+        'tech.subtitle': 'Используем лучшие инструменты для каждой задачи',
+
+        'portfolio.badge': 'ПОРТФОЛИО',
+        'portfolio.title': 'Наши <span class="gradient-text">проекты</span>',
+        'portfolio.subtitle': 'Описания ориентированы на реальные услуги — детали и масштаб обсудим под ваш запрос',
+        'portfolio.p1.alt': 'QuantTerminal Pro — торговый терминал',
+        'portfolio.p1.desc': 'Десктопный торговый терминал (Windows/Linux) с визуализацией ордербука и интеграцией 15+ бирж через единый API на базе WebSockets.',
+        'portfolio.p2.alt': 'ArbitrageX Bot — панель мониторинга',
+        'portfolio.p2.desc': 'Кросс-биржевой арбитражный бот с latency &lt; 50ms. Интеллектуальный обход rate-лимитов и жесткая система риск-менеджмента для контроля проскальзываний.',
+        'portfolio.p3.alt': 'CryptoAnalytics SaaS — дашборд аналитики',
+        'portfolio.p3.desc': 'Аналитическая платформа с real-time дашбордами и обработкой потоковых данных для сотен одновременных подключений.',
+        'portfolio.p4.alt': 'TradeFlow — мобильное приложение для портфеля и торговли',
+        'portfolio.p4.desc': 'Мобильное Android-приложение для управления портфелем. Быстрый доступ к торгам, мониторинг позиций и push-уведомления об исполнении ордеров.',
+
+        'contact.badge': 'НАЧАТЬ ПРОЕКТ',
+        'contact.title': 'Готовы <span class="gradient-text">создать</span>?',
+        'contact.lead': 'Расскажите о вашем проекте — мы подготовим оценку и предложение в течение 24 часов',
+        'form.name': 'Имя',
+        'form.tg': 'Ваш Telegram (@username)',
+        'form.tg_title': 'Латиница, 5–32 символа, с @ или без',
+        'form.message': 'Опишите ваш проект...',
+        'form.submit': 'Отправить заявку',
+        'form.type': 'Тип проекта',
+        'form.type.algo': 'Торговый алгоритм',
+        'form.type.bot': 'Торговый бот',
+        'form.type.api': 'API интеграция',
+        'form.type.desktop': 'Десктопное приложение',
+        'form.type.web': 'Веб-разработка',
+        'form.type.mobile': 'Мобильное приложение',
+        'form.type.other': 'Другое',
+
+        'faq.badge': 'FAQ',
+        'faq.title': 'Вы спрашиваете — <span class="gradient-text">мы отвечаем</span>',
+        'faq.subtitle': 'Коротко о праве на код, платформах, безопасности ключей и том, как мы подключаемся к биржам.',
+        'faq.q1': 'Кому принадлежит исходный код после разработки?',
+        'faq.a1': 'После полной оплаты проекта вы получаете все права на интеллектуальную собственность и исходный код. Мы работаем по договору и подписываем NDA — ваша торговая логика остаётся только вашей.',
+        'faq.q2': 'На каких операционных системах работает ваш софт?',
+        'faq.a2': 'Мы специализируемся на высокопроизводительных решениях для <strong class="text-gray-300 font-medium">Windows</strong> и <strong class="text-gray-300 font-medium">Linux</strong>. Также разрабатываем мобильные терминалы и системы управления для <strong class="text-gray-300 font-medium">Android</strong>.',
+        'faq.q3': 'Как обстоит дело с безопасностью моих API-ключей?',
+        'faq.a3': 'Мы проектируем системы так, чтобы у нас не было доступа к вашим средствам. Софт устанавливается на ваш сервер. В API-ключах вы настраиваете доступ только на «Торговлю», блокируя возможность «Вывода средств».',
+        'faq.q4': 'Какие протоколы вы используете для подключения к биржам?',
+        'faq.a4': 'Мы не используем медленный REST для высокочастотных задач. Только WebSockets, gRPC и FIX API для обеспечения минимального пинга и мгновенного исполнения ордеров.',
+        'faq.q5': 'Вы предоставляете готовые стратегии?',
+        'faq.a5': 'Нет, мы — инженеры: превращаем вашу уникальную логику или бизнес-задачу в устойчивый программный код. Мы не занимаемся прогнозированием рынка за вас, но при необходимости можем направить в нужное русло.',
+
+        'footer.brand_desc': 'Создаём технологии, которые работают на вас. Торговые алгоритмы, боты, софт и приложения под ключ.',
+        'footer.col_services': 'Услуги',
+        'footer.col_dev': 'Разработка',
+        'footer.col_contacts': 'Контакты',
+        'footer.link.algos': 'Торговые алгоритмы',
+        'footer.link.bots': 'Торговые боты',
+        'footer.link.api': 'API интеграции',
+        'footer.link.desktop': 'Десктопный софт',
+        'footer.link.web': 'Веб-сайты',
+        'footer.link.mobile': 'Мобильные приложения',
+        'footer.link.tech': 'Технологии',
+        'footer.link.process': 'Как мы работаем',
+        'footer.link.faq': 'FAQ',
+        'footer.legal_title': 'Юридическая информация и уведомление о рисках',
+        'footer.legal_p1': '<strong class="text-gray-500">Отказ от ответственности.</strong> Проект AlgoForge занимается исключительно разработкой программного обеспечения на заказ. Мы не являемся финансовыми консультантами, не предоставляем инвестиционные рекомендации и не управляем активами пользователей.',
+        'footer.legal_p2': '<strong class="text-gray-500">Риски.</strong> Торговля на финансовых и криптовалютных рынках сопряжена с высоким риском полной или частичной потери денежных средств. Любые алгоритмы, боты и стратегии являются инструментами автоматизации и не гарантируют получение прибыли в будущем. Результаты, продемонстрированные в кейсах, являются субъективными и не являются обещанием аналогичной доходности.',
+        'footer.legal_p3': '<strong class="text-gray-500">Использование сервиса.</strong> Весь контент на сайте носит информационно-образовательный характер. Пользователь самостоятельно принимает решения о запуске торговых систем и несёт полную ответственность за любые финансовые результаты. Мы не принимаем денежные средства для торговли и не предлагаем финансовые продукты.',
+        'footer.copy_rights': 'Все права защищены.',
+
+        'modal.title': 'Сообщение',
+        'modal.ok': 'Понятно',
+        modalSelectProjectType: 'Выберите тип проекта в списке.',
+        modalInvalidTelegram: 'В поле Telegram укажите корректный username: латиница, 5–32 символа, как в ссылке t.me/username (можно с @ или без).',
+        modalConfigTelegram: 'Внизу файла index.html найдите блок window.SITE_CONFIG и укажите telegramUsername — ваш логин в Telegram без символа @ (как в ссылке t.me/username).',
+        modalTooLong: 'Текст слишком длинный для одной ссылки Telegram. Сократите описание проекта.',
+        requestTitle: 'Заявка с сайта',
+        requestName: 'Имя',
+        requestClientTelegram: 'Telegram клиента',
+        requestProjectType: 'Тип проекта',
+        submitOpening: 'Открываем Telegram…',
+        submitDone: 'Готово — проверьте Telegram',
+    },
+    en: {
+        titleSuffix: 'Algorithms. Bots. Software. Websites.',
+        telegramLabel: 'Telegram',
+        langButton: 'RU',
+        langAriaSwitch: 'Switch language to Russian',
+        navAriaLogo: 'AlgoForge — home',
+
+        'nav.services': 'Services',
+        'nav.about': 'About',
+        'nav.process': 'Process',
+        'nav.tech': 'Tech',
+        'nav.portfolio': 'Portfolio',
+        'nav.faq': 'FAQ',
+        'nav.contact': 'Contact',
+
+        'hero.badge': 'Accepting new projects',
+        'hero.title': 'Automation that makes <span class="gradient-text glow-green">money</span>.<span class="block mt-1 sm:mt-2">From crypto bots to enterprise.</span>',
+        'hero.aria': 'Automation that makes money. From crypto bots to enterprise.',
+        'hero.lead': 'We build infrastructure for trading and business. API integrations, desktop, web, and mobile apps end-to-end. Clean code and mathematical precision in every algorithm.',
+        'hero.cta_primary': 'Start project',
+        'hero.cta_secondary': 'Our services',
+        'hero.scroll': 'scroll',
+
+        'services.badge': 'SERVICES',
+        'services.title': 'What we <span class="gradient-text">build</span>',
+        'services.subtitle': 'Full-cycle development — from architecture to production deployment',
+        'services.s1.title': 'Trading algorithms',
+        'services.s1.desc': 'We develop HFT and algorithmic trading systems for crypto exchanges and traditional markets — order execution logic, risk management, and deployment.',
+        'services.s2.title': 'Trading bots',
+        'services.s2.desc': 'Automation of trading workflows: arbitrage, market-making, DCA, and grid bots. They run 24/7 with millisecond reactions, no emotions, no mistakes.',
+        'services.s3.title': 'API integrations',
+        'services.s3.desc': 'Connectivity to any exchanges, marketplaces, and services. Reliable streaming data exchange — Binance, Bybit, OKX, and dozens of other APIs.',
+        'services.s4.title': 'Desktop software',
+        'services.s4.desc': 'Fault-tolerant Windows and Linux apps: trading terminals, dashboards, analytics tools, and utilities that handle real-time data without freezes.',
+        'services.s5.title': 'Web development',
+        'services.s5.desc': 'Landing pages, corporate websites, SaaS platforms, and complex dashboards. Modern stack, microservice architecture, and readiness for heavy loads.',
+        'services.s6.title': 'Mobile apps',
+        'services.s6.desc': 'Native and cross-platform Android apps: fintech tools, trading, and business process management right on the phone.',
+
+        'about.badge': 'ABOUT',
+        'about.title': 'We are a <span class="gradient-text">team</span> trusted by clients',
+        'about.lead': 'AlgoForge is a team of engineers and product specialists with a strong background in FinTech and software development. We don’t just write code — we design reliable architecture for specific business goals.',
+        'about.desc': 'Every project starts with logic and requirements analysis. We dive deep into your domain, design technical solutions, and only then move to implementation. The result is a stable product ready for production.',
+        'about.tag1': 'NDA protection',
+        'about.tag2': 'on-time delivery',
+        'about.tag3': '24/7 support',
+        'about.stat_projects': 'PROJECTS',
+        'about.stat_years': 'YEARS OF EXPERIENCE',
+        'about.stat_engineers': 'ENGINEERS',
+        'about.stat_uptime': 'UPTIME',
+
+        'process.badge': 'PROCESS',
+        'process.title': 'How we <span class="gradient-text">work</span>',
+        'process.subtitle': 'A systematic approach and transparent tracking at every stage',
+        'process.p1.title': 'Discovery & requirements',
+        'process.p1.desc': 'We study business goals and technical constraints, write a detailed spec without blind spots, and choose the optimal tech stack.',
+        'process.p2.title': 'Design & architecture',
+        'process.p2.desc': 'We design the architecture of the future product. For visual products we craft UI/UX prototypes. You sign off on the logic and look before development starts.',
+        'process.p3.title': 'Development & code review',
+        'process.p3.desc': 'We work in sprints with regular demo releases, practice strict code review, unit testing, and clean-code standards for system stability.',
+        'process.p4.title': 'Launch & support',
+        'process.p4.desc': 'We deploy the product, set up CI/CD and monitoring. After release we provide tech support, quick fixes, and further scaling.',
+
+        'tech.badge': 'TECH',
+        'tech.title': 'Our <span class="gradient-text">stack</span>',
+        'tech.subtitle': 'We use the best tools for each task',
+
+        'portfolio.badge': 'PORTFOLIO',
+        'portfolio.title': 'Our <span class="gradient-text">projects</span>',
+        'portfolio.subtitle': 'Descriptions reflect real services — we will discuss details and scope based on your request',
+        'portfolio.p1.alt': 'QuantTerminal Pro — trading terminal',
+        'portfolio.p1.desc': 'Desktop trading terminal (Windows/Linux) with order book visualization and 15+ exchanges integrated via a single WebSockets API.',
+        'portfolio.p2.alt': 'ArbitrageX Bot — monitoring dashboard',
+        'portfolio.p2.desc': 'Cross-exchange arbitrage bot with latency &lt; 50ms. Smart rate-limit handling and a strict risk-management system to control slippage.',
+        'portfolio.p3.alt': 'CryptoAnalytics SaaS — analytics dashboard',
+        'portfolio.p3.desc': 'Analytics platform with real-time dashboards and streaming-data processing for hundreds of concurrent connections.',
+        'portfolio.p4.alt': 'TradeFlow — mobile app for portfolio and trading',
+        'portfolio.p4.desc': 'Android mobile app for portfolio management. Fast access to trading, position monitoring, and push notifications on order execution.',
+
+        'contact.badge': 'START PROJECT',
+        'contact.title': 'Ready to <span class="gradient-text">build</span>?',
+        'contact.lead': 'Tell us about your project — we will prepare an estimate and proposal within 24 hours.',
+        'form.name': 'Name',
+        'form.tg': 'Your Telegram (@username)',
+        'form.tg_title': 'Latin letters, 5–32 chars, with or without @',
+        'form.message': 'Describe your project...',
+        'form.submit': 'Send request',
+        'form.type': 'Project type',
+        'form.type.algo': 'Trading algorithm',
+        'form.type.bot': 'Trading bot',
+        'form.type.api': 'API integration',
+        'form.type.desktop': 'Desktop application',
+        'form.type.web': 'Web development',
+        'form.type.mobile': 'Mobile application',
+        'form.type.other': 'Other',
+
+        'faq.badge': 'FAQ',
+        'faq.title': 'You ask — <span class="gradient-text">we answer</span>',
+        'faq.subtitle': 'In short: source code ownership, platforms, API key security, and how we connect to exchanges.',
+        'faq.q1': 'Who owns the source code after development?',
+        'faq.a1': 'After full payment you receive all IP rights and the source code. We work under contract and sign NDA — your trading logic stays yours only.',
+        'faq.q2': 'Which operating systems do your solutions run on?',
+        'faq.a2': 'We specialize in high-performance solutions for <strong class="text-gray-300 font-medium">Windows</strong> and <strong class="text-gray-300 font-medium">Linux</strong>. We also build mobile terminals and management systems for <strong class="text-gray-300 font-medium">Android</strong>.',
+        'faq.q3': 'How do you handle API key security?',
+        'faq.a3': 'We design systems so that we never have access to your funds. The software runs on your server. In API keys you allow only “Trading” and block “Withdraw”.',
+        'faq.q4': 'Which protocols do you use for exchange connectivity?',
+        'faq.a4': 'We don’t use slow REST for high-frequency tasks. Only WebSockets, gRPC, and FIX API for minimal latency and instant order execution.',
+        'faq.q5': 'Do you provide ready-made strategies?',
+        'faq.a5': 'No — we are engineers. We turn your unique logic or business case into resilient code. We don’t predict the market for you, but we can guide you in the right direction.',
+
+        'footer.brand_desc': 'We build technology that works for you. Trading algorithms, bots, software, and apps end-to-end.',
+        'footer.col_services': 'Services',
+        'footer.col_dev': 'Development',
+        'footer.col_contacts': 'Contacts',
+        'footer.link.algos': 'Trading algorithms',
+        'footer.link.bots': 'Trading bots',
+        'footer.link.api': 'API integrations',
+        'footer.link.desktop': 'Desktop software',
+        'footer.link.web': 'Websites',
+        'footer.link.mobile': 'Mobile apps',
+        'footer.link.tech': 'Tech',
+        'footer.link.process': 'How we work',
+        'footer.link.faq': 'FAQ',
+        'footer.legal_title': 'Legal information and risk notice',
+        'footer.legal_p1': '<strong class="text-gray-500">Disclaimer.</strong> AlgoForge is exclusively engaged in custom software development. We are not financial advisors, do not provide investment recommendations, and do not manage user assets.',
+        'footer.legal_p2': '<strong class="text-gray-500">Risks.</strong> Trading on financial and crypto markets carries a high risk of partial or full loss of funds. Any algorithms, bots, and strategies are automation tools and do not guarantee future profits. Results shown in case studies are subjective and are not a promise of similar returns.',
+        'footer.legal_p3': '<strong class="text-gray-500">Use of service.</strong> All content on the website is for informational and educational purposes. The user makes independent decisions on running trading systems and bears full responsibility for any financial results. We do not accept funds for trading and do not offer financial products.',
+        'footer.copy_rights': 'All rights reserved.',
+
+        'modal.title': 'Message',
+        'modal.ok': 'OK',
+        modalSelectProjectType: 'Please select a project type from the list.',
+        modalInvalidTelegram: 'Enter a valid Telegram username: latin letters, 5–32 characters, as in t.me/username (with or without @).',
+        modalConfigTelegram: 'In index.html, find window.SITE_CONFIG and set telegramUsername — your Telegram handle without @ (as in t.me/username).',
+        modalTooLong: 'The message is too long for a single Telegram link. Please shorten the project description.',
+        requestTitle: 'Website request',
+        requestName: 'Name',
+        requestClientTelegram: 'Client Telegram',
+        requestProjectType: 'Project type',
+        submitOpening: 'Opening Telegram…',
+        submitDone: 'Done — check Telegram',
+    },
+};
+
+let currentLanguage = 'ru';
+
+function t(key) {
+    return (I18N[currentLanguage] && I18N[currentLanguage][key] !== undefined)
+        ? I18N[currentLanguage][key]
+        : (I18N.ru[key] !== undefined ? I18N.ru[key] : key);
+}
+
+function getLocalizedTitle(brandName) {
+    return `${brandName} — ${t('titleSuffix')}`;
+}
+
+function applyDataI18n() {
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (key) el.textContent = t(key);
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+        const key = el.getAttribute('data-i18n-html');
+        if (key) el.innerHTML = t(key);
+    });
+    const ATTR_MAP = ['placeholder', 'title', 'aria-label', 'alt'];
+    ATTR_MAP.forEach((attr) => {
+        const sel = `[data-i18n-attr-${attr}]`;
+        document.querySelectorAll(sel).forEach((el) => {
+            const key = el.getAttribute(`data-i18n-attr-${attr}`);
+            if (key) el.setAttribute(attr, t(key));
+        });
+    });
+}
+
+function applyLanguage(lang) {
+    currentLanguage = lang === 'en' ? 'en' : 'ru';
+    document.documentElement.lang = currentLanguage;
+    localStorage.setItem('site_lang', currentLanguage);
+
+    applyDataI18n();
+
+    const triggerLabel = document.getElementById('custom-type-label');
+    const hiddenType = document.getElementById('contact-type');
+    if (triggerLabel && hiddenType && !hiddenType.value) triggerLabel.textContent = t('form.type');
+    if (triggerLabel && hiddenType && hiddenType.value) {
+        const currentVal = hiddenType.value;
+        triggerLabel.textContent = t('form.type.' + currentVal);
+    }
+
+    const submitBtn = document.querySelector('#contact-form button[type="submit"]');
+    if (submitBtn && !submitBtn.disabled) {
+        submitBtn.innerHTML = `${t('form.submit')}<i data-lucide="send" class="w-5 h-5"></i>`;
+        if (window.lucide) lucide.createIcons();
+    }
+
+    document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
+        btn.textContent = t('langButton');
+        btn.setAttribute('aria-label', t('langAriaSwitch'));
+    });
+
+    if (typeof applySiteConfig === 'function') applySiteConfig();
+}
+
 function applySiteConfig() {
     const c = getSiteConfig();
     const tg = normalizeTelegramUser(c.telegramUsername);
     const mail = (c.email || '').trim();
     const tgUrl = tg ? 'https://t.me/' + tg : '#';
 
-    document.title = c.brandName + ' — Алгоритмы. Боты. Софт. Сайты.';
+    document.title = getLocalizedTitle(c.brandName);
 
     document.querySelectorAll('[data-site-email]').forEach((el) => { el.textContent = mail || ''; });
     document.querySelectorAll('[data-site-email-footer]').forEach((el) => { el.textContent = mail || ''; });
@@ -51,9 +398,9 @@ function applySiteConfig() {
         }
     });
 
-    const tgLabel = tg ? 'Telegram: @' + tg : 'Telegram';
+    const tgLabel = tg ? `${t('telegramLabel')}: @${tg}` : t('telegramLabel');
     document.querySelectorAll('[data-site-telegram-label]').forEach((el) => { el.textContent = tgLabel; });
-    document.querySelectorAll('[data-site-telegram-footer]').forEach((el) => { el.textContent = tg ? '@' + tg : 'Telegram'; });
+    document.querySelectorAll('[data-site-telegram-footer]').forEach((el) => { el.textContent = tg ? '@' + tg : t('telegramLabel'); });
     document.querySelectorAll('[data-site-telegram-link], [data-site-telegram-link-footer], [data-site-social-telegram]').forEach((el) => {
         el.href = tgUrl;
     });
@@ -82,7 +429,8 @@ function applySiteConfig() {
     document.querySelectorAll('[data-site-brand-copy]').forEach((el) => { el.textContent = c.brandName; });
 }
 
-applySiteConfig();
+currentLanguage = localStorage.getItem('site_lang') === 'en' ? 'en' : 'ru';
+document.documentElement.lang = currentLanguage;
 
 // ==========================================
 // Модальное окно (вместо alert)
@@ -417,16 +765,6 @@ statNumbers.forEach(stat => {
 // ==========================================
 // Form Submission
 // ==========================================
-const PROJECT_TYPE_LABELS = {
-    algo: 'Торговый алгоритм',
-    bot: 'Торговый бот',
-    api: 'API интеграция',
-    desktop: 'Десктопное приложение',
-    web: 'Веб-разработка',
-    mobile: 'Мобильное приложение',
-    other: 'Другое',
-};
-
 function resetCustomProjectTypeSelect() {
     const hidden = document.getElementById('contact-type');
     const label = document.getElementById('custom-type-label');
@@ -434,7 +772,7 @@ function resetCustomProjectTypeSelect() {
     const trigger = document.getElementById('custom-type-trigger');
     if (hidden) hidden.value = '';
     if (label) {
-        label.textContent = 'Тип проекта';
+        label.textContent = t('form.type');
         label.classList.add('text-gray-400');
         label.classList.remove('text-white');
     }
@@ -468,8 +806,9 @@ function initCustomProjectTypeSelect() {
 
     panel.querySelectorAll('.custom-type-opt').forEach((btn) => {
         btn.addEventListener('click', () => {
-            hidden.value = btn.getAttribute('data-value') || '';
-            label.textContent = btn.textContent.trim();
+            const val = btn.getAttribute('data-value') || '';
+            hidden.value = val;
+            label.textContent = val ? t('form.type.' + val) : btn.textContent.trim();
             label.classList.remove('text-gray-400');
             label.classList.add('text-white');
             closePanel();
@@ -478,6 +817,17 @@ function initCustomProjectTypeSelect() {
 
     document.addEventListener('click', (e) => {
         if (!root.contains(e.target)) closePanel();
+    });
+}
+
+function initLanguageToggle() {
+    document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const next = currentLanguage === 'ru' ? 'en' : 'ru';
+            applyLanguage(next);
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) mobileMenu.classList.add('hidden');
+        });
     });
 }
 
@@ -502,41 +852,39 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
         return;
     }
     if (!typeVal) {
-        showSiteModal('Выберите тип проекта в списке.');
+        showSiteModal(t('modalSelectProjectType'));
         return;
     }
 
     const clientTg = normalizeTelegramUser(tgEl.value);
     if (!clientTg || !/^[a-zA-Z][a-zA-Z0-9_]{4,31}$/.test(clientTg)) {
-        showSiteModal('В поле Telegram укажите корректный username: латиница, 5–32 символа, как в ссылке t.me/username (можно с @ или без).');
+        showSiteModal(t('modalInvalidTelegram'));
         return;
     }
 
     const cfg = getSiteConfig();
     const tg = normalizeTelegramUser(cfg.telegramUsername);
     if (!tg || tg === 'your_username') {
-        showSiteModal(
-            'Внизу файла index.html найдите блок window.SITE_CONFIG и укажите telegramUsername — ваш логин в Telegram без символа @ (как в ссылке t.me/username).'
-        );
+        showSiteModal(t('modalConfigTelegram'));
         return;
     }
 
     const name = nameEl.value.trim();
     const message = msgEl.value.trim();
-    const typeLabel = PROJECT_TYPE_LABELS[typeVal] || typeVal;
+    const typeLabel = t('form.type.' + typeVal) || typeVal;
 
     const text = [
-        'Заявка с сайта',
-        'Имя: ' + name,
-        'Telegram клиента: @' + clientTg,
-        'Тип проекта: ' + typeLabel,
+        t('requestTitle'),
+        t('requestName') + ': ' + name,
+        t('requestClientTelegram') + ': @' + clientTg,
+        t('requestProjectType') + ': ' + typeLabel,
         '',
         message,
     ].join('\n');
 
     const url = 'https://t.me/' + tg + '?text=' + encodeURIComponent(text);
     if (url.length > 3500) {
-        showSiteModal('Текст слишком длинный для одной ссылки Telegram. Сократите описание проекта.');
+        showSiteModal(t('modalTooLong'));
         return;
     }
 
@@ -548,7 +896,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        Открываем Telegram…
+        ${t('submitOpening')}
     `;
     btn.disabled = true;
 
@@ -559,7 +907,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
             </svg>
-            Готово — проверьте Telegram
+            ${t('submitDone')}
         `;
         btn.classList.remove('from-neon-green', 'to-accent-400');
         btn.classList.add('from-green-500', 'to-green-400');
@@ -604,6 +952,8 @@ document.querySelectorAll('.card-3d').forEach(card => {
 // ==========================================
 lucide.createIcons();
 initCustomProjectTypeSelect();
+initLanguageToggle();
+applyLanguage(currentLanguage);
 
 
 // ==========================================
