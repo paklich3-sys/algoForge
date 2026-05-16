@@ -504,7 +504,7 @@
         applyLang(lang);
         document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
         document.getElementById('lang-btn-m').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
-        lucide.createIcons();
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     </script>
     <script src="../nav.js"></script>
     <script src="../bg-animation.js"></script>
