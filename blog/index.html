@@ -306,16 +306,6 @@
     </footer>
 
     <script>
-        // --- Nav scroll ---
-        window.addEventListener('scroll', () => {
-            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
-        });
-
-        // --- Mobile menu ---
-        document.getElementById('mobile-btn').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-
         // --- i18n ---
         const STRINGS = {
             ru: {
@@ -416,24 +406,9 @@
         document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang === 'ru' ? 'en' : 'ru'));
         document.getElementById('lang-btn-m').addEventListener('click', () => applyLang(lang === 'ru' ? 'en' : 'ru'));
 
-        // Mobile menu — встроенный обработчик (не зависит от внешних скриптов)
-        (function() {
-            var btn  = document.getElementById('mobile-btn');
-            var menu = document.getElementById('mobile-menu');
-            if (btn && menu) {
-                btn.addEventListener('click', function() { menu.classList.toggle('hidden'); });
-                menu.querySelectorAll('a').forEach(function(a) {
-                    a.addEventListener('click', function() { menu.classList.add('hidden'); });
-                });
-            }
-            window.addEventListener('scroll', function() {
-                var nav = document.getElementById('navbar');
-                if (nav) nav.classList.toggle('scrolled', window.scrollY > 50);
-            }, { passive: true });
-        })();
-
         if (typeof lucide !== 'undefined') lucide.createIcons();
     </script>
+    <script src="../nav.js"></script>
     <script src="../bg-animation.js"></script>
 </body>
 </html>
