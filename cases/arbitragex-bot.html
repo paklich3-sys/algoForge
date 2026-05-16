@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Кейс: арбитражный бот с latency < 50ms, параллельным исполнением ордеров на 6 биржах и жёстким риск-менеджментом.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://algoforge.ru/cases/arbitragex-bot.html">
+    <meta property="og:title" content="ArbitrageX Bot — кросс-биржевой арбитраж | AlgoForge">
+    <meta property="og:url" content="https://algoforge.ru/cases/arbitragex-bot.html">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <title>ArbitrageX Bot — кросс-биржевой арбитраж | AlgoForge</title>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"ArbitrageX Bot — кросс-биржевой арбитражный бот","datePublished":"2026-05-16","author":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"},"publisher":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"}}</script>
+    
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Кейсы","item":"https://algoforge.ru/cases/"},{"@type":"ListItem","position":3,"name":"ArbitrageX Bot — кросс-биржевой арбитраж","item":"https://algoforge.ru/cases/arbitragex-bot.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}.glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}article h2{font-size:1.35rem;font-weight:700;color:#fff;margin:2rem 0 .7rem}article h3{font-size:1.05rem;font-weight:600;color:#e2e2e2;margin:1.4rem 0 .45rem}article p{margin-bottom:.95rem;color:#b0b0b0}article ul,article ol{margin:0 0 .95rem 1.5rem;color:#b0b0b0}article li{margin-bottom:.35rem}article strong{color:#e2e2e2}article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}.callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.callout strong{color:#00ff88}.metric{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1rem 1.25rem;text-align:center}.metric-val{font-size:1.6rem;font-weight:800;font-family:'JetBrains Mono',monospace;color:#00ff88}.metric-lbl{font-size:.78rem;color:#888;margin-top:.2rem}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}</style>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6"><div class="flex items-center justify-between h-16">
+            <a href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="./" class="text-sm text-gray-400 hover:text-white" id="nav-back">&#8592; Кейсы</a>
+                <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+            </div>
+            <div class="flex md:hidden gap-3 items-center"><button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button><a href="./" class="text-gray-400 text-sm" id="nav-back-m">&#8592; Кейсы</a></div>
+        </div></div>
+    </nav>
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-purple-400 border border-purple-400/20">Bot</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">Go · Arbitrage · 6 бирж</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-3" id="art-title">ArbitrageX Bot</h1>
+            <p class="text-gray-400 text-lg font-medium" id="art-sub">Кросс-биржевой арбитражный бот с latency &lt; 50 мс</p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1640340434855-6084b1f4901c?w=1200&q=80&auto=format&fit=crop" alt="Арбитражный бот" class="w-full rounded-2xl mb-8" style="height:260px;object-fit:cover;filter:brightness(.75)" loading="lazy">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+            <div class="metric"><div class="metric-val">35 мс</div><div class="metric-lbl" id="m1">средняя latency</div></div>
+            <div class="metric"><div class="metric-val">6</div><div class="metric-lbl" id="m2">бирж</div></div>
+            <div class="metric"><div class="metric-val">47</div><div class="metric-lbl" id="m3">торговых пар</div></div>
+            <div class="metric"><div class="metric-val">40–60%</div><div class="metric-lbl" id="m4">прибыльных сделок</div></div>
+        </div>
+        <article id="art-body-ru">
+            <h2>О проекте</h2>
+            <p>Клиент занимался ручным арбитражем на криптовалютных биржах — отслеживал расхождения цен вручную и выставлял ордера самостоятельно. Успевал поймать 1–2 возможности в час, упуская большую часть. Задача: автоматизировать поиск и исполнение арбитражных возможностей с реакцией, недостижимой для человека.</p>
+            <h2>Технические требования</h2>
+            <ul>
+                <li>Мониторинг расхождений цен на 6 биржах: Binance, Bybit, OKX, Kraken, Gate.io, Huobi</li>
+                <li>Latency исполнения (от обнаружения до отправки ордеров): &lt; 50 мс</li>
+                <li>Корректный учёт комиссий, проскальзывания и времени исполнения</li>
+                <li>Параллельное выставление ордеров на обеих биржах</li>
+                <li>Система управления балансами на всех биржах</li>
+                <li>Алерты в Telegram при нештатных ситуациях</li>
+            </ul>
+            <h2>Стек и архитектура</h2>
+            <p><strong>Основной язык:</strong> Go. Выбран за сочетание производительности и удобства конкурентного кода. asyncio в Python давал latency 150–200 мс на прототипе; Go — стабильные 20–40 мс.</p>
+            <p><strong>Market data layer:</strong> горутины для каждой биржи поддерживают WebSocket-соединение и обновляют общую структуру цен через lock-free канал.</p>
+            <p><strong>Arbitrage engine:</strong> отдельная горутина, читает ценовой кэш, рассчитывает потенциальную прибыль с учётом всех издержек и принимает решение о торговле.</p>
+            <p><strong>Execution layer:</strong> параллельная отправка ордеров через goroutines. При частичном исполнении — автоматическая логика хеджирования.</p>
+            <p><strong>Risk management:</strong> отдельный модуль, проверяет состояние раз в секунду: дневной P&amp;L, открытые позиции, балансы, аномалии в ценах.</p>
+            <h2>Ключевые решения</h2>
+            <h3>Обход rate limits</h3>
+            <p>Написали centralized rate limiter с приоритетной очередью: торговые запросы имеют приоритет над информационными. При приближении к лимиту очередь адаптивно замедляет информационные запросы, сохраняя возможность выставлять ордера.</p>
+            <h3>Валидация арбитражной возможности</h3>
+            <p>Перед исполнением бот делает «последнюю проверку»: запрашивает актуальные балансы и глубину ордербука. Добавляет 10–15 мс, но исключает ситуации, когда возможность уже исчезла к моменту отправки.</p>
+            <h3>Управление балансами</h3>
+            <p>Арбитраж требует средств одновременно на нескольких биржах. Реализовали мониторинг балансов с автоматическими уведомлениями при необходимости ребалансировки.</p>
+            <h2>Показатели</h2>
+            <ul>
+                <li>Средняя latency от обнаружения до исполнения: 35 мс</li>
+                <li>Торговых пар под мониторингом: 47 (топ-пары на всех 6 биржах)</li>
+                <li>Выявляемых возможностей в сутки: 150–300 (зависит от волатильности)</li>
+                <li>Из них прибыльных после всех комиссий: 40–60%</li>
+                <li>Дневной лимит потерь: срабатывал 3 раза за 6 месяцев работы</li>
+            </ul>
+            <div class="callout"><strong>Хотите свой арбитражный бот?</strong> <a href="../#contact">Опишите задачу</a> — расскажем об архитектуре под ваш случай.</div>
+        </article>
+        <article id="art-body-en" style="display:none">
+            <h2>About the project</h2>
+            <p>The client was doing manual arbitrage — tracking price discrepancies by hand and placing orders manually. They managed to catch 1–2 opportunities per hour, missing most. Goal: automate detection and execution with reaction time impossible for a human.</p>
+            <h2>Stack: Go</h2>
+            <p>Python asyncio gave 150–200ms latency on the prototype; Go delivered stable 20–40ms. Goroutines for each exchange maintain WebSocket connections and update a shared price cache via lock-free channels. Parallel order execution via goroutines, with partial fill hedging logic.</p>
+            <h2>Key results</h2>
+            <ul>
+                <li>Average latency from detection to execution: 35ms</li>
+                <li>47 trading pairs monitored across 6 exchanges</li>
+                <li>150–300 opportunities identified per day (depends on volatility)</li>
+                <li>40–60% profitable after all fees and slippage</li>
+            </ul>
+            <div class="callout"><strong>Want your own arbitrage bot?</strong> <a href="../#contact">Describe the task</a> — we will explain the architecture for your case.</div>
+        </article>
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm" id="back-link"><i data-lucide="arrow-left" class="w-4 h-4"></i><span id="back-text">Все кейсы</span></a>
+            <a href="../#contact" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105" id="cta-link"><i data-lucide="send" class="w-4 h-4"></i><span id="cta-text">Обсудить похожий проект</span></a>
+        </div>
+    </div>
+    <footer class="border-t border-white/5 py-8"><div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono"><span id="copy">&#169; 2026 AlgoForge. Все права защищены.</span><div class="flex gap-6"><a href="../" class="hover:text-neon-green" id="f-home">Главная</a><a href="./" class="hover:text-neon-green" id="f-cases">Кейсы</a><a href="../#contact" class="hover:text-neon-green" id="f-contact">Связаться</a></div></div></footer>
+    <script>
+        window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40);});
+        const STRINGS={ru:{'nav-back':'← Кейсы','nav-contact':'Связаться','art-title':'ArbitrageX Bot','art-sub':'Кросс-биржевой арбитражный бот с latency < 50 мс','m1':'средняя latency','m2':'бирж','m3':'торговых пар','m4':'прибыльных сделок','back-text':'Все кейсы','cta-text':'Обсудить похожий проект',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-cases':'Кейсы','f-contact':'Связаться',lang:'EN'},en:{'nav-back':'← Cases','nav-contact':'Contact','art-title':'ArbitrageX Bot','art-sub':'Cross-exchange arbitrage bot with latency < 50ms','m1':'avg latency','m2':'exchanges','m3':'trading pairs','m4':'profitable trades','back-text':'All cases','cta-text':'Discuss a similar project',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-cases':'Cases','f-contact':'Contact',lang:'RU'}};
+        let lang=localStorage.getItem('site_lang')==='en'?'en':'ru';
+        function applyLang(l){lang=l;localStorage.setItem('site_lang',l);document.documentElement.lang=l;const s=STRINGS[l];Object.keys(s).forEach(id=>{if(id==='lang')return;const el=document.getElementById(id);if(el)el.textContent=s[id];});document.getElementById('lang-btn').textContent=s.lang;document.getElementById('lang-btn-m').textContent=s.lang;document.getElementById('art-body-ru').style.display=l==='ru'?'':'none';document.getElementById('art-body-en').style.display=l==='en'?'':'none';}
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Честный разбор стоимости разработки торгового бота или алгоритма: от чего зависит цена, что входит в работу и чего ждать на каждом этапе.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://algoforge.ru/blog/trading-algorithm-cost.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Сколько стоит разработка торгового алгоритма | AlgoForge">
+    <meta property="og:url" content="https://algoforge.ru/blog/trading-algorithm-cost.html">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <title>Сколько стоит разработка торгового алгоритма | AlgoForge</title>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Сколько стоит разработка торгового алгоритма","description":"Честный разбор стоимости разработки торгового бота или алгоритма: от чего зависит цена, что входит в работу.","datePublished":"2026-05-16","dateModified":"2026-05-16","author":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"},"publisher":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"}}</script>
+    
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Блог","item":"https://algoforge.ru/blog/"},{"@type":"ListItem","position":3,"name":"Сколько стоит разработка торгового алгоритма","item":"https://algoforge.ru/blog/trading-algorithm-cost.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}.glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}article h2{font-size:1.4rem;font-weight:700;color:#fff;margin:2rem 0 .75rem}article h3{font-size:1.1rem;font-weight:600;color:#e2e2e2;margin:1.5rem 0 .5rem}article p{margin-bottom:1rem;color:#b0b0b0}article ul,article ol{margin:0 0 1rem 1.5rem;color:#b0b0b0}article li{margin-bottom:.4rem}article strong{color:#e2e2e2}article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}.callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.callout strong{color:#00ff88}.price-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:1.25rem 1.5rem;margin:1rem 0}.price-val{font-size:1.3rem;font-weight:800;font-family:'JetBrains Mono',monospace;color:#00ff88}.price-name{font-size:1rem;font-weight:700;color:#e2e2e2;margin-bottom:.4rem}.price-time{font-size:.8rem;color:#888;font-family:'JetBrains Mono',monospace;margin-top:.4rem}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}</style>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6"><div class="flex items-center justify-between h-16">
+            <a href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="./" class="text-sm text-gray-400 hover:text-white" id="nav-blog">← Блог</a>
+                <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+            </div>
+            <div class="flex md:hidden gap-3 items-center"><button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button><a href="./" class="text-gray-400 text-sm" id="nav-blog-m">← Блог</a></div>
+        </div></div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">Pricing</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-400 border border-accent-400/20">Business</span>
+                <span class="text-xs text-gray-600 font-mono">16 мая 2026 · 10 мин</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-4" id="art-title">Сколько стоит разработка торгового алгоритма</h1>
+            <p class="text-gray-400 text-lg" id="art-lead">Честный разбор: от чего зависит стоимость, что входит в каждый тип проекта и чего точно не стоит делать при запуске.</p>
+        </div>
+
+        <article id="art-body-ru">
+            <h2>Основные составляющие стоимости</h2>
+            <ul>
+                <li><strong>Сложность логики</strong> — простой DCA-бот и сложный маркетмейкер с адаптивным прайсингом — принципиально разные задачи.</li>
+                <li><strong>Количество бирж и инструментов</strong> — каждое подключение требует интеграции, тестирования, обработки специфики площадки.</li>
+                <li><strong>Требования к скорости</strong> — бот для дневной торговли и HFT-система требуют разного стека и архитектуры.</li>
+                <li><strong>Инфраструктура</strong> — нужны ли серверный деплой, мониторинг, CI/CD, резервирование.</li>
+                <li><strong>Интерфейс</strong> — нужна ли панель управления, дашборд с метриками.</li>
+                <li><strong>Поддержка и доработки</strong> — разовый запуск или регулярное сопровождение.</li>
+            </ul>
+
+            <h2>Диапазоны стоимости по типам систем</h2>
+
+            <div class="price-card">
+                <div class="price-name">Простой торговый бот</div>
+                <div class="price-val">от 150 000 ₽</div>
+                <p style="margin:0.5rem 0 0;font-size:0.88rem;color:#888">Одна биржа, одна стратегия (DCA, Grid или простой сигнальный бот), базовый риск-менеджмент, логирование, деплой на сервер.</p>
+                <div class="price-time">Срок: 2–4 недели</div>
+            </div>
+
+            <div class="price-card">
+                <div class="price-name">Арбитражный бот</div>
+                <div class="price-val">от 400 000 ₽</div>
+                <p style="margin:0.5rem 0 0;font-size:0.88rem;color:#888">Мониторинг 2–4 бирж через WebSocket, детектирование арбитражных возможностей, параллельное исполнение, управление балансами, система алертов.</p>
+                <div class="price-time">Срок: 4–8 недель</div>
+            </div>
+
+            <div class="price-card">
+                <div class="price-name">Маркетмейкерский бот</div>
+                <div class="price-val">от 700 000 ₽</div>
+                <p style="margin:0.5rem 0 0;font-size:0.88rem;color:#888">Адаптивный прайсинг спредов, управление inventory risk, оптимизация размещения ордеров, продвинутый риск-менеджмент, метрики эффективности.</p>
+                <div class="price-time">Срок: 2–4 месяца</div>
+            </div>
+
+            <div class="price-card">
+                <div class="price-name">Торговый терминал / Desktop</div>
+                <div class="price-val">от 500 000 ₽</div>
+                <p style="margin:0.5rem 0 0;font-size:0.88rem;color:#888">Десктопное приложение (Windows/Linux), подключение к биржам, визуализация ордербука и графиков, управление ордерами, история сделок.</p>
+                <div class="price-time">Срок: 2–4 месяца</div>
+            </div>
+
+            <div class="price-card">
+                <div class="price-name">SaaS-платформа для трейдинга</div>
+                <div class="price-val">от 2 000 000 ₽</div>
+                <p style="margin:0.5rem 0 0;font-size:0.88rem;color:#888">Веб-приложение с дашбордами, бэкенд, БД, потоковые данные, аутентификация, биллинг, облачная инфраструктура.</p>
+                <div class="price-time">Срок: от 4 месяцев</div>
+            </div>
+
+            <h2>Что сильно влияет на итоговую цену</h2>
+
+            <h3>Чёткость технического задания</h3>
+            <p>Самый частый источник «неожиданного» роста бюджета — недостаточно проработанное ТЗ. Хорошее ТЗ включает: описание логики входа и выхода, параметры риск-менеджмента, список инструментов и бирж, ожидания по нагрузке, описание интерфейса.</p>
+
+            <h3>Требования к uptime</h3>
+            <p>Бот, который может упасть и подняться через 5 минут — одна история. Система с 99,9% uptime, автоматическим восстановлением и failover — другая.</p>
+
+            <h3>Готовность стратегии</h3>
+            <p>Если у вас есть стратегия с чёткими правилами — задача сводится к реализации. Если стратегию нужно разработать — это отдельная работа и бюджет.</p>
+            <div class="callout"><strong>Важный момент:</strong> разработчики торговых систем занимаются инженерией, а не исследованием стратегий. Мы реализуем вашу логику, но не гарантируем её прибыльность — это зависит от рынка, а не от кода.</div>
+
+            <h2>Чего не стоит делать</h2>
+            <ul>
+                <li><strong>Экономить на тестировании.</strong> Баг в торговом боте — реальные деньги. Нормальный процесс: юнит-тесты, интеграционные тесты на тестнете, тестовый период с минимальным капиталом.</li>
+                <li><strong>Запускать без мониторинга.</strong> Боты ломаются: биржи меняют API, условия меняются. Нужны алерты и регулярный ревью логов.</li>
+                <li><strong>Ждать мгновенного ROI.</strong> Разработка — инвестиция. Сначала убедитесь, что стратегия работает на реальных данных.</li>
+            </ul>
+
+            <h2>Как происходит оценка у нас</h2>
+            <p>На первом созвоне выясняем: что именно нужно, сложность логики, биржи, требования к скорости и надёжности. После — подробная смета с разбивкой по этапам.</p>
+            <p>Оценка и смета — бесплатно. Если цены не совпадают с бюджетом — скажем честно.</p>
+
+            <div class="callout"><strong>Хотите обсудить ваш проект?</strong> <a href="../#contact">Свяжитесь с нами</a> — оценим бесплатно за 24 часа.</div>
+        </article>
+
+        <article id="art-body-en" style="display:none">
+            <h2>What drives the price</h2>
+            <ul>
+                <li><strong>Logic complexity</strong> — a simple DCA bot vs a market-maker with adaptive pricing are completely different engineering tasks.</li>
+                <li><strong>Number of exchanges and instruments</strong> — each integration requires API work, testing and handling the venue's specific quirks.</li>
+                <li><strong>Latency requirements</strong> — day trading bot vs HFT system require different stacks.</li>
+                <li><strong>Infrastructure</strong> — server deployment, monitoring, CI/CD, failover.</li>
+                <li><strong>Interface</strong> — dashboard, management panel, mobile app.</li>
+            </ul>
+
+            <h2>Price ranges by system type</h2>
+            <div class="price-card">
+                <div class="price-name">Simple trading bot</div>
+                <div class="price-val">from ₽150,000</div>
+                <p style="margin:0.5rem 0 0;font-size:0.88rem;color:#888">One exchange, one strategy (DCA, Grid or signal bot), basic risk management, logging, server deployment.</p>
+                <div class="price-time">Timeline: 2–4 weeks</div>
+            </div>
+            <div class="price-card">
+                <div class="price-name">Arbitrage bot</div>
+                <div class="price-val">from ₽400,000</div>
+                <p style="margin:0.5rem 0 0;font-size:0.88rem;color:#888">2–4 exchange monitoring via WebSocket, opportunity detection, parallel execution, balance management, alert system.</p>
+                <div class="price-time">Timeline: 4–8 weeks</div>
+            </div>
+            <div class="price-card">
+                <div class="price-name">Market-making bot</div>
+                <div class="price-val">from ₽700,000</div>
+                <p style="margin:0.5rem 0 0;font-size:0.88rem;color:#888">Adaptive spread pricing, inventory risk management, order placement optimisation, advanced risk management, performance metrics.</p>
+                <div class="price-time">Timeline: 2–4 months</div>
+            </div>
+
+            <div class="callout"><strong>Interested in discussing your project?</strong> <a href="../#contact">Contact us</a> — free estimate within 24 hours.</div>
+        </article>
+
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm" id="back-link"><i data-lucide="arrow-left" class="w-4 h-4"></i><span id="back-text">Все статьи</span></a>
+            <a href="../#contact" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105" id="cta-link"><i data-lucide="send" class="w-4 h-4"></i><span id="cta-text">Получить оценку</span></a>
+        </div>
+    </div>
+
+    <footer class="border-t border-white/5 py-8"><div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono"><span id="copy">© 2026 AlgoForge. Все права защищены.</span><div class="flex gap-6"><a href="../" class="hover:text-neon-green" id="f-home">Главная</a><a href="./" class="hover:text-neon-green" id="f-blog">Блог</a><a href="../#contact" class="hover:text-neon-green" id="f-contact">Связаться</a></div></div></footer>
+
+    <script>
+        window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40);});
+        const STRINGS={ru:{'nav-blog':'← Блог','nav-contact':'Связаться','art-title':'Сколько стоит разработка торгового алгоритма','art-lead':'Честный разбор: от чего зависит стоимость, что входит в каждый тип проекта и чего точно не стоит делать при запуске.','back-text':'Все статьи','cta-text':'Получить оценку',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-blog':'Блог','f-contact':'Связаться',lang:'EN'},en:{'nav-blog':'← Blog','nav-contact':'Contact','art-title':'How much does trading algorithm development cost','art-lead':'An honest breakdown: what drives price, what is included in each type of project, and what not to do at launch.','back-text':'All articles','cta-text':'Get an estimate',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-blog':'Blog','f-contact':'Contact',lang:'RU'}};
+        let lang=localStorage.getItem('site_lang')==='en'?'en':'ru';
+        function applyLang(l){lang=l;localStorage.setItem('site_lang',l);document.documentElement.lang=l;const s=STRINGS[l];Object.keys(s).forEach(id=>{if(id==='lang')return;const el=document.getElementById(id);if(el)el.textContent=s[id];});document.getElementById('lang-btn').textContent=s.lang;document.getElementById('lang-btn-m').textContent=s.lang;document.getElementById('art-body-ru').style.display=l==='ru'?'':'none';document.getElementById('art-body-en').style.display=l==='en'?'':'none';}
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

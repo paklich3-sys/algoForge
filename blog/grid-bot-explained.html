@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Разбираем механику Grid-бота: как он зарабатывает на боковике, как выбрать параметры сетки и при каких условиях стратегия перестаёт работать.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://algoforge.ru/blog/grid-bot-explained.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Grid-бот: как устроен и когда работает | AlgoForge">
+    <meta property="og:url" content="https://algoforge.ru/blog/grid-bot-explained.html">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <title>Grid-бот: как устроен и когда работает | AlgoForge</title>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Grid-бот: как устроен и когда работает","description":"Разбираем механику Grid-бота: как он зарабатывает на боковике, как выбрать параметры сетки и при каких условиях стратегия перестаёт работать.","datePublished":"2026-05-16","dateModified":"2026-05-16","author":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"},"publisher":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"}}</script>
+    
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Блог","item":"https://algoforge.ru/blog/"},{"@type":"ListItem","position":3,"name":"Grid-бот: как устроен и когда работает","item":"https://algoforge.ru/blog/grid-bot-explained.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}.glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}article h2{font-size:1.4rem;font-weight:700;color:#fff;margin:2rem 0 .75rem}article h3{font-size:1.1rem;font-weight:600;color:#e2e2e2;margin:1.5rem 0 .5rem}article p{margin-bottom:1rem;color:#b0b0b0}article ul,article ol{margin:0 0 1rem 1.5rem;color:#b0b0b0}article li{margin-bottom:.4rem}article strong{color:#e2e2e2}article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}pre{background:#0a0a14;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;color:#c9d1d9}code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:5px;color:#00ff88}pre code{background:none;padding:0;color:#c9d1d9}.callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.callout strong{color:#00ff88}.warn{border-left:3px solid #f59e0b;background:rgba(245,158,11,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.warn strong{color:#f59e0b}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}</style>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6"><div class="flex items-center justify-between h-16">
+            <a href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="./" class="text-sm text-gray-400 hover:text-white" id="nav-blog">← Блог</a>
+                <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+            </div>
+            <div class="flex md:hidden gap-3 items-center"><button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button><a href="./" class="text-gray-400 text-sm" id="nav-blog-m">← Блог</a></div>
+        </div></div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">Grid</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-400 border border-accent-400/20">Strategy</span>
+                <span class="text-xs text-gray-600 font-mono">16 мая 2026 · 9 мин</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-4" id="art-title">Grid-бот: как устроен и когда работает</h1>
+            <p class="text-gray-400 text-lg" id="art-lead">Grid-бот создаёт «сетку» ордеров и зарабатывает каждый раз, когда цена колеблется в её границах. Никакого прогнозирования — только математика флуктуаций.</p>
+        </div>
+
+        <article id="art-body-ru">
+            <h2>Механика: как это работает</h2>
+            <p>Представьте, что BTC торгуется в диапазоне 95 000 – 105 000 долларов. Вы настраиваете сетку с шагом 1 000 долларов.</p>
+            <p>Бот расставляет ордера:</p>
+            <pre><code>105 000 — продажа
+104 000 — продажа
+103 000 — продажа
+102 000 — продажа  ← текущая цена
+101 000 — покупка
+100 000 — покупка
+ 99 000 — покупка
+ 98 000 — покупка
+ 97 000 — покупка</code></pre>
+            <p>Цена опускается до 101 000 — исполняется ордер на покупку. Одновременно над этим уровнем выставляется продажа по 102 000. Цена возвращается к 102 000 — исполняется продажа. Разница в 1 000 долларов за вычетом комиссий — прибыль. Так при каждом колебании вверх-вниз в рамках сетки.</p>
+
+            <h2>Параметры сетки: как выбрать</h2>
+            <p><strong>Диапазон</strong> — верхняя и нижняя границы. Хороший ориентир: охватить 80–90% колебаний цены за последние 1–3 месяца. Слишком узкий диапазон — цена выйдет за него. Слишком широкий — ордеры будут исполняться редко.</p>
+            <p><strong>Шаг сетки</strong> — расстояние между уровнями. Оптимальный шаг: не менее 0,3–0,5% от цены. При стандартной комиссии 0,1% + 0,1% = 0,2% суммарно. Шаг должен давать больше 0,2% прибыли.</p>
+            <p><strong>Количество уровней</strong> — диапазон / шаг. 10 уровней = 10% диапазон при 1% шаге.</p>
+            <p><strong>Объём на уровень</strong> — общий капитал / количество уровней.</p>
+
+            <h2>Когда Grid работает хорошо</h2>
+            <p>Grid-бот создан для бокового рынка. Идеальные условия:</p>
+            <ul>
+                <li>Низкая трендовая составляющая</li>
+                <li>Умеренная волатильность (цена двигается, но не выходит за диапазон)</li>
+                <li>Высокая ликвидность пары</li>
+            </ul>
+            <p>Исторически стабильные пары: BTC/USDT и ETH/USDT в периоды консолидации, стейблкоин-пары (USDT/USDC), ряд крупных альткоинов в боковых фазах.</p>
+
+            <h2>Когда Grid теряет деньги</h2>
+            <div class="warn"><strong>Тренд — враг Grid-бота.</strong> Если цена уверенно идёт вниз за пределы нижней границы, бот накапливает убыточные позиции. Он продолжает покупать по мере снижения, а продавать некуда — верхние ордера не исполняются.</div>
+            <p>Как снизить этот риск:</p>
+            <ul>
+                <li>Устанавливать Stop Loss — при пробое нижней границы на X% закрывать все позиции с контролируемым убытком</li>
+                <li>Использовать только ту часть капитала, потерю которой вы можете себе позволить</li>
+                <li>Выбирать пары с фундаментальной поддержкой (не торговать Grid на низколиквидных альткоинах)</li>
+            </ul>
+
+            <h2>Спотовый vs фьючерсный Grid</h2>
+            <p>На <strong>споте</strong> Grid работает с реальными активами. Если цена упала — у вас есть BTC, и вы ждёте возврата.</p>
+            <p>На <strong>фьючерсах</strong> Grid работает с плечом. Это умножает прибыль в хорошие периоды и потери при тренде. Для фьючерсного Grid: небольшое плечо (2–3x), обязательный Stop Loss, тщательный выбор диапазона.</p>
+
+            <h2>Что можно автоматизировать дополнительно</h2>
+            <p>Базовый Grid-бот — стартовая точка. Более сложные версии включают:</p>
+            <ul>
+                <li><strong>Автоматический сдвиг диапазона</strong> при смене рыночного режима</li>
+                <li><strong>Динамический шаг</strong> — меньший в центре, больший у краёв</li>
+                <li><strong>Ребалансировку</strong> при сильном выходе цены за границы</li>
+                <li><strong>Multi-grid</strong> — несколько сеток на разных таймфреймах</li>
+            </ul>
+
+            <div class="callout"><strong>Нужен Grid-бот под ваши параметры?</strong> <a href="../#contact">Свяжитесь с нами</a> — обсудим архитектуру и оценим сроки.</div>
+
+            <h2>Смотрите также</h2>
+            <ul>
+                <li><a href="arbitrage-bot-guide.html">Как работает арбитражный бот</a></li>
+                <li><a href="trading-algorithm-cost.html">Сколько стоит разработка торгового алгоритма</a></li>
+            </ul>
+        </article>
+
+        <article id="art-body-en" style="display:none">
+            <h2>How it works</h2>
+            <p>Imagine BTC trading in the $95,000–$105,000 range. You configure a grid with $1,000 step. The bot places buy orders below and sell orders above the current price. Each time price moves down and back up by one step, the bot earns the spread minus commissions.</p>
+            <h2>Choosing parameters</h2>
+            <p><strong>Range:</strong> should cover 80–90% of price movement over the last 1–3 months.</p>
+            <p><strong>Step:</strong> minimum 0.3–0.5% of price — must exceed the round-trip commission (typically 0.2%).</p>
+            <p><strong>Levels:</strong> range / step. Volume per level: total capital / number of levels.</p>
+            <h2>When Grid works well</h2>
+            <p>Grid bots are designed for sideways markets: low trend component, moderate volatility, high liquidity. Best suited to BTC/USDT and ETH/USDT in consolidation phases, stablecoin pairs.</p>
+            <h2>When Grid loses money</h2>
+            <div class="warn"><strong>Trend is the enemy of a grid bot.</strong> If price breaks decisively below the lower boundary, the bot accumulates losing positions — keeps buying as price falls, but can't sell because the upper orders never fill.</div>
+            <p>Mitigations: set a Stop Loss at the lower boundary, only risk capital you can afford to lose, avoid illiquid altcoins.</p>
+            <div class="callout"><strong>Need a Grid bot for your parameters?</strong> <a href="../#contact">Contact us</a> — we will discuss architecture and estimate timeline.</div>
+        </article>
+
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm" id="back-link"><i data-lucide="arrow-left" class="w-4 h-4"></i><span id="back-text">Все статьи</span></a>
+            <a href="../#contact" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105" id="cta-link"><i data-lucide="send" class="w-4 h-4"></i><span id="cta-text">Обсудить проект</span></a>
+        </div>
+    </div>
+
+    <footer class="border-t border-white/5 py-8"><div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono"><span id="copy">© 2026 AlgoForge. Все права защищены.</span><div class="flex gap-6"><a href="../" class="hover:text-neon-green" id="f-home">Главная</a><a href="./" class="hover:text-neon-green" id="f-blog">Блог</a><a href="../#contact" class="hover:text-neon-green" id="f-contact">Связаться</a></div></div></footer>
+
+    <script>
+        window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40);});
+        const STRINGS={ru:{'nav-blog':'← Блог','nav-contact':'Связаться','art-title':'Grid-бот: как устроен и когда работает','art-lead':'Grid-бот создаёт «сетку» ордеров и зарабатывает каждый раз, когда цена колеблется в её границах. Никакого прогнозирования — только математика флуктуаций.','back-text':'Все статьи','cta-text':'Обсудить проект',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-blog':'Блог','f-contact':'Связаться',lang:'EN'},en:{'nav-blog':'← Blog','nav-contact':'Contact','art-title':'Grid Bot: how it works and when it performs','art-lead':'A grid bot places a "grid" of orders and earns every time price oscillates within the boundaries. No prediction — pure fluctuation mathematics.','back-text':'All articles','cta-text':'Discuss a project',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-blog':'Blog','f-contact':'Contact',lang:'RU'}};
+        let lang=localStorage.getItem('site_lang')==='en'?'en':'ru';
+        function applyLang(l){lang=l;localStorage.setItem('site_lang',l);document.documentElement.lang=l;const s=STRINGS[l];Object.keys(s).forEach(id=>{if(id==='lang')return;const el=document.getElementById(id);if(el)el.textContent=s[id];});document.getElementById('lang-btn').textContent=s.lang;document.getElementById('lang-btn-m').textContent=s.lang;document.getElementById('art-body-ru').style.display=l==='ru'?'':'none';document.getElementById('art-body-en').style.display=l==='en'?'':'none';}
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

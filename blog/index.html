@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Технические статьи AlgoForge: торговые боты, алгоритмы, API-интеграции, безопасность ключей и разработка FinTech-решений под ключ.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <link rel="canonical" href="https://algoforge.ru/blog/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Блог AlgoForge — статьи о торговых алгоритмах и FinTech">
+    <meta property="og:description" content="Технические разборы: WebSocket vs REST, безопасность API-ключей, торговые боты на Python и многое другое.">
+    <meta property="og:url" content="https://algoforge.ru/blog/">
+    <meta property="og:site_name" content="AlgoForge">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Блог AlgoForge — статьи о торговых алгоритмах и FinTech">
+    <meta name="twitter:description" content="Технические разборы: WebSocket vs REST, безопасность API-ключей, торговые боты на Python.">
+    <meta name="twitter:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <link rel="apple-touch-icon" href="../favicon.png?v=4">
+    <title>Блог — AlgoForge: статьи о торговых алгоритмах и FinTech</title>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Блог AlgoForge",
+        "url": "https://algoforge.ru/blog/",
+        "publisher": {
+            "@type": "Organization",
+            "name": "AlgoForge",
+            "url": "https://algoforge.ru/",
+            "logo": "https://algoforge.ru/logo-v3.png?v=1"
+        }
+    }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        accent: { 400:'#22d3ee',500:'#06b6d4' },
+                        neon: { green:'#00ff88', blue:'#00d4ff', purple:'#a855f7' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter','sans-serif'],
+                        mono: ['JetBrains Mono','monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        #three-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+        nav,main,footer,section{position:relative;z-index:1}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif}
+        .glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}
+        .gradient-text{background:linear-gradient(135deg,#00ff88,#00d4ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .card-hover{transition:all .3s cubic-bezier(.23,1,.32,1)}
+        .card-hover:hover{transform:translateY(-4px);border-color:rgba(0,255,136,.25)}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:#0d0d12}
+        ::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}
+        nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}
+        .tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.7rem;font-family:'JetBrains Mono',monospace;border:1px solid}
+        .tag-green{color:#00ff88;border-color:rgba(0,255,136,.3);background:rgba(0,255,136,.05)}
+        .tag-blue{color:#22d3ee;border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.05)}
+        .tag-purple{color:#a855f7;border-color:rgba(168,85,247,.3);background:rgba(168,85,247,.05)}
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <!-- NAV -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../" aria-label="AlgoForge — на главную">
+                    <img src="../logo-v3.png?v=1" alt="AlgoForge" height="192" class="h-14 w-auto object-contain" loading="eager">
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="../#services" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-services">Услуги</a>
+                    <a href="./" class="text-sm text-white font-medium" id="nav-blog">Блог</a>
+                    <a href="../cases/" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-cases">Кейсы</a>
+                    <a href="../news/" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-news">Новости</a>
+                    <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                    <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:shadow-lg transition-all hover:scale-105" id="nav-contact">Связаться</a>
+                </div>
+                <button id="mobile-btn" class="md:hidden p-2 text-gray-400 hover:text-white">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden glass mx-4 mb-3 rounded-2xl overflow-hidden">
+            <div class="flex flex-col p-4 gap-1">
+                <a href="../#services" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-services">Услуги</a>
+                <a href="./" class="px-4 py-3 rounded-xl text-white font-medium hover:bg-white/5 transition-colors" id="m-blog">Блог</a>
+                <a href="../cases/" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-cases">Кейсы</a>
+                <a href="../news/" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-news">Новости</a>
+                <button id="m-lang-btn" class="text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">EN</button>
+                <a href="../#contact" class="mt-1 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-center" id="m-contact">Связаться</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="pt-28 pb-14 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20 mb-5" id="badge">БЛОГ</span>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+                <span id="h1-main">Технические </span><span class="gradient-text" id="h1-grad">статьи</span>
+            </h1>
+            <p class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto" id="hero-lead">
+                Разбираем архитектуру торговых систем, протоколы бирж, безопасность и инструменты — без воды, с примерами из реальных проектов.
+            </p>
+        </div>
+    </section>
+
+    <!-- ARTICLES GRID -->
+    <main class="max-w-5xl mx-auto px-4 pb-24">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+            <!-- Article 1 -->
+            <article class="glass rounded-2xl p-6 card-hover flex flex-col gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="tag tag-blue" id="tag-a1">API</span>
+                    <span class="tag tag-green" id="tag-b1">WebSocket</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-white mb-2 leading-snug">
+                        <a href="websocket-vs-rest.html" class="hover:text-neon-green transition-colors" id="title-1">WebSocket vs REST: что выбрать для подключения к бирже</a>
+                    </h2>
+                    <p class="text-gray-500 text-sm leading-relaxed" id="desc-1">Сравниваем два подхода по задержке, нагрузке и сложности реализации. Когда REST достаточно, а когда без WebSocket не обойтись.</p>
+                </div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-xs text-gray-600 font-mono">16 мая 2026</span>
+                    <a href="websocket-vs-rest.html" class="text-xs text-neon-green hover:underline font-mono flex items-center gap-1" id="read-1">
+                        <span>Читать</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="glass rounded-2xl p-6 card-hover flex flex-col gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="tag tag-green" id="tag-a2">Python</span>
+                    <span class="tag tag-blue" id="tag-b2">Bot</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-white mb-2 leading-snug">
+                        <a href="trading-bot-python.html" class="hover:text-neon-green transition-colors" id="title-2">Торговый бот на Python: архитектура и ключевые компоненты</a>
+                    </h2>
+                    <p class="text-gray-500 text-sm leading-relaxed" id="desc-2">Разбираем структуру production-бота: обработчик данных, исполнитель ордеров, риск-менеджер и логгер. Типичные ошибки при первой разработке.</p>
+                </div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-xs text-gray-600 font-mono">16 мая 2026</span>
+                    <a href="trading-bot-python.html" class="text-xs text-neon-green hover:underline font-mono flex items-center gap-1" id="read-2">
+                        <span>Читать</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="glass rounded-2xl p-6 card-hover flex flex-col gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="tag tag-purple" id="tag-a3">Security</span>
+                    <span class="tag tag-blue" id="tag-b3">API Keys</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-white mb-2 leading-snug">
+                        <a href="api-key-security.html" class="hover:text-neon-green transition-colors" id="title-3">Безопасность API-ключей биржи: как не потерять средства</a>
+                    </h2>
+                    <p class="text-gray-500 text-sm leading-relaxed" id="desc-3">Права доступа, IP-вайтлист, хранение секретов и архитектура, при которой разработчик физически не может вывести ваши средства.</p>
+                </div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-xs text-gray-600 font-mono">16 мая 2026</span>
+                    <a href="api-key-security.html" class="text-xs text-neon-green hover:underline font-mono flex items-center gap-1" id="read-3">
+                        <span>Читать</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 4 -->
+            <article class="glass rounded-2xl p-6 card-hover flex flex-col gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="tag tag-purple" id="tag-a4">Arbitrage</span>
+                    <span class="tag tag-blue" id="tag-b4">Architecture</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-white mb-2 leading-snug">
+                        <a href="arbitrage-bot-guide.html" class="hover:text-neon-green transition-colors" id="title-4">Как работает арбитражный бот: принципы и архитектура</a>
+                    </h2>
+                    <p class="text-gray-500 text-sm leading-relaxed" id="desc-4">4 модуля рабочего бота: Data Feed, Spread Calculator, Order Execution и Risk Management. Почему большинство ботов теряют деньги.</p>
+                </div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-xs text-gray-600 font-mono">16 мая 2026</span>
+                    <a href="arbitrage-bot-guide.html" class="text-xs text-neon-green hover:underline font-mono flex items-center gap-1" id="read-4">
+                        <span>Читать</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 5 -->
+            <article class="glass rounded-2xl p-6 card-hover flex flex-col gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="tag tag-green" id="tag-a5">Grid</span>
+                    <span class="tag tag-blue" id="tag-b5">Strategy</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-white mb-2 leading-snug">
+                        <a href="grid-bot-explained.html" class="hover:text-neon-green transition-colors" id="title-5">Grid-бот: как устроен и когда работает</a>
+                    </h2>
+                    <p class="text-gray-500 text-sm leading-relaxed" id="desc-5">Механика сетки, выбор диапазона и шага, когда стратегия зарабатывает на боковике и почему тренд её убивает.</p>
+                </div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-xs text-gray-600 font-mono">16 мая 2026</span>
+                    <a href="grid-bot-explained.html" class="text-xs text-neon-green hover:underline font-mono flex items-center gap-1" id="read-5">
+                        <span>Читать</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 6 -->
+            <article class="glass rounded-2xl p-6 card-hover flex flex-col gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="tag" style="color:#ef4444;border-color:rgba(239,68,68,.3)" id="tag-a6">HFT</span>
+                    <span class="tag tag-blue" id="tag-b6">Low-Latency</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-white mb-2 leading-snug">
+                        <a href="hft-latency-optimization.html" class="hover:text-neon-green transition-colors" id="title-6">Оптимизация latency в HFT: от WebSocket до co-location</a>
+                    </h2>
+                    <p class="text-gray-500 text-sm leading-relaxed" id="desc-6">5 уровней оптимизации: географическая близость, протокол, сетевой стек ОС, язык программирования, мониторинг.</p>
+                </div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-xs text-gray-600 font-mono">16 мая 2026</span>
+                    <a href="hft-latency-optimization.html" class="text-xs text-neon-green hover:underline font-mono flex items-center gap-1" id="read-6">
+                        <span>Читать</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 7 -->
+            <article class="glass rounded-2xl p-6 card-hover flex flex-col gap-4">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <span class="tag tag-green" id="tag-a7">Pricing</span>
+                    <span class="tag tag-blue" id="tag-b7">Business</span>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-white mb-2 leading-snug">
+                        <a href="trading-algorithm-cost.html" class="hover:text-neon-green transition-colors" id="title-7">Сколько стоит разработка торгового алгоритма</a>
+                    </h2>
+                    <p class="text-gray-500 text-sm leading-relaxed" id="desc-7">Честный разбор: от простого бота за 150 тыс. ₽ до HFT-системы. Из чего складывается цена и чего не стоит экономить.</p>
+                </div>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-xs text-gray-600 font-mono">16 мая 2026</span>
+                    <a href="trading-algorithm-cost.html" class="text-xs text-neon-green hover:underline font-mono flex items-center gap-1" id="read-7">
+                        <span>Читать</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-16 text-center glass rounded-2xl p-8 sm:p-12">
+            <h2 class="text-2xl sm:text-3xl font-black mb-3" id="cta-title">Нужна разработка под ключ?</h2>
+            <p class="text-gray-400 mb-6 max-w-lg mx-auto" id="cta-desc">Опишите задачу в Telegram — обсудим архитектуру и оценим сроки бесплатно.</p>
+            <a href="https://t.me/Algo_Forge_S" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-neon-green to-accent-400 text-black font-bold hover:shadow-xl hover:shadow-neon-green/20 transition-all hover:scale-105" id="cta-btn">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span>Написать в Telegram</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-8">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono">
+            <span id="copy">© 2026 AlgoForge. Все права защищены.</span>
+            <div class="flex gap-6">
+                <a href="../" class="hover:text-neon-green transition-colors" id="f-home">Главная</a>
+                <a href="./" class="hover:text-neon-green transition-colors" id="f-blog">Блог</a>
+                <a href="../#contact" class="hover:text-neon-green transition-colors" id="f-contact">Связаться</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Nav scroll ---
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+        });
+
+        // --- Mobile menu ---
+        document.getElementById('mobile-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // --- i18n ---
+        const STRINGS = {
+            ru: {
+                badge: 'БЛОГ', 'h1-main': 'Технические ', 'h1-grad': 'статьи',
+                'hero-lead': 'Разбираем архитектуру торговых систем, протоколы бирж, безопасность и инструменты — без воды, с примерами из реальных проектов.',
+                'nav-services': 'Услуги', 'nav-blog': 'Блог', 'nav-cases': 'Кейсы', 'nav-news': 'Новости', 'nav-contact': 'Связаться',
+                'm-services': 'Услуги', 'm-blog': 'Блог', 'm-cases': 'Кейсы', 'm-news': 'Новости', 'm-contact': 'Связаться',
+                'tag-a1': 'API', 'tag-b1': 'WebSocket',
+                'title-1': 'WebSocket vs REST: что выбрать для подключения к бирже',
+                'desc-1': 'Сравниваем два подхода по задержке, нагрузке и сложности реализации. Когда REST достаточно, а когда без WebSocket не обойтись.',
+                'read-1': 'Читать', 'tag-a2': 'Python', 'tag-b2': 'Bot',
+                'title-2': 'Торговый бот на Python: архитектура и ключевые компоненты',
+                'desc-2': 'Разбираем структуру production-бота: обработчик данных, исполнитель ордеров, риск-менеджер и логгер. Типичные ошибки при первой разработке.',
+                'read-2': 'Читать', 'tag-a3': 'Security', 'tag-b3': 'API Keys',
+                'title-3': 'Безопасность API-ключей биржи: как не потерять средства',
+                'desc-3': 'Права доступа, IP-вайтлист, хранение секретов и архитектура, при которой разработчик физически не может вывести ваши средства.',
+                'read-3': 'Читать', 'tag-a4': 'Arbitrage', 'tag-b4': 'Architecture',
+                'title-4': 'Как работает арбитражный бот: принципы и архитектура',
+                'desc-4': '4 модуля рабочего бота: Data Feed, Spread Calculator, Order Execution и Risk Management. Почему большинство ботов теряют деньги.',
+                'read-4': 'Читать', 'tag-a5': 'Grid', 'tag-b5': 'Strategy',
+                'title-5': 'Grid-бот: как устроен и когда работает',
+                'desc-5': 'Механика сетки, выбор диапазона и шага, когда стратегия зарабатывает на боковике и почему тренд её убивает.',
+                'read-5': 'Читать', 'tag-a6': 'HFT', 'tag-b6': 'Low-Latency',
+                'title-6': 'Оптимизация latency в HFT: от WebSocket до co-location',
+                'desc-6': '5 уровней оптимизации: географическая близость, протокол, сетевой стек ОС, язык программирования, мониторинг.',
+                'read-6': 'Читать', 'tag-a7': 'Pricing', 'tag-b7': 'Business',
+                'title-7': 'Сколько стоит разработка торгового алгоритма',
+                'desc-7': 'Честный разбор: от простого бота за 150 тыс. ₽ до HFT-системы. Из чего складывается цена и чего не стоит экономить.',
+                'read-7': 'Читать',
+                'cta-title': 'Нужна разработка под ключ?',
+                'cta-desc': 'Опишите задачу в Telegram — обсудим архитектуру и оценим сроки бесплатно.',
+                'cta-btn': 'Написать в Telegram',
+                copy: '© 2026 AlgoForge. Все права защищены.',
+                'f-home': 'Главная', 'f-blog': 'Блог', 'f-contact': 'Связаться',
+                lang: 'EN',
+            },
+            en: {
+                badge: 'BLOG', 'h1-main': 'Technical ', 'h1-grad': 'articles',
+                'hero-lead': 'We break down trading system architecture, exchange protocols, security, and tools — no fluff, real project examples.',
+                'nav-services': 'Services', 'nav-blog': 'Blog', 'nav-cases': 'Cases', 'nav-news': 'News', 'nav-contact': 'Contact',
+                'm-services': 'Services', 'm-blog': 'Blog', 'm-cases': 'Cases', 'm-news': 'News', 'm-contact': 'Contact',
+                'tag-a1': 'API', 'tag-b1': 'WebSocket',
+                'title-1': 'WebSocket vs REST: which to choose for exchange connectivity',
+                'desc-1': 'Comparing both approaches by latency, load and implementation complexity. When REST is enough and when WebSocket is a must.',
+                'read-1': 'Read', 'tag-a2': 'Python', 'tag-b2': 'Bot',
+                'title-2': 'Trading bot in Python: architecture and key components',
+                'desc-2': 'Breaking down a production-grade bot: data handler, order executor, risk manager and logger. Common mistakes on the first build.',
+                'read-2': 'Read', 'tag-a3': 'Security', 'tag-b3': 'API Keys',
+                'title-3': 'Exchange API key security: how not to lose funds',
+                'desc-3': 'Permissions, IP whitelist, secrets storage and architecture where a developer physically cannot withdraw your funds.',
+                'read-3': 'Read', 'tag-a4': 'Arbitrage', 'tag-b4': 'Architecture',
+                'title-4': 'How an arbitrage bot works: principles and architecture',
+                'desc-4': '4 modules: Data Feed, Spread Calculator, Order Execution and Risk Management. Why most bots lose money.',
+                'read-4': 'Read', 'tag-a5': 'Grid', 'tag-b5': 'Strategy',
+                'title-5': 'Grid bot: how it works and when it performs',
+                'desc-5': 'Grid mechanics, range and step selection, when the strategy earns in sideways markets and why trends kill it.',
+                'read-5': 'Read', 'tag-a6': 'HFT', 'tag-b6': 'Low-Latency',
+                'title-6': 'Latency optimisation in HFT: from WebSocket to co-location',
+                'desc-6': '5 optimisation levels: physical proximity, protocol, OS network stack, programming language, monitoring.',
+                'read-6': 'Read', 'tag-a7': 'Pricing', 'tag-b7': 'Business',
+                'title-7': 'How much does trading algorithm development cost',
+                'desc-7': 'Honest breakdown: from a simple bot to an HFT system. What drives the price and where not to cut corners.',
+                'read-7': 'Read',
+                'cta-title': 'Need a turnkey solution?',
+                'cta-desc': 'Describe your task in Telegram — we will discuss the architecture and estimate timing for free.',
+                'cta-btn': 'Message on Telegram',
+                copy: '© 2026 AlgoForge. All rights reserved.',
+                'f-home': 'Home', 'f-blog': 'Blog', 'f-contact': 'Contact',
+                lang: 'RU',
+            }
+        };
+
+        let lang = localStorage.getItem('site_lang') === 'en' ? 'en' : 'ru';
+
+        function applyLang(l) {
+            lang = l;
+            localStorage.setItem('site_lang', l);
+            document.documentElement.lang = l;
+            const s = STRINGS[l];
+            Object.keys(s).forEach(id => {
+                if (id === 'lang') return;
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (id.startsWith('read-')) {
+                    el.querySelector('span') ? el.querySelector('span').textContent = s[id] : (el.textContent = s[id]);
+                } else if (id.startsWith('title-')) {
+                    const a = el.querySelector('a') || el;
+                    a.textContent = s[id];
+                } else {
+                    el.textContent = s[id];
+                }
+            });
+            document.getElementById('lang-btn').textContent = s.lang;
+            document.getElementById('m-lang-btn').textContent = s.lang;
+        }
+
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang === 'ru' ? 'en' : 'ru'));
+        document.getElementById('m-lang-btn').addEventListener('click', () => applyLang(lang === 'ru' ? 'en' : 'ru'));
+
+        lucide.createIcons();
+    </script>
+    <script src="../bg-animation.js"></script>
+</body>
+</html>

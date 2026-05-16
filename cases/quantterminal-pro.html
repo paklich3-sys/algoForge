@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Кейс: разработка десктопного торгового терминала с визуализацией ордербука и единым API для 18 бирж на базе Rust + Tauri. Результаты и архитектура.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://algoforge.ru/cases/quantterminal-pro.html">
+    <meta property="og:type" content="article"><meta property="og:title" content="QuantTerminal Pro — торговый терминал для 18 бирж | AlgoForge">
+    <meta property="og:url" content="https://algoforge.ru/cases/quantterminal-pro.html">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <title>QuantTerminal Pro — торговый терминал для 18 бирж | AlgoForge</title>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"QuantTerminal Pro — десктопный торговый терминал с единым API для 18 бирж","datePublished":"2026-05-16","author":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"},"publisher":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"}}</script>
+    
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Кейсы","item":"https://algoforge.ru/cases/"},{"@type":"ListItem","position":3,"name":"QuantTerminal Pro — торговый терминал для 18 бирж","item":"https://algoforge.ru/cases/quantterminal-pro.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}
+        .glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}
+        nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}
+        article h2{font-size:1.35rem;font-weight:700;color:#fff;margin:2rem 0 .7rem}
+        article h3{font-size:1.05rem;font-weight:600;color:#e2e2e2;margin:1.4rem 0 .45rem}
+        article p{margin-bottom:.95rem;color:#b0b0b0}
+        article ul,article ol{margin:0 0 .95rem 1.5rem;color:#b0b0b0}
+        article li{margin-bottom:.35rem}article strong{color:#e2e2e2}
+        article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}
+        .callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.callout strong{color:#00ff88}
+        .metric{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1rem 1.25rem;text-align:center}
+        .metric-val{font-size:1.6rem;font-weight:800;font-family:'JetBrains Mono',monospace;color:#00ff88}
+        .metric-lbl{font-size:.78rem;color:#888;margin-top:.2rem}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}
+    </style>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6"><div class="flex items-center justify-between h-16">
+            <a href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="./" class="text-sm text-gray-400 hover:text-white" id="nav-back">← Кейсы</a>
+                <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+            </div>
+            <div class="flex md:hidden gap-3 items-center">
+                <button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button>
+                <a href="./" class="text-gray-400 text-sm" id="nav-back-m">← Кейсы</a>
+            </div>
+        </div></div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-400 border border-accent-400/20">Desktop</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">Rust · Tauri · React</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-3" id="art-title">QuantTerminal Pro</h1>
+            <p class="text-gray-400 text-lg font-medium" id="art-sub">Десктопный торговый терминал с единым API для 18 бирж</p>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80&auto=format&fit=crop"
+             alt="Торговый терминал" class="w-full rounded-2xl mb-8" style="height:260px;object-fit:cover;filter:brightness(.75)" loading="lazy">
+
+        <!-- Metrics -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+            <div class="metric"><div class="metric-val">&lt; 5 мс</div><div class="metric-lbl" id="m1">обновление данных</div></div>
+            <div class="metric"><div class="metric-val">18</div><div class="metric-lbl" id="m2">бирж в v1</div></div>
+            <div class="metric"><div class="metric-val">80–120</div><div class="metric-lbl" id="m3">МБ RAM</div></div>
+            <div class="metric"><div class="metric-val">3+ мес</div><div class="metric-lbl" id="m4">без перезапусков</div></div>
+        </div>
+
+        <article id="art-body-ru">
+            <h2>О проекте</h2>
+            <p>Клиент — независимый трейдер с многолетним опытом, торгующий одновременно на нескольких биржах. Основная боль: приходилось держать открытыми 5–6 вкладок браузера с разными биржами, переключаться между ними вручную, а данные везде были в разных форматах.</p>
+            <p>Задача: единый рабочий стол, который агрегирует данные со всех нужных площадок и позволяет управлять позициями из одного места.</p>
+
+            <h2>Технические требования</h2>
+            <ul>
+                <li>Поддержка 15+ бирж через единый унифицированный интерфейс</li>
+                <li>Работа на Windows и Linux</li>
+                <li>Real-time данные: ордербук, стакан, последние сделки — без задержек</li>
+                <li>Выставление и отмена ордеров прямо из терминала</li>
+                <li>Агрегированный ордербук (объединение ликвидности с нескольких бирж)</li>
+                <li>Потребление памяти в разумных пределах при 50+ WebSocket-соединениях</li>
+            </ul>
+
+            <h2>Стек и архитектура</h2>
+            <p><strong>Frontend:</strong> Tauri (Rust backend + React UI). Выбор Tauri вместо Electron обусловлен жёсткими требованиями к производительности и памяти. Аналогичное Electron-приложение потребляло бы 400–600 МБ RAM; Tauri держится в пределах 80–120 МБ.</p>
+            <p><strong>Слой работы с биржами:</strong> Rust. Написали единый адаптер, нормализующий данные от каждой биржи к общему формату. Новая биржа добавляется через реализацию стандартного интерфейса — без затрагивания остального кода.</p>
+            <p><strong>WebSocket-менеджер:</strong> пул соединений с автоматическим переподключением, ведением состояния ордербука, логикой синхронизации snapshot + incremental updates. Написан на Rust с использованием tokio async runtime.</p>
+            <p><strong>Хранилище:</strong> SQLite для локального хранения истории ордеров, настроек и профилей. Real-time данные хранятся только в памяти.</p>
+
+            <h2>Где было сложно</h2>
+            <h3>Агрегированный ордербук</h3>
+            <p>Самая нетривиальная часть. Разные биржи присылают данные с разной частотой и в разных форматах. Нужно было объединять их в единый ордербук, корректно обрабатывая расхождения по времени и формату. Добавили fuzzy matching для идентификации одного инструмента на разных биржах (BTC-USDT vs BTCUSDT vs BTC/USDT).</p>
+
+            <h3>Рендеринг под нагрузкой</h3>
+            <p>Ордербук с 50 уровнями обновляется несколько раз в секунду. Наивная реализация (перерисовывать всё при каждом обновлении) создавала заметные фризы. Перешли на виртуализированный список с точечными обновлениями только изменившихся строк.</p>
+
+            <h3>Разные rate limits на разных биржах</h3>
+            <p>Каждая биржа имеет свои ограничения. Написали централизованный rate limiter с очередью запросов per-exchange.</p>
+
+            <h2>Результат</h2>
+            <ul>
+                <li>Стабильная работа 24/7 без перезапусков более 3 месяцев на тестовом периоде</li>
+                <li>Задержка обновления данных: &lt; 5 мс от получения WebSocket-события до отрисовки</li>
+                <li>Поддержка 18 бирж в первой версии; новая добавляется за 2–4 часа работы</li>
+                <li>Объединённый ордербук агрегирует данные с задержкой &lt; 10 мс</li>
+            </ul>
+
+            <div class="callout">
+                <strong>Нужен торговый терминал под ваши требования?</strong> <a href="../#contact">Расскажите о задаче</a> — оценим за 24 часа.
+            </div>
+        </article>
+
+        <article id="art-body-en" style="display:none">
+            <h2>About the project</h2>
+            <p>The client — an independent trader working simultaneously across several exchanges — had to keep 5–6 browser tabs open, switching between them manually, with data in different formats everywhere.</p>
+            <p>Goal: a unified workstation aggregating data from all platforms with position management from one place.</p>
+
+            <h2>Technical requirements</h2>
+            <ul>
+                <li>15+ exchanges through a single unified interface</li>
+                <li>Windows and Linux support</li>
+                <li>Real-time data: order book, tape, recent trades — without delays</li>
+                <li>Order placement and cancellation from the terminal</li>
+                <li>Aggregated order book across exchanges</li>
+                <li>Reasonable memory usage with 50+ WebSocket connections</li>
+            </ul>
+
+            <h2>Stack and architecture</h2>
+            <p><strong>Frontend:</strong> Tauri (Rust backend + React UI). Chosen over Electron for performance and memory. Equivalent Electron app would use 400–600 MB RAM; Tauri stays within 80–120 MB.</p>
+            <p><strong>Exchange layer:</strong> Rust. Built a unified adapter normalising data from every exchange to a common format. Adding a new exchange means implementing a standard interface — no changes to the rest of the code.</p>
+            <p><strong>WebSocket manager:</strong> connection pool with auto-reconnect, order book state maintenance and snapshot + incremental update sync. Rust with tokio async runtime.</p>
+
+            <h2>Results</h2>
+            <ul>
+                <li>Stable 24/7 operation for 3+ months without restarts during testing</li>
+                <li>Data update latency: &lt; 5ms from WebSocket event to render</li>
+                <li>18 exchanges in v1; a new exchange takes 2–4 hours to add</li>
+                <li>Aggregated order book latency: &lt; 10ms</li>
+            </ul>
+
+            <div class="callout">
+                <strong>Need a trading terminal built to your specifications?</strong> <a href="../#contact">Tell us about the task</a> — we will estimate within 24 hours.
+            </div>
+        </article>
+
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm" id="back-link">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i><span id="back-text">Все кейсы</span>
+            </a>
+            <a href="../#contact" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105" id="cta-link">
+                <i data-lucide="send" class="w-4 h-4"></i><span id="cta-text">Обсудить похожий проект</span>
+            </a>
+        </div>
+    </div>
+
+    <footer class="border-t border-white/5 py-8">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono">
+            <span id="copy">© 2026 AlgoForge. Все права защищены.</span>
+            <div class="flex gap-6">
+                <a href="../" class="hover:text-neon-green" id="f-home">Главная</a>
+                <a href="./" class="hover:text-neon-green" id="f-cases">Кейсы</a>
+                <a href="../#contact" class="hover:text-neon-green" id="f-contact">Связаться</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => { document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40); });
+        const STRINGS = {
+            ru: {'nav-back':'← Кейсы','nav-contact':'Связаться','art-title':'QuantTerminal Pro','art-sub':'Десктопный торговый терминал с единым API для 18 бирж','m1':'обновление данных','m2':'бирж в v1','m3':'МБ RAM','m4':'без перезапусков','back-text':'Все кейсы','cta-text':'Обсудить похожий проект',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-cases':'Кейсы','f-contact':'Связаться',lang:'EN'},
+            en: {'nav-back':'← Cases','nav-contact':'Contact','art-title':'QuantTerminal Pro','art-sub':'Desktop trading terminal with unified API for 18 exchanges','m1':'data update','m2':'exchanges v1','m3':'MB RAM','m4':'without restarts','back-text':'All cases','cta-text':'Discuss a similar project',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-cases':'Cases','f-contact':'Contact',lang:'RU'}
+        };
+        let lang = localStorage.getItem('site_lang') === 'en' ? 'en' : 'ru';
+        function applyLang(l) {
+            lang = l; localStorage.setItem('site_lang', l); document.documentElement.lang = l;
+            const s = STRINGS[l];
+            Object.keys(s).forEach(id => { if(id==='lang') return; const el=document.getElementById(id); if(el) el.textContent=s[id]; });
+            document.getElementById('lang-btn').textContent = s.lang; document.getElementById('lang-btn-m').textContent = s.lang;
+            document.getElementById('art-body-ru').style.display = l==='ru'?'':'none';
+            document.getElementById('art-body-en').style.display = l==='en'?'':'none';
+        }
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

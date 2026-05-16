@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Кейс: SaaS-платформа с real-time дашбордами для 500+ одновременных пользователей, Kafka, TimescaleDB и задержкой доставки 180 мс.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://algoforge.ru/cases/cryptoanalytics-saas.html">
+    <meta property="og:title" content="CryptoAnalytics SaaS — аналитическая платформа | AlgoForge">
+    <meta property="og:url" content="https://algoforge.ru/cases/cryptoanalytics-saas.html">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <title>CryptoAnalytics SaaS — аналитическая платформа для трейдинга | AlgoForge</title>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"CryptoAnalytics SaaS — аналитическая платформа с real-time дашбордами","datePublished":"2026-05-16","author":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"},"publisher":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"}}</script>
+    
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Кейсы","item":"https://algoforge.ru/cases/"},{"@type":"ListItem","position":3,"name":"CryptoAnalytics SaaS — аналитическая платформа для трейдинга","item":"https://algoforge.ru/cases/cryptoanalytics-saas.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}.glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}article h2{font-size:1.35rem;font-weight:700;color:#fff;margin:2rem 0 .7rem}article h3{font-size:1.05rem;font-weight:600;color:#e2e2e2;margin:1.4rem 0 .45rem}article p{margin-bottom:.95rem;color:#b0b0b0}article ul{margin:0 0 .95rem 1.5rem;color:#b0b0b0}article li{margin-bottom:.35rem}article strong{color:#e2e2e2}article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}.callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.callout strong{color:#00ff88}.metric{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1rem 1.25rem;text-align:center}.metric-val{font-size:1.6rem;font-weight:800;font-family:'JetBrains Mono',monospace;color:#00ff88}.metric-lbl{font-size:.78rem;color:#888;margin-top:.2rem}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}</style>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6"><div class="flex items-center justify-between h-16">
+            <a href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="./" class="text-sm text-gray-400 hover:text-white" id="nav-back">← Кейсы</a>
+                <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+            </div>
+            <div class="flex md:hidden gap-3 items-center"><button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button><a href="./" class="text-gray-400 text-sm" id="nav-back-m">← Кейсы</a></div>
+        </div></div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">SaaS</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-400 border border-accent-400/20">Kafka · K8s · TimescaleDB</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-3" id="art-title">CryptoAnalytics SaaS</h1>
+            <p class="text-gray-400 text-lg font-medium" id="art-sub">Аналитическая платформа с real-time дашбордами</p>
+        </div>
+
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop"
+             alt="Аналитическая платформа" class="w-full rounded-2xl mb-8" style="height:260px;object-fit:cover;filter:brightness(.75)" loading="lazy">
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+            <div class="metric"><div class="metric-val">180 мс</div><div class="metric-lbl" id="m1">медиана доставки</div></div>
+            <div class="metric"><div class="metric-val">500+</div><div class="metric-lbl" id="m2">одновременно</div></div>
+            <div class="metric"><div class="metric-val">2.3 ТБ</div><div class="metric-lbl" id="m3">данных в TimescaleDB</div></div>
+            <div class="metric"><div class="metric-val">&lt; 1 сек</div><div class="metric-lbl" id="m4">срабатывание алерта</div></div>
+        </div>
+
+        <article id="art-body-ru">
+            <h2>О проекте</h2>
+            <p>Клиент — стартап, создающий инструменты аналитики для криптотрейдеров. Продукт: веб-платформа с агрегированными рыночными данными, настраиваемыми дашбордами и системой алертов.</p>
+            <p>Основной технический вызов: платформа должна показывать данные в реальном времени сотням пользователей одновременно, не создавая сотни отдельных подключений к биржам.</p>
+
+            <h2>Технические требования</h2>
+            <ul>
+                <li>Real-time дашборды с обновлением данных &lt; 500 мс</li>
+                <li>Поддержка 300+ одновременных пользователей при старте, масштабируемость до 2000+</li>
+                <li>Кастомизируемые виджеты: графики, ордербуки, потоки сделок, индикаторы</li>
+                <li>Система алертов: цена выше X, объём больше Y — уведомление</li>
+                <li>История данных за последние 2 года</li>
+                <li>Аутентификация, подписки, биллинг</li>
+            </ul>
+
+            <h2>Архитектура</h2>
+            <p>Ключевое решение: разделение слоя сбора данных и слоя доставки пользователям.</p>
+            <p><strong>Data ingestion layer (Go):</strong> один модуль подключается к биржам. Один WebSocket на биржу — а не по одному на каждого пользователя. Собранные данные публикуются в Kafka.</p>
+            <p><strong>Stream processing (Go + Apache Kafka):</strong> Kafka агрегирует потоки от всех бирж, обеспечивает надёжную доставку и буферизацию.</p>
+            <p><strong>Delivery layer (Node.js + WebSocket):</strong> получает обработанные данные из Kafka и рассылает подписанным пользователям. Каждый пользователь подписывается только на видимые виджеты.</p>
+            <p><strong>Frontend (Next.js + React):</strong> SSR для быстрой загрузки, WebSocket для real-time, Recharts для графиков.</p>
+            <p><strong>База данных:</strong> PostgreSQL + TimescaleDB для временных рядов. Запросы к истории за год — секунды.</p>
+            <p><strong>Инфраструктура:</strong> Kubernetes на AWS. Auto-scaling delivery layer при росте нагрузки.</p>
+
+            <h2>Решение проблемы масштабирования</h2>
+            <p>Реализовали систему subscription management: delivery layer знает, кто смотрит на что. При получении события из Kafka — рассылаем только подписанным на этот символ. Пользователь на вкладке с ETH не получает трафик BTC.</p>
+
+            <h2>Алерт-система</h2>
+            <p>Движок правил обрабатывает пользовательские условия против потока данных. Правила компилируются в оптимизированные предикаты и группируются по символу для batch-проверки. При срабатывании — уведомление в браузере, Email, Telegram.</p>
+
+            <h2>Результат</h2>
+            <ul>
+                <li>Задержка доставки: медиана 180 мс, 95-й перцентиль 420 мс</li>
+                <li>Нагрузочное тестирование: 500 одновременных пользователей без деградации</li>
+                <li>18 месяцев тиков по 200 парам — 2,3 ТБ, нормальная скорость запросов</li>
+                <li>Время срабатывания алертов: &lt; 1 секунды</li>
+            </ul>
+
+            <div class="callout"><strong>Строите аналитическую платформу?</strong> <a href="../#contact">Опишите проект</a> — обсудим архитектуру.</div>
+        </article>
+
+        <article id="art-body-en" style="display:none">
+            <h2>About the project</h2>
+            <p>A fintech startup building analytics tools for crypto traders. The platform shows aggregated market data, customisable dashboards and a user-defined alert system.</p>
+            <p>Core technical challenge: deliver real-time data to hundreds of simultaneous users without creating hundreds of separate exchange connections.</p>
+
+            <h2>Architecture</h2>
+            <p><strong>Data ingestion (Go):</strong> one module connects to all exchanges — one WebSocket per exchange, not per user. Data is published to Kafka.</p>
+            <p><strong>Delivery layer (Node.js + WebSocket):</strong> reads from Kafka and fans out to subscribed users. Each user only receives data for their visible widgets.</p>
+            <p><strong>Storage:</strong> PostgreSQL + TimescaleDB. Year of tick data queries in seconds. 2.3 TB for 18 months, 200 pairs.</p>
+            <p><strong>Infrastructure:</strong> Kubernetes on AWS with auto-scaling delivery layer.</p>
+
+            <h2>Results</h2>
+            <ul>
+                <li>Delivery latency: 180ms median, 420ms p95</li>
+                <li>Load test: 500 simultaneous users without degradation</li>
+                <li>Alert fire time: &lt; 1 second from event to notification</li>
+            </ul>
+            <div class="callout"><strong>Building an analytics platform?</strong> <a href="../#contact">Describe the project</a>.</div>
+        </article>
+
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm" id="back-link"><i data-lucide="arrow-left" class="w-4 h-4"></i><span id="back-text">Все кейсы</span></a>
+            <a href="../#contact" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105" id="cta-link"><i data-lucide="send" class="w-4 h-4"></i><span id="cta-text">Обсудить похожий проект</span></a>
+        </div>
+    </div>
+
+    <footer class="border-t border-white/5 py-8"><div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono"><span id="copy">© 2026 AlgoForge. Все права защищены.</span><div class="flex gap-6"><a href="../" class="hover:text-neon-green" id="f-home">Главная</a><a href="./" class="hover:text-neon-green" id="f-cases">Кейсы</a><a href="../#contact" class="hover:text-neon-green" id="f-contact">Связаться</a></div></div></footer>
+
+    <script>
+        window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40);});
+        const STRINGS={ru:{'nav-back':'← Кейсы','nav-contact':'Связаться','art-title':'CryptoAnalytics SaaS','art-sub':'Аналитическая платформа с real-time дашбордами','m1':'медиана доставки','m2':'одновременно','m3':'данных в TimescaleDB','m4':'срабатывание алерта','back-text':'Все кейсы','cta-text':'Обсудить похожий проект',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-cases':'Кейсы','f-contact':'Связаться',lang:'EN'},en:{'nav-back':'← Cases','nav-contact':'Contact','art-title':'CryptoAnalytics SaaS','art-sub':'Analytics platform with real-time dashboards','m1':'delivery median','m2':'simultaneous','m3':'data in TimescaleDB','m4':'alert fire time','back-text':'All cases','cta-text':'Discuss a similar project',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-cases':'Cases','f-contact':'Contact',lang:'RU'}};
+        let lang=localStorage.getItem('site_lang')==='en'?'en':'ru';
+        function applyLang(l){lang=l;localStorage.setItem('site_lang',l);document.documentElement.lang=l;const s=STRINGS[l];Object.keys(s).forEach(id=>{if(id==='lang')return;const el=document.getElementById(id);if(el)el.textContent=s[id];});document.getElementById('lang-btn').textContent=s.lang;document.getElementById('lang-btn-m').textContent=s.lang;document.getElementById('art-body-ru').style.display=l==='ru'?'':'none';document.getElementById('art-body-en').style.display=l==='en'?'':'none';}
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

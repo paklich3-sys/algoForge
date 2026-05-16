@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Архитектура торгового бота на Python: обработчик данных, исполнитель ордеров, риск-менеджер и логгер. Структура кода, типичные ошибки и советы для production.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="canonical" href="https://algoforge.ru/blog/trading-bot-python.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Торговый бот на Python: архитектура — AlgoForge">
+    <meta property="og:description" content="Разбираем структуру production-бота: обработчик данных, ордера, риск-менеджер, логгер. Типичные ошибки при первой разработке.">
+    <meta property="og:url" content="https://algoforge.ru/blog/trading-bot-python.html">
+    <meta property="og:site_name" content="AlgoForge">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Торговый бот на Python: архитектура — AlgoForge">
+    <meta name="twitter:description" content="Структура production-бота: ключевые компоненты, ошибки новичков, советы по отладке.">
+    <meta name="twitter:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <link rel="apple-touch-icon" href="../favicon.png?v=4">
+    <title>Торговый бот на Python: архитектура и ключевые компоненты — AlgoForge</title>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Торговый бот на Python: архитектура и ключевые компоненты",
+        "description": "Разбираем структуру production-бота: обработчик данных, исполнитель ордеров, риск-менеджер и логгер. Типичные ошибки при первой разработке.",
+        "datePublished": "2026-05-16",
+        "dateModified": "2026-05-16",
+        "author": { "@type": "Organization", "name": "AlgoForge", "url": "https://algoforge.ru/" },
+        "publisher": { "@type": "Organization", "name": "AlgoForge", "url": "https://algoforge.ru/", "logo": { "@type": "ImageObject", "url": "https://algoforge.ru/logo-v3.png?v=1" } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://algoforge.ru/blog/trading-bot-python.html" }
+    }
+    </script>
+    
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Блог","item":"https://algoforge.ru/blog/"},{"@type":"ListItem","position":3,"name":"Торговый бот на Python: архитектура и ключевые компоненты —","item":"https://algoforge.ru/blog/trading-bot-python.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}
+        .glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}
+        nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}
+        article h2{font-size:1.4rem;font-weight:700;color:#fff;margin:2rem 0 .75rem}
+        article h3{font-size:1.1rem;font-weight:600;color:#e2e2e2;margin:1.5rem 0 .5rem}
+        article p{margin-bottom:1rem;color:#b0b0b0}
+        article ul,article ol{margin:0 0 1rem 1.5rem;color:#b0b0b0}
+        article li{margin-bottom:.4rem}
+        article strong{color:#e2e2e2}
+        article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}
+        article a:hover{color:#00d4ff}
+        pre{background:#0a0a14;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;color:#c9d1d9}
+        code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:5px;color:#00ff88}
+        pre code{background:none;padding:0;color:#c9d1d9}
+        .kw{color:#ff79c6} .fn{color:#50fa7b} .st{color:#f1fa8c} .cm{color:#6272a4;font-style:italic} .nb{color:#8be9fd} .cl{color:#8be9fd}
+        .callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}
+        .callout strong{color:#00ff88}
+        .warn{border-left:3px solid #ff5555;background:rgba(255,85,85,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}
+        .warn strong{color:#ff5555}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:#0d0d12}
+        ::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}
+    </style>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-16">
+                <a href="../" aria-label="AlgoForge">
+                    <img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager">
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="./" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-blog">← Блог</a>
+                    <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                    <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+                </div>
+                <div class="flex md:hidden items-center gap-3">
+                    <button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button>
+                    <a href="./" class="text-gray-400 text-sm" id="nav-blog-m">← Блог</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">Python</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-400 border border-accent-400/20">Architecture</span>
+                <span class="text-xs text-gray-600 font-mono">16 мая 2026 · 10 мин</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-4" id="art-title">
+                Торговый бот на Python: архитектура и ключевые компоненты
+            </h1>
+            <p class="text-gray-400 text-lg" id="art-lead">
+                Разбираем, как устроен промышленный торговый бот — не скрипт в 200 строк, а поддерживаемая система, которая работает 24/7 без падений.
+            </p>
+        </div>
+
+        <article id="art-body-ru">
+            <h2>Почему «написать бота» ≠ «написать рабочего бота»</h2>
+            <p>
+                Первый торговый бот многих разработчиков — это 300 строк в одном файле: получить цену, посчитать сигнал, отправить ордер. Он работает 15 минут на бумажном трейдинге, а потом ломается на первом же исключении от API, не восстанавливает позицию после перезапуска и теряет деньги из-за дублирования ордеров.
+            </p>
+            <p>
+                Production-бот — это иначе. Покажем, как его правильно структурировать.
+            </p>
+
+            <h2>Архитектура: 5 слоёв</h2>
+            <p>Хороший бот состоит из пяти независимых компонентов, каждый отвечает за свою зону ответственности:</p>
+            <ol>
+                <li><strong>Data Handler</strong> — получение и нормализация рыночных данных</li>
+                <li><strong>Strategy Engine</strong> — логика генерации сигналов</li>
+                <li><strong>Risk Manager</strong> — проверка лимитов и размера позиции</li>
+                <li><strong>Order Executor</strong> — отправка и отслеживание ордеров</li>
+                <li><strong>Logger / State Store</strong> — запись событий и восстановление состояния</li>
+            </ol>
+
+            <h2>1. Data Handler</h2>
+            <p>Отвечает за соединение с биржей и доставку «чистых» данных остальным компонентам. Ничего не знает о стратегии.</p>
+<pre><code><span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
+<span class="kw">from</span> typing <span class="kw">import</span> Callable
+<span class="kw">import</span> asyncio, json, websockets
+
+@dataclass
+<span class="kw">class</span> <span class="cl">Tick</span>:
+    symbol: str
+    price: float
+    volume: float
+    ts: int  <span class="cm"># unix ms</span>
+
+<span class="kw">class</span> <span class="cl">DataHandler</span>:
+    <span class="fn">def</span> <span class="fn">__init__</span>(self, symbols: list[str], on_tick: <span class="cl">Callable</span>):
+        self.symbols = symbols
+        self.on_tick = on_tick
+
+    <span class="kw">async</span> <span class="fn">def</span> <span class="fn">_run</span>(self):
+        streams = <span class="st">"/"</span>.join(f<span class="st">"{s.lower()}@trade"</span> <span class="kw">for</span> s <span class="kw">in</span> self.symbols)
+        url = f<span class="st">"wss://stream.binance.com:9443/stream?streams={streams}"</span>
+        <span class="kw">async</span> <span class="kw">with</span> websockets.<span class="fn">connect</span>(url, ping_interval=<span class="nb">20</span>) <span class="kw">as</span> ws:
+            <span class="kw">async</span> <span class="kw">for</span> raw <span class="kw">in</span> ws:
+                d = json.<span class="fn">loads</span>(raw)[<span class="st">"data"</span>]
+                tick = <span class="cl">Tick</span>(d[<span class="st">"s"</span>], float(d[<span class="st">"p"</span>]), float(d[<span class="st">"q"</span>]), d[<span class="st">"T"</span>])
+                <span class="kw">await</span> self.<span class="fn">on_tick</span>(tick)
+
+    <span class="kw">async</span> <span class="fn">def</span> <span class="fn">run</span>(self):
+        <span class="kw">while</span> <span class="nb">True</span>:
+            <span class="kw">try</span>:
+                <span class="kw">await</span> self.<span class="fn">_run</span>()
+            <span class="kw">except</span> Exception <span class="kw">as</span> e:
+                print(f<span class="st">"DataHandler error: {e}, reconnecting in 5s"</span>)
+                <span class="kw">await</span> asyncio.<span class="fn">sleep</span>(<span class="nb">5</span>)
+</code></pre>
+
+            <h2>2. Strategy Engine</h2>
+            <p>Получает нормализованные тики, считает индикаторы и генерирует сигналы. Не отправляет ордера сам — только возвращает решение.</p>
+<pre><code><span class="kw">from</span> enum <span class="kw">import</span> Enum
+
+<span class="kw">class</span> <span class="cl">Signal</span>(Enum):
+    BUY = <span class="st">"buy"</span>
+    SELL = <span class="st">"sell"</span>
+    HOLD = <span class="st">"hold"</span>
+
+<span class="kw">class</span> <span class="cl">MomentumStrategy</span>:
+    <span class="fn">def</span> <span class="fn">__init__</span>(self, window: int = <span class="nb">20</span>):
+        self.prices: list[float] = []
+        self.window = window
+
+    <span class="fn">def</span> <span class="fn">on_tick</span>(self, tick: <span class="cl">Tick</span>) -> <span class="cl">Signal</span>:
+        self.prices.<span class="fn">append</span>(tick.price)
+        <span class="kw">if</span> len(self.prices) > self.window:
+            self.prices.<span class="fn">pop</span>(<span class="nb">0</span>)
+        <span class="kw">if</span> len(self.prices) < self.window:
+            <span class="kw">return</span> <span class="cl">Signal</span>.HOLD
+        avg = sum(self.prices) / self.window
+        <span class="kw">if</span> tick.price > avg * <span class="nb">1.005</span>:   <span class="cm"># +0.5% выше MA</span>
+            <span class="kw">return</span> <span class="cl">Signal</span>.BUY
+        <span class="kw">if</span> tick.price < avg * <span class="nb">0.995</span>:   <span class="cm"># -0.5% ниже MA</span>
+            <span class="kw">return</span> <span class="cl">Signal</span>.SELL
+        <span class="kw">return</span> <span class="cl">Signal</span>.HOLD
+</code></pre>
+
+            <div class="callout">
+                <strong>Принцип:</strong> стратегия — это чистая функция. Она не знает об API, балансе или ордерах. Это упрощает тестирование: можно прогнать стратегию на исторических данных без биржи.
+            </div>
+
+            <h2>3. Risk Manager</h2>
+            <p>Самый важный компонент. Проверяет, можно ли вообще открывать позицию, и сколько.</p>
+<pre><code><span class="kw">class</span> <span class="cl">RiskManager</span>:
+    <span class="fn">def</span> <span class="fn">__init__</span>(self, max_position_usd: float, max_daily_loss_usd: float):
+        self.max_pos = max_position_usd
+        self.max_loss = max_daily_loss_usd
+        self.daily_pnl = <span class="nb">0.0</span>
+        self.open_positions: dict = {}
+
+    <span class="fn">def</span> <span class="fn">can_open</span>(self, symbol: str, side: str, price: float, qty: float) -> bool:
+        cost = price * qty
+        <span class="kw">if</span> cost > self.max_pos:
+            <span class="kw">return</span> <span class="nb">False</span>
+        <span class="kw">if</span> self.daily_pnl < -self.max_loss:
+            <span class="kw">return</span> <span class="nb">False</span>  <span class="cm"># дневной стоп-лосс</span>
+        <span class="kw">if</span> symbol <span class="kw">in</span> self.open_positions:
+            <span class="kw">return</span> <span class="nb">False</span>  <span class="cm"># уже есть позиция</span>
+        <span class="kw">return</span> <span class="nb">True</span>
+
+    <span class="fn">def</span> <span class="fn">calc_qty</span>(self, balance: float, price: float, risk_pct: float = <span class="nb">0.02</span>) -> float:
+        <span class="cm"># Ставим не более 2% депозита на сделку</span>
+        budget = min(balance * risk_pct, self.max_pos)
+        <span class="kw">return</span> round(budget / price, <span class="nb">6</span>)
+</code></pre>
+
+            <h2>4. Order Executor</h2>
+            <p>Отправляет ордера, отслеживает статус и обрабатывает ошибки API.</p>
+<pre><code><span class="kw">import</span> hmac, hashlib, time
+<span class="kw">import</span> aiohttp
+
+<span class="kw">class</span> <span class="cl">OrderExecutor</span>:
+    BASE = <span class="st">"https://api.binance.com"</span>
+
+    <span class="fn">def</span> <span class="fn">__init__</span>(self, api_key: str, secret: str):
+        self.key = api_key
+        self.secret = secret.encode()
+
+    <span class="fn">def</span> <span class="fn">_sign</span>(self, params: str) -> str:
+        <span class="kw">return</span> hmac.<span class="fn">new</span>(self.secret, params.encode(), hashlib.sha256).<span class="fn">hexdigest</span>()
+
+    <span class="kw">async</span> <span class="fn">def</span> <span class="fn">market_buy</span>(self, symbol: str, qty: float) -> dict:
+        ts = int(time.<span class="fn">time</span>() * <span class="nb">1000</span>)
+        params = f<span class="st">"symbol={symbol}&side=BUY&type=MARKET&quantity={qty}&timestamp={ts}"</span>
+        sig = self.<span class="fn">_sign</span>(params)
+        url = f<span class="st">"{self.BASE}/api/v3/order?{params}&signature={sig}"</span>
+        headers = {<span class="st">"X-MBX-APIKEY"</span>: self.key}
+        <span class="kw">async</span> <span class="kw">with</span> aiohttp.<span class="cl">ClientSession</span>() <span class="kw">as</span> s:
+            <span class="kw">async</span> <span class="kw">with</span> s.<span class="fn">post</span>(url, headers=headers) <span class="kw">as</span> r:
+                data = <span class="kw">await</span> r.<span class="fn">json</span>()
+                <span class="kw">if</span> r.status != <span class="nb">200</span>:
+                    <span class="kw">raise</span> RuntimeError(f<span class="st">"Order error: {data}"</span>)
+                <span class="kw">return</span> data
+</code></pre>
+
+            <div class="warn">
+                <strong>Важно:</strong> никогда не храните API-ключи в коде. Используйте переменные окружения (<code>.env</code>) или секреты вашей платформы. Никогда не включайте разрешение «Вывод средств» в ключе.
+            </div>
+
+            <h2>5. Logger и хранение состояния</h2>
+            <p>
+                Бот должен уметь восстанавливать состояние после перезапуска. Минимум — записывать все ордера и позиции в файл или БД.
+            </p>
+<pre><code><span class="kw">import</span> json, pathlib, datetime
+
+<span class="kw">class</span> <span class="cl">StateStore</span>:
+    <span class="fn">def</span> <span class="fn">__init__</span>(self, path: str = <span class="st">"state.json"</span>):
+        self.path = pathlib.<span class="cl">Path</span>(path)
+        self.data = json.<span class="fn">loads</span>(self.path.<span class="fn">read_text</span>()) <span class="kw">if</span> self.path.<span class="fn">exists</span>() <span class="kw">else</span> {}
+
+    <span class="fn">def</span> <span class="fn">save_order</span>(self, order: dict):
+        oid = str(order[<span class="st">"orderId"</span>])
+        self.data[oid] = {**order, <span class="st">"saved_at"</span>: datetime.datetime.<span class="fn">utcnow</span>().<span class="fn">isoformat</span>()}
+        self.path.<span class="fn">write_text</span>(json.<span class="fn">dumps</span>(self.data, indent=<span class="nb">2</span>))
+
+    <span class="fn">def</span> <span class="fn">open_positions</span>(self) -> list:
+        <span class="kw">return</span> [v <span class="kw">for</span> v <span class="kw">in</span> self.data.<span class="fn">values</span>() <span class="kw">if</span> v.<span class="fn">get</span>(<span class="st">"status"</span>) == <span class="st">"FILLED"</span>]
+</code></pre>
+
+            <h2>Собираем всё вместе</h2>
+<pre><code><span class="kw">import</span> asyncio
+
+<span class="kw">async</span> <span class="fn">def</span> <span class="fn">main</span>():
+    store = <span class="cl">StateStore</span>()
+    risk = <span class="cl">RiskManager</span>(max_position_usd=<span class="nb">500</span>, max_daily_loss_usd=<span class="nb">100</span>)
+    strategy = <span class="cl">MomentumStrategy</span>(window=<span class="nb">20</span>)
+    executor = <span class="cl">OrderExecutor</span>(
+        api_key=os.environ[<span class="st">"BINANCE_KEY"</span>],
+        secret=os.environ[<span class="st">"BINANCE_SECRET"</span>]
+    )
+
+    <span class="kw">async</span> <span class="fn">def</span> <span class="fn">on_tick</span>(tick: <span class="cl">Tick</span>):
+        signal = strategy.<span class="fn">on_tick</span>(tick)
+        <span class="kw">if</span> signal == <span class="cl">Signal</span>.BUY:
+            qty = risk.<span class="fn">calc_qty</span>(balance=<span class="nb">1000</span>, price=tick.price)
+            <span class="kw">if</span> risk.<span class="fn">can_open</span>(tick.symbol, <span class="st">"buy"</span>, tick.price, qty):
+                order = <span class="kw">await</span> executor.<span class="fn">market_buy</span>(tick.symbol, qty)
+                store.<span class="fn">save_order</span>(order)
+
+    handler = <span class="cl">DataHandler</span>([<span class="st">"BTCUSDT"</span>, <span class="st">"ETHUSDT"</span>], on_tick)
+    <span class="kw">await</span> handler.<span class="fn">run</span>()
+
+asyncio.<span class="fn">run</span>(<span class="fn">main</span>())
+</code></pre>
+
+            <h2>Типичные ошибки новичков</h2>
+            <ul>
+                <li><strong>Нет идемпотентности ордеров.</strong> При перезапуске бот отправляет ордер повторно. Используйте <code>newClientOrderId</code> с уникальным UUID — биржа отклонит дубликат.</li>
+                <li><strong>Нет обработки частичного исполнения.</strong> Ордер может заполниться на 60%. Бот думает, что позиции нет, и открывает новую.</li>
+                <li><strong>Стратегия и исполнение в одной функции.</strong> Тяжело тестировать и дебажить.</li>
+                <li><strong>Нет дневного стоп-лосса.</strong> При серии убыточных сделок бот продолжает торговать, пока не сольёт депозит.</li>
+                <li><strong>Синхронный код на I/O.</strong> Блокирующий <code>requests.get</code> в async-контексте замораживает весь event loop.</li>
+            </ul>
+
+            <div class="callout">
+                <strong>Совет:</strong> начните с бумажного трейдинга (paper trading) — симулируйте исполнение ордеров без реальных денег, записывайте виртуальный PnL. Только после стабильных результатов переходите на реальный счёт с минимальной суммой.
+            </div>
+
+            <h2>Итог</h2>
+            <p>
+                Торговый бот — это не скрипт, а набор компонентов с чёткими зонами ответственности. Чем более изолированы слои, тем проще их тестировать и улучшать по отдельности. Риск-менеджер — не опция, а обязательный элемент любой системы на реальные деньги.
+            </p>
+            <p>
+                Если нужен готовый, надёжный бот под конкретную стратегию — <a href="../#contact">напишите нам</a>. Работаем под NDA, архитектуру согласовываем с вами до старта.
+            </p>
+        </article>
+
+        <article id="art-body-en" style="display:none">
+            <h2>Why "write a bot" ≠ "write a working bot"</h2>
+            <p>
+                A first trading bot is often 300 lines in one file: get price, compute signal, place order. It works for 15 minutes in paper trading, then crashes on the first API exception, fails to restore position after restart, and duplicates orders.
+            </p>
+            <p>A production bot is structured differently. Here's how.</p>
+
+            <h2>Architecture: 5 layers</h2>
+            <ol>
+                <li><strong>Data Handler</strong> — fetches and normalises market data</li>
+                <li><strong>Strategy Engine</strong> — generates signals</li>
+                <li><strong>Risk Manager</strong> — enforces limits and position sizing</li>
+                <li><strong>Order Executor</strong> — sends and tracks orders</li>
+                <li><strong>Logger / State Store</strong> — records events and restores state</li>
+            </ol>
+
+            <h2>Key principles</h2>
+            <p>
+                The strategy should be a pure function that knows nothing about the API, balance, or orders. This makes backtesting trivial — run it on historical data without touching the exchange.
+            </p>
+            <p>
+                The Risk Manager is the most important component. It checks daily loss limits, prevents duplicate positions, and calculates proper position size (e.g. 2% of equity per trade).
+            </p>
+            <p>
+                The Order Executor handles API signing, error handling and partial fills. Never store API keys in code — use environment variables. Never enable "Withdraw" permission on trading keys.
+            </p>
+
+            <h2>Common beginner mistakes</h2>
+            <ul>
+                <li><strong>No order idempotency.</strong> On restart the bot sends a duplicate order. Use <code>newClientOrderId</code> with a unique UUID — the exchange rejects duplicates.</li>
+                <li><strong>No partial fill handling.</strong> An order fills 60%. The bot thinks there's no position and opens a new one.</li>
+                <li><strong>Strategy and execution in one function.</strong> Hard to test and debug separately.</li>
+                <li><strong>No daily stop-loss.</strong> After a losing streak the bot keeps trading until the deposit is gone.</li>
+                <li><strong>Blocking I/O in async context.</strong> Calling <code>requests.get</code> inside an async function freezes the entire event loop.</li>
+            </ul>
+
+            <div class="callout">
+                <strong>Tip:</strong> start with paper trading — simulate order execution without real money and track virtual PnL. Only go live with a minimal amount after stable results.
+            </div>
+
+            <h2>Conclusion</h2>
+            <p>
+                A trading bot is not a script — it's a set of components with clear responsibilities. The more isolated the layers, the easier it is to test and improve them independently. A risk manager is not optional on any real-money system.
+            </p>
+            <p>
+                Need a production-ready bot for your specific strategy? <a href="../#contact">Get in touch</a>. We work under NDA and agree on architecture with you before starting.
+            </p>
+        </article>
+
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm" id="back-link">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span id="back-text">Все статьи</span>
+            </a>
+            <a href="../#contact" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105" id="cta-link">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span id="cta-text">Обсудить проект</span>
+            </a>
+        </div>
+    </div>
+
+    <footer class="border-t border-white/5 py-8">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono">
+            <span id="copy">© 2026 AlgoForge. Все права защищены.</span>
+            <div class="flex gap-6">
+                <a href="../" class="hover:text-neon-green transition-colors" id="f-home">Главная</a>
+                <a href="./" class="hover:text-neon-green transition-colors" id="f-blog">Блог</a>
+                <a href="../#contact" class="hover:text-neon-green transition-colors" id="f-contact">Связаться</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+        });
+        const STRINGS = {
+            ru: { 'nav-blog':'← Блог','nav-contact':'Связаться','art-title':'Торговый бот на Python: архитектура и ключевые компоненты','art-lead':'Разбираем, как устроен промышленный торговый бот — не скрипт в 200 строк, а поддерживаемая система, которая работает 24/7 без падений.','back-text':'Все статьи','cta-text':'Обсудить проект',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-blog':'Блог','f-contact':'Связаться',lang:'EN' },
+            en: { 'nav-blog':'← Blog','nav-contact':'Contact','art-title':'Trading bot in Python: architecture and key components','art-lead':'We break down how a production trading bot is structured — not a 200-line script, but a maintainable system that runs 24/7 without crashes.','back-text':'All articles','cta-text':'Discuss a project',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-blog':'Blog','f-contact':'Contact',lang:'RU' }
+        };
+        let lang = localStorage.getItem('site_lang') === 'en' ? 'en' : 'ru';
+        function applyLang(l) {
+            lang = l; localStorage.setItem('site_lang', l); document.documentElement.lang = l;
+            const s = STRINGS[l];
+            Object.keys(s).forEach(id => { if(id==='lang') return; const el=document.getElementById(id); if(el) el.textContent=s[id]; });
+            document.getElementById('lang-btn').textContent = s.lang;
+            document.getElementById('lang-btn-m').textContent = s.lang;
+            document.getElementById('art-body-ru').style.display = l==='ru'?'':'none';
+            document.getElementById('art-body-en').style.display = l==='en'?'':'none';
+        }
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

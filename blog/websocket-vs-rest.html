@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WebSocket vs REST для подключения к криптобирже: сравнение по задержке, нагрузке и сложности. Когда REST достаточно, а когда без стриминга не обойтись.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="canonical" href="https://algoforge.ru/blog/websocket-vs-rest.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="WebSocket vs REST для биржи — AlgoForge">
+    <meta property="og:description" content="Сравнение WebSocket и REST для торговых систем: задержка, нагрузка, use-cases. С примерами на Python.">
+    <meta property="og:url" content="https://algoforge.ru/blog/websocket-vs-rest.html">
+    <meta property="og:site_name" content="AlgoForge">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="WebSocket vs REST для биржи — AlgoForge">
+    <meta name="twitter:description" content="Разбор: что выбрать для торгового бота и почему. Задержки, rate limits, реконнект.">
+    <meta name="twitter:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <link rel="apple-touch-icon" href="../favicon.png?v=4">
+    <title>WebSocket vs REST для подключения к бирже — AlgoForge</title>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "WebSocket vs REST: что выбрать для подключения к бирже",
+        "description": "Сравнение WebSocket и REST API для торговых систем: задержка, нагрузка, rate limits и реальные use-cases.",
+        "datePublished": "2026-05-16",
+        "dateModified": "2026-05-16",
+        "author": { "@type": "Organization", "name": "AlgoForge", "url": "https://algoforge.ru/" },
+        "publisher": { "@type": "Organization", "name": "AlgoForge", "url": "https://algoforge.ru/", "logo": { "@type": "ImageObject", "url": "https://algoforge.ru/logo-v3.png?v=1" } },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://algoforge.ru/blog/websocket-vs-rest.html" }
+    }
+    </script>
+    
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Блог","item":"https://algoforge.ru/blog/"},{"@type":"ListItem","position":3,"name":"WebSocket vs REST для подключения к бирже —","item":"https://algoforge.ru/blog/websocket-vs-rest.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        accent: { 400:'#22d3ee' },
+                        neon: { green:'#00ff88' }
+                    },
+                    fontFamily: {
+                        sans:['Inter','sans-serif'],
+                        mono:['JetBrains Mono','monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}
+        .glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}
+        .gradient-text{background:linear-gradient(135deg,#00ff88,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}
+        article h2{font-size:1.4rem;font-weight:700;color:#fff;margin:2rem 0 .75rem}
+        article h3{font-size:1.1rem;font-weight:600;color:#e2e2e2;margin:1.5rem 0 .5rem}
+        article p{margin-bottom:1rem;color:#b0b0b0}
+        article ul,article ol{margin:0 0 1rem 1.5rem;color:#b0b0b0}
+        article li{margin-bottom:.4rem}
+        article strong{color:#e2e2e2}
+        article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}
+        article a:hover{color:#00d4ff}
+        pre{background:#0a0a14;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;color:#c9d1d9}
+        code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:5px;color:#00ff88}
+        pre code{background:none;padding:0;color:#c9d1d9}
+        .kw{color:#ff79c6} .fn{color:#50fa7b} .st{color:#f1fa8c} .cm{color:#6272a4;font-style:italic} .nb{color:#8be9fd}
+        table{width:100%;border-collapse:collapse;margin:1.25rem 0;font-size:.88rem}
+        th{background:rgba(255,255,255,.05);color:#e2e2e2;padding:.6rem 1rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.08)}
+        td{padding:.55rem 1rem;border-bottom:1px solid rgba(255,255,255,.04);color:#aaa}
+        tr:last-child td{border-bottom:none}
+        .callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}
+        .callout strong{color:#00ff88}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:#0d0d12}
+        ::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}
+    </style>
+</head>
+<body>
+    <!-- NAV -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-16">
+                <a href="../" aria-label="AlgoForge — на главную">
+                    <img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager">
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="./" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-blog">← Блог</a>
+                    <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                    <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+                </div>
+                <div class="flex md:hidden items-center gap-3">
+                    <button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button>
+                    <a href="./" class="text-gray-400 text-sm" id="nav-blog-m">← Блог</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ARTICLE -->
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+
+        <!-- Meta header -->
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">API</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-400 border border-accent-400/20">WebSocket</span>
+                <span class="text-xs text-gray-600 font-mono">16 мая 2026 · 8 мин</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-4" id="art-title">
+                WebSocket vs REST: что выбрать для подключения к бирже
+            </h1>
+            <p class="text-gray-400 text-lg" id="art-lead">
+                Когда достаточно обычных HTTP-запросов, а когда нужен постоянный канал — разбираем с числами и примерами.
+            </p>
+        </div>
+
+        <!-- Content RU -->
+        <article id="art-body-ru">
+            <h2>Откуда вообще возник вопрос</h2>
+            <p>
+                Почти все криптобиржи поддерживают и REST, и WebSocket. Начинающие разработчики, как правило, стартуют с REST: запрос — ответ, всё понятно. Но при первом же тесте на реальном рынке обнаруживают задержки в 150–300 мс на получение тикера и ограничение в 1200 запросов в минуту (Binance). Тогда и появляется вопрос: а стоит ли переходить на WebSocket?
+            </p>
+
+            <h2>Как работает REST в контексте торговли</h2>
+            <p>
+                REST (Representational State Transfer) использует стандартный HTTP: клиент отправляет запрос, сервер отвечает, соединение закрывается. Каждый раз — новое TCP-рукопожатие, TLS-хендшейк, DNS-резолв (если нет постоянного соединения).
+            </p>
+            <p>
+                Для получения цены это выглядит так:
+            </p>
+<pre><code><span class="kw">import</span> requests
+
+<span class="fn">def</span> <span class="fn">get_price</span>(symbol: str) -> float:
+    url = <span class="st">f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"</span>
+    resp = requests.<span class="fn">get</span>(url, timeout=<span class="nb">3</span>)
+    resp.<span class="fn">raise_for_status</span>()
+    <span class="kw">return</span> float(resp.<span class="fn">json</span>()[<span class="st">"price"</span>])
+
+<span class="cm"># Каждый вызов — новый HTTP-запрос</span>
+price = <span class="fn">get_price</span>(<span class="st">"BTCUSDT"</span>)
+</code></pre>
+            <p>
+                Суммарная задержка складывается из RTT до сервера + время обработки + накладные расходы HTTP. На колокейшне рядом с серверами биржи это может быть 3–8 мс, из любой точки России — 50–200 мс.
+            </p>
+
+            <h3>Rate limits: главное ограничение REST</h3>
+            <p>
+                Биржи жёстко ограничивают количество запросов. Binance даёт 1200 запросов/мин по весу (каждый endpoint имеет вес от 1 до 50). При превышении лимита приходит HTTP 429, а при систематических нарушениях — бан IP на несколько часов.
+            </p>
+            <p>
+                Если вы хотите обновлять цену каждую секунду для 20 символов — это уже 1200 запросов в минуту. Лимит исчерпан полностью, и остальная логика бота (размещение ордеров, проверка баланса) просто не поместится.
+            </p>
+
+            <h2>Как работает WebSocket</h2>
+            <p>
+                WebSocket — это постоянное двунаправленное соединение поверх TCP. После одного HTTP-хендшейка (Upgrade) сервер сам толкает данные клиенту при каждом изменении. Никаких повторных соединений, никакого опроса.
+            </p>
+<pre><code><span class="kw">import</span> asyncio
+<span class="kw">import</span> websockets
+<span class="kw">import</span> json
+
+<span class="kw">async</span> <span class="fn">def</span> <span class="fn">stream_price</span>():
+    url = <span class="st">"wss://stream.binance.com:9443/ws/btcusdt@trade"</span>
+    <span class="kw">async</span> <span class="kw">with</span> websockets.<span class="fn">connect</span>(url) <span class="kw">as</span> ws:
+        <span class="kw">while</span> <span class="nb">True</span>:
+            msg = <span class="kw">await</span> ws.<span class="fn">recv</span>()
+            data = json.<span class="fn">loads</span>(msg)
+            <span class="cm"># data["p"] — цена каждой сделки в реальном времени</span>
+            print(data[<span class="st">"p"</span>])
+
+asyncio.<span class="fn">run</span>(<span class="fn">stream_price</span>())
+</code></pre>
+            <p>
+                Задержка между изменением цены на бирже и получением сообщения — единицы миллисекунд (плюс сетевой RTT). Rate limits на стриминг существенно мягче или вовсе не применяются к входящим сообщениям.
+            </p>
+
+            <h2>Прямое сравнение</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Критерий</th>
+                        <th>REST</th>
+                        <th>WebSocket</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Задержка получения данных</td><td>50–300 мс (polling)</td><td>1–10 мс (push)</td></tr>
+                    <tr><td>Нагрузка на сеть</td><td>Высокая (заголовки HTTP на каждый запрос)</td><td>Минимальная (только payload)</td></tr>
+                    <tr><td>Rate limits</td><td>Жёсткие (1200 req/min)</td><td>Мягкие / не применяются</td></tr>
+                    <tr><td>Сложность реализации</td><td>Низкая</td><td>Средняя (реконнект, ping/pong)</td></tr>
+                    <tr><td>Подходит для рыночных данных</td><td>✗ при высокой частоте</td><td>✓</td></tr>
+                    <tr><td>Подходит для ордеров</td><td>✓ (POST /order)</td><td>✓ (Binance WS API v3)</td></tr>
+                    <tr><td>Stateful соединение</td><td>✗</td><td>✓ (надо обрабатывать разрыв)</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Когда достаточно REST</h2>
+            <ul>
+                <li>Вы запрашиваете данные реже одного раза в 3–5 секунд.</li>
+                <li>Стратегия работает на дневных или часовых свечах.</li>
+                <li>Вам нужна история (klines, trades) — только REST endpoint.</li>
+                <li>Постановка ордеров и управление балансом — REST всегда надёжнее для исполнения.</li>
+                <li>Прототип или MVP: скорость разработки важнее миллисекунд.</li>
+            </ul>
+
+            <h2>Когда необходим WebSocket</h2>
+            <ul>
+                <li>Вам нужен каждый тик или каждая сделка (stриминг orderbook/trades).</li>
+                <li>Стратегия реагирует на изменение цены быстрее 1 секунды.</li>
+                <li>Вы отслеживаете 10+ символов одновременно.</li>
+                <li>Арбитражный бот: разница в ценах живёт 50–200 мс, нельзя терять время на HTTP.</li>
+                <li>Маркетмейкер: нужно видеть глубину стакана в реальном времени.</li>
+            </ul>
+
+            <div class="callout">
+                <strong>Практический вывод:</strong> используйте WebSocket для входящих рыночных данных и REST для исполняющих действий (ордера, баланс). Гибридный подход — стандарт для production-ботов.
+            </div>
+
+            <h2>Особенности работы с WebSocket в production</h2>
+            <h3>Реконнект при разрыве</h3>
+            <p>
+                Биржи разрывают соединение каждые 24 часа (Binance) или при длительном отсутствии активности. Ваш код должен автоматически переподключаться и восстанавливать подписки.
+            </p>
+<pre><code><span class="kw">import</span> asyncio
+<span class="kw">import</span> websockets
+
+<span class="kw">async</span> <span class="fn">def</span> <span class="fn">connect_with_retry</span>(url: str, handler):
+    <span class="kw">while</span> <span class="nb">True</span>:
+        <span class="kw">try</span>:
+            <span class="kw">async</span> <span class="kw">with</span> websockets.<span class="fn">connect</span>(url, ping_interval=<span class="nb">20</span>) <span class="kw">as</span> ws:
+                <span class="kw">await</span> <span class="fn">handler</span>(ws)
+        <span class="kw">except</span> (websockets.ConnectionClosed, OSError):
+            <span class="kw">await</span> asyncio.<span class="fn">sleep</span>(<span class="nb">5</span>)  <span class="cm"># пауза перед реконнектом</span>
+</code></pre>
+
+            <h3>Ping/Pong</h3>
+            <p>
+                Многие биржи требуют периодически отправлять ping-сообщения, иначе соединение признаётся неактивным. Библиотека <code>websockets</code> делает это автоматически через параметр <code>ping_interval</code>.
+            </p>
+
+            <h3>Множественные потоки</h3>
+            <p>
+                Binance позволяет объединять несколько стримов в одно соединение через <code>/stream?streams=</code>. Это снижает число соединений и упрощает управление:
+            </p>
+<pre><code>url = <span class="st">"wss://stream.binance.com:9443/stream?streams=btcusdt@trade/ethusdt@trade"</span>
+</code></pre>
+
+            <h2>Итог</h2>
+            <p>
+                Нет «лучшего» протокола — есть подходящий для задачи. Большинство production-систем используют оба: WebSocket для рыночных данных и REST для управления ордерами и аккаунтом. Если вы строите бота впервые — начните с REST, убедитесь в логике стратегии, потом переходите на стриминг.
+            </p>
+            <p>
+                Нужна готовая торговая система с оптимальной архитектурой? <a href="../#contact">Опишите задачу</a> — обсудим и оценим.
+            </p>
+        </article>
+
+        <!-- Content EN (hidden by default) -->
+        <article id="art-body-en" style="display:none">
+            <h2>Where the question comes from</h2>
+            <p>
+                Almost all crypto exchanges support both REST and WebSocket. Junior developers typically start with REST: request → response, straightforward. But on the first live market test they hit 150–300 ms delays on ticker fetch and a 1200-requests-per-minute cap (Binance). That's when the question appears: should I switch to WebSocket?
+            </p>
+
+            <h2>How REST works in a trading context</h2>
+            <p>
+                REST uses standard HTTP: client sends a request, server responds, connection closes. Every call involves a fresh TCP handshake, TLS setup, and optionally DNS lookup.
+            </p>
+            <p>
+                Fetching the price looks like this:
+            </p>
+<pre><code><span class="kw">import</span> requests
+
+<span class="fn">def</span> <span class="fn">get_price</span>(symbol: str) -> float:
+    url = <span class="st">f"https://api.binance.com/api/v3/ticker/price?symbol={symbol}"</span>
+    resp = requests.<span class="fn">get</span>(url, timeout=<span class="nb">3</span>)
+    resp.<span class="fn">raise_for_status</span>()
+    <span class="kw">return</span> float(resp.<span class="fn">json</span>()[<span class="st">"price"</span>])
+
+price = <span class="fn">get_price</span>(<span class="st">"BTCUSDT"</span>)
+</code></pre>
+            <p>
+                Total latency = RTT to server + processing + HTTP overhead. On exchange co-location it can be 3–8 ms; from Russia — 50–200 ms.
+            </p>
+
+            <h3>Rate limits: REST's main constraint</h3>
+            <p>
+                Exchanges enforce strict request caps. Binance allows 1200 weight-units per minute (each endpoint has a weight from 1 to 50). Exceeding the limit returns HTTP 429; repeat violations result in an IP ban for hours.
+            </p>
+            <p>
+                Polling the price every second for 20 symbols already consumes 1200 req/min — the entire quota, leaving no room for order placement or balance checks.
+            </p>
+
+            <h2>How WebSocket works</h2>
+            <p>
+                WebSocket is a persistent bidirectional channel over TCP. After a single HTTP upgrade handshake, the server pushes data to the client on every change. No repeated connections, no polling.
+            </p>
+<pre><code><span class="kw">import</span> asyncio
+<span class="kw">import</span> websockets
+<span class="kw">import</span> json
+
+<span class="kw">async</span> <span class="fn">def</span> <span class="fn">stream_price</span>():
+    url = <span class="st">"wss://stream.binance.com:9443/ws/btcusdt@trade"</span>
+    <span class="kw">async</span> <span class="kw">with</span> websockets.<span class="fn">connect</span>(url) <span class="kw">as</span> ws:
+        <span class="kw">while</span> <span class="nb">True</span>:
+            msg = <span class="kw">await</span> ws.<span class="fn">recv</span>()
+            data = json.<span class="fn">loads</span>(msg)
+            print(data[<span class="st">"p"</span>])  <span class="cm"># live trade price</span>
+
+asyncio.<span class="fn">run</span>(<span class="fn">stream_price</span>())
+</code></pre>
+            <p>
+                Latency between a price change on the exchange and receiving the message is single-digit milliseconds (plus network RTT). Rate limits on streaming are much looser or don't apply to incoming messages at all.
+            </p>
+
+            <h2>Side-by-side comparison</h2>
+            <table>
+                <thead>
+                    <tr><th>Criterion</th><th>REST</th><th>WebSocket</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Data receive latency</td><td>50–300 ms (polling)</td><td>1–10 ms (push)</td></tr>
+                    <tr><td>Network overhead</td><td>High (full HTTP headers per request)</td><td>Minimal (payload only)</td></tr>
+                    <tr><td>Rate limits</td><td>Strict (1200 req/min)</td><td>Soft / not applied to inbound</td></tr>
+                    <tr><td>Implementation complexity</td><td>Low</td><td>Medium (reconnect, ping/pong)</td></tr>
+                    <tr><td>Good for market data</td><td>✗ at high frequency</td><td>✓</td></tr>
+                    <tr><td>Good for orders</td><td>✓ (POST /order)</td><td>✓ (Binance WS API v3)</td></tr>
+                    <tr><td>Stateful connection</td><td>✗</td><td>✓ (must handle disconnects)</td></tr>
+                </tbody>
+            </table>
+
+            <h2>When REST is enough</h2>
+            <ul>
+                <li>You query data less than once every 3–5 seconds.</li>
+                <li>Your strategy runs on daily or hourly candles.</li>
+                <li>You need historical data (klines, trades) — REST-only endpoint.</li>
+                <li>Order placement and balance management — REST is always more reliable for execution.</li>
+                <li>Prototype or MVP: development speed matters more than milliseconds.</li>
+            </ul>
+
+            <h2>When WebSocket is necessary</h2>
+            <ul>
+                <li>You need every tick or every trade (orderbook/trades streaming).</li>
+                <li>Your strategy reacts to price changes faster than 1 second.</li>
+                <li>You're tracking 10+ symbols simultaneously.</li>
+                <li>Arbitrage bot: price discrepancies last 50–200 ms, can't afford HTTP overhead.</li>
+                <li>Market maker: need order book depth in real time.</li>
+            </ul>
+
+            <div class="callout">
+                <strong>Practical conclusion:</strong> use WebSocket for inbound market data and REST for execution (orders, balance). The hybrid approach is the production standard.
+            </div>
+
+            <h2>Production WebSocket considerations</h2>
+            <h3>Reconnect on disconnect</h3>
+            <p>
+                Exchanges drop connections every 24 hours (Binance) or on inactivity. Your code must auto-reconnect and restore subscriptions.
+            </p>
+<pre><code><span class="kw">async</span> <span class="fn">def</span> <span class="fn">connect_with_retry</span>(url: str, handler):
+    <span class="kw">while</span> <span class="nb">True</span>:
+        <span class="kw">try</span>:
+            <span class="kw">async</span> <span class="kw">with</span> websockets.<span class="fn">connect</span>(url, ping_interval=<span class="nb">20</span>) <span class="kw">as</span> ws:
+                <span class="kw">await</span> <span class="fn">handler</span>(ws)
+        <span class="kw">except</span> (websockets.ConnectionClosed, OSError):
+            <span class="kw">await</span> asyncio.<span class="fn">sleep</span>(<span class="nb">5</span>)
+</code></pre>
+
+            <h2>Conclusion</h2>
+            <p>
+                There is no single "better" protocol — only the one that fits your task. Most production systems use both: WebSocket for market data, REST for orders and account management. If you're building your first bot — start with REST, verify the strategy logic, then migrate to streaming.
+            </p>
+            <p>
+                Need a ready-made trading system with optimal architecture? <a href="../#contact">Describe your task</a> — we'll discuss and estimate it.
+            </p>
+        </article>
+
+        <!-- Back link + CTA -->
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm" id="back-link">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span id="back-text">Все статьи</span>
+            </a>
+            <a href="../#contact"
+               class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105"
+               id="cta-link">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span id="cta-text">Обсудить проект</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-8">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono">
+            <span id="copy">© 2026 AlgoForge. Все права защищены.</span>
+            <div class="flex gap-6">
+                <a href="../" class="hover:text-neon-green transition-colors" id="f-home">Главная</a>
+                <a href="./" class="hover:text-neon-green transition-colors" id="f-blog">Блог</a>
+                <a href="../#contact" class="hover:text-neon-green transition-colors" id="f-contact">Связаться</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+        });
+
+        const STRINGS = {
+            ru: {
+                'nav-blog': '← Блог', 'nav-contact': 'Связаться',
+                'art-title': 'WebSocket vs REST: что выбрать для подключения к бирже',
+                'art-lead': 'Когда достаточно обычных HTTP-запросов, а когда нужен постоянный канал — разбираем с числами и примерами.',
+                'back-text': 'Все статьи', 'cta-text': 'Обсудить проект',
+                copy: '© 2026 AlgoForge. Все права защищены.',
+                'f-home': 'Главная', 'f-blog': 'Блог', 'f-contact': 'Связаться', lang: 'EN'
+            },
+            en: {
+                'nav-blog': '← Blog', 'nav-contact': 'Contact',
+                'art-title': 'WebSocket vs REST: which to choose for exchange connectivity',
+                'art-lead': 'When standard HTTP requests are sufficient and when you need a persistent channel — with numbers and examples.',
+                'back-text': 'All articles', 'cta-text': 'Discuss a project',
+                copy: '© 2026 AlgoForge. All rights reserved.',
+                'f-home': 'Home', 'f-blog': 'Blog', 'f-contact': 'Contact', lang: 'RU'
+            }
+        };
+
+        let lang = localStorage.getItem('site_lang') === 'en' ? 'en' : 'ru';
+
+        function applyLang(l) {
+            lang = l;
+            localStorage.setItem('site_lang', l);
+            document.documentElement.lang = l;
+            const s = STRINGS[l];
+            Object.keys(s).forEach(id => {
+                if (id === 'lang') return;
+                const el = document.getElementById(id);
+                if (el) el.textContent = s[id];
+            });
+            document.getElementById('lang-btn').textContent = s.lang;
+            document.getElementById('lang-btn-m').textContent = s.lang;
+            document.getElementById('art-body-ru').style.display = l === 'ru' ? '' : 'none';
+            document.getElementById('art-body-en').style.display = l === 'en' ? '' : 'none';
+        }
+
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang === 'ru' ? 'en' : 'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click', () => applyLang(lang === 'ru' ? 'en' : 'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

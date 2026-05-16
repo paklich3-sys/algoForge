@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Актуальные новости алгоритмической торговли, крипторегулирования и технологий. Разбор событий, которые влияют на алготрейдинг в 2026 году.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <link rel="canonical" href="https://algoforge.ru/news/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Новости алготрейдинга и крипторынка — AlgoForge">
+    <meta property="og:description" content="Разбор регуляторных изменений, технологических обновлений бирж и трендов алгоритмической торговли.">
+    <meta property="og:url" content="https://algoforge.ru/news/">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <title>Новости алготрейдинга и крипторынка — AlgoForge</title>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Новости AlgoForge",
+        "url": "https://algoforge.ru/news/",
+        "publisher": { "@type": "Organization", "name": "AlgoForge", "url": "https://algoforge.ru/" }
+    }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.263.1"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>
+        #three-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+        nav,main,footer,section{position:relative;z-index:1}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}
+        .glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}
+        nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}
+        .news-img{width:100%;height:220px;object-fit:cover;border-radius:12px 12px 0 0;filter:brightness(.75)}
+        .news-card{transition:all .3s cubic-bezier(.23,1,.32,1)}
+        .news-card:hover{transform:translateY(-4px);border-color:rgba(0,255,136,.25)!important}
+        .tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.7rem;font-family:'JetBrains Mono',monospace;border:1px solid}
+        .gradient-text{background:linear-gradient(135deg,#00ff88,#00d4ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}
+        .article-body h2{font-size:1.3rem;font-weight:700;color:#fff;margin:1.75rem 0 .65rem}
+        .article-body p{margin-bottom:.9rem;color:#b0b0b0;font-size:.97rem}
+        .article-body ul{margin:0 0 .9rem 1.5rem;color:#b0b0b0;font-size:.97rem}
+        .article-body li{margin-bottom:.35rem}
+        .article-body strong{color:#e2e2e2}
+        .article-body a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}
+        .callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.75rem 1rem;margin:1rem 0;color:#b0b0b0;font-size:.93rem}
+        .callout strong{color:#00ff88}
+        .news-divider{border:none;border-top:1px solid rgba(255,255,255,.06);margin:3rem 0}
+    </style>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between h-16">
+                <a href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager"></a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="../#services" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-services">Услуги</a>
+                    <a href="../blog/" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-blog">Блог</a>
+                    <a href="../cases/" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-cases">Кейсы</a>
+                    <a href="./" class="text-sm text-white font-medium" id="nav-news">Новости</a>
+                    <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                    <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+                </div>
+                <div class="flex md:hidden items-center gap-3">
+                    <button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button>
+                    <button id="mobile-btn" class="p-2 text-gray-400 hover:text-white"><i data-lucide="menu" class="w-5 h-5"></i></button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden glass mx-4 mb-3 rounded-2xl">
+            <div class="flex flex-col p-4 gap-1">
+                <a href="../#services" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-services">Услуги</a>
+                <a href="../blog/" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-blog">Блог</a>
+                <a href="../cases/" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-cases">Кейсы</a>
+                <a href="./" class="px-4 py-3 rounded-xl text-white hover:bg-white/5 transition-colors" id="m-news">Новости</a>
+                <a href="../#contact" class="mt-1 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-center" id="m-contact">Связаться</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="pt-28 pb-12 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-400 border border-accent-400/20 mb-5" id="badge">НОВОСТИ</span>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+                <span id="h1-a">Рынок. Регуляторы. </span><span class="gradient-text" id="h1-b">Технологии.</span>
+            </h1>
+            <p class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto" id="hero-lead">
+                Разбираем события, которые меняют правила игры для алготрейдеров: новые законы, обновления API бирж, изменения в инфраструктуре.
+            </p>
+        </div>
+    </section>
+
+    <main class="max-w-4xl mx-auto px-4 pb-24">
+
+        <!-- NEWS 1: SEC/CFTC -->
+        <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news1">
+            <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9?w=1200&q=80&auto=format&fit=crop"
+                 alt="Регуляторы США" class="news-img" loading="lazy">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4 flex-wrap">
+                    <span class="tag" style="color:#22d3ee;border-color:rgba(34,211,238,.3)" id="n1-tag">Регулирование</span>
+                    <span class="text-xs text-gray-600 font-mono" id="n1-date">27 апреля 2026</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3" id="n1-title">
+                    SEC и CFTC — единый сигнал рынку: цифровые активы выходят из серой зоны
+                </h2>
+                <div class="article-body" id="n1-body-ru">
+                    <p>На конференции Bitcoin 2026 в Лас-Вегасе руководители SEC и CFTC — двух главных финансовых регуляторов США — впервые появились вместе на одной сцене. Совместное выступление стало недвусмысленным сигналом: оба ведомства согласовали позицию и намерены действовать скоординированно.</p>
+
+                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=900&q=80&auto=format&fit=crop"
+                         alt="Конференция по регулированию" class="w-full rounded-xl my-5" style="height:200px;object-fit:cover;filter:brightness(.75)" loading="lazy">
+
+                    <h2>Что изменится с принятием CLARITY Act</h2>
+                    <p>Оба регулятора призвали Конгресс ускорить принятие CLARITY Act — законопроекта, который должен наконец разграничить полномочия SEC и CFTC в сфере цифровых активов:</p>
+                    <ul>
+                        <li><strong>Биткоин и эфир</strong> — цифровые товары под надзором CFTC.</li>
+                        <li><strong>Новые токены</strong> — ценные бумаги под SEC до достижения «достаточной децентрализации».</li>
+                        <li><strong>Стейблкоины</strong> — отдельный режим, правила разрабатываются параллельно.</li>
+                    </ul>
+                    <p>CLARITY Act — не первая попытка: аналогичные инициативы появлялись в Конгрессе с 2022 года. Отличие 2026 года — согласованная поддержка обеих регуляторных ведомств, что существенно повышает шансы на принятие.</p>
+
+                    <h2>Требования к AML для участников рынка</h2>
+                    <p>Для компаний, работающих с биржевой инфраструктурой, законопроект содержит прямые требования: все зарегистрированные участники рынка обязаны внедрить AML-процедуры (Anti-Money Laundering) в соответствии с федеральными стандартами. Это означает верификацию контрагентов, мониторинг транзакций и отчётность в FinCEN.</p>
+
+                    <div class="callout">
+                        <strong>Для алготрейдинга:</strong> CFTC традиционно лояльнее к алгоритмической торговле, чем SEC. Если надзор за биткоином перейдёт к CFTC — институциональные алготрейдеры получат более предсказуемую регуляторную среду для работы на американском рынке. Барьеры для входа снизятся, объёмы институциональной ликвидности вырастут.
+                    </div>
+
+                    <h2>Что делать прямо сейчас</h2>
+                    <p>Компаниям, работающим или планирующим работать с американскими клиентами, стоит следить за продвижением CLARITY Act в Конгрессе и уже сейчас начать изучать требования к регистрации под режимом CFTC. Закон не принят, но подготовку лучше начинать заблаговременно.</p>
+                </div>
+                <div id="n1-body-en" style="display:none" class="article-body">
+                    <p>At the Bitcoin 2026 conference in Las Vegas, the heads of the SEC and CFTC appeared together on stage for the first time — a clear coordinated signal to the market that both agencies have aligned their positions on digital assets.</p>
+
+                    <h2>What CLARITY Act would change</h2>
+                    <ul>
+                        <li><strong>Bitcoin and Ether</strong> — digital commodities under CFTC oversight.</li>
+                        <li><strong>New tokens</strong> — securities under SEC until "sufficient decentralisation."</li>
+                        <li><strong>Stablecoins</strong> — separate regime, rules in development.</li>
+                    </ul>
+                    <p>What makes the 2026 attempt different from previous similar bills is coordinated support from both regulatory agencies, significantly increasing the odds of passage.</p>
+
+                    <h2>AML requirements for market participants</h2>
+                    <p>The bill requires all registered participants to implement AML procedures compliant with federal standards — counterparty verification, transaction monitoring and FinCEN reporting.</p>
+
+                    <div class="callout">
+                        <strong>For algo trading:</strong> CFTC is traditionally more permissive toward algorithmic trading than the SEC. If Bitcoin oversight moves to CFTC, institutional algo traders will have a more predictable regulatory environment for the US market, with lower entry barriers and greater institutional liquidity.
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <hr class="news-divider">
+
+        <!-- NEWS 2: Russia -->
+        <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news2">
+            <img src="https://images.unsplash.com/photo-1547448415-e9f5b28e570d?w=1200&q=80&auto=format&fit=crop"
+                 alt="Регулирование криптовалют в России" class="news-img" loading="lazy">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4 flex-wrap">
+                    <span class="tag" style="color:#a855f7;border-color:rgba(168,85,247,.3)" id="n2-tag">Россия</span>
+                    <span class="text-xs text-gray-600 font-mono" id="n2-date">23 марта 2026</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3" id="n2-title">
+                    Россия переводит криптооборот в лицензированный режим: что это значит для алготрейдеров
+                </h2>
+                <div class="article-body" id="n2-body-ru">
+                    <p>Правительственная комиссия одобрила пакет законопроектов, переводящих российский крипторынок из серой зоны в зону лицензированного оборота. Это продолжение курса, начатого в 2024 году законом о цифровых финансовых активах: теперь регуляторика приобрела завершённый вид.</p>
+
+                    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=900&q=80&auto=format&fit=crop"
+                         alt="Законодательство" class="w-full rounded-xl my-5" style="height:200px;object-fit:cover;filter:brightness(.7)" loading="lazy">
+
+                    <h2>Ключевые изменения</h2>
+                    <ul>
+                        <li><strong>Работа только через лицензированных посредников</strong> — банки, биржи, брокеры с соответствующей лицензией ЦБ.</li>
+                        <li><strong>Обязательное тестирование</strong> — участники рынка должны подтвердить понимание рисков.</li>
+                        <li><strong>Лимиты для неквалифицированных инвесторов</strong> — ограничения на объём операций.</li>
+                        <li><strong>Санкции за нелегальный оборот</strong> — ожидаются с 2027 года, дав рынку время на адаптацию.</li>
+                    </ul>
+
+                    <h2>Как это меняет архитектуру торговых систем</h2>
+                    <p>Ключевое изменение для российских алготрейдеров — переход от прямого подключения к зарубежным биржам к работе через российского лицензированного посредника. Это не запрет, но существенное изменение инфраструктурной архитектуры:</p>
+                    <ul>
+                        <li>Вместо прямого API-подключения к Binance или Bybit — подключение через российский шлюз с собственным API.</li>
+                        <li>Дополнительный уровень задержки из-за промежуточного звена.</li>
+                        <li>Требования к документированию стратегий и хранению логов.</li>
+                        <li>Необходимость пройти верификацию как «квалифицированный инвестор» для снятия лимитов.</li>
+                    </ul>
+
+                    <div class="callout">
+                        <strong>Практический вывод:</strong> компаниям стоит уже сейчас изучить требования к лицензированным посредникам и начать выстраивать отношения с теми, кто будет работать в новом режиме. Срок адаптации — около года до введения санкций в 2027 году.
+                    </div>
+
+                    <h2>Что остаётся без изменений</h2>
+                    <p>Сама возможность алгоритмической торговли не ограничивается — регуляторика направлена на контроль оборота, а не на запрет стратегий. Торговые алгоритмы, боты и автоматизированные системы остаются легальными инструментами при соблюдении требований к посредникам.</p>
+                </div>
+                <div id="n2-body-en" style="display:none" class="article-body">
+                    <p>Russia's government commission approved a package of bills moving the domestic crypto market from a grey zone into a licensed regime — continuing the regulatory track started with the Digital Financial Assets law in 2024.</p>
+
+                    <h2>Key changes</h2>
+                    <ul>
+                        <li><strong>Operations only through licensed intermediaries</strong> — banks, exchanges and brokers with Central Bank licences.</li>
+                        <li><strong>Mandatory testing</strong> for retail participants to confirm risk awareness.</li>
+                        <li><strong>Transaction limits</strong> for non-qualified investors.</li>
+                        <li><strong>Penalties for unlicensed activity</strong> — expected from 2027, giving market about a year to adapt.</li>
+                    </ul>
+
+                    <h2>Impact on trading system architecture</h2>
+                    <p>The key shift for Russian algo traders: moving from direct connections to foreign exchanges toward working through a licensed Russian intermediary with its own API. This adds latency but doesn't ban algorithmic strategies themselves.</p>
+
+                    <div class="callout">
+                        <strong>Practical advice:</strong> study licensed intermediary requirements now and begin building relationships with operators who will work in the new regime. The adaptation window closes when penalties start in 2027.
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <hr class="news-divider">
+
+        <!-- NEWS 3: AI in trading -->
+        <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news3">
+            <img src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1200&q=80&auto=format&fit=crop"
+                 alt="Искусственный интеллект в трейдинге" class="news-img" loading="lazy">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4 flex-wrap">
+                    <span class="tag" style="color:#00ff88;border-color:rgba(0,255,136,.3)" id="n3-tag">Тренды</span>
+                    <span class="text-xs text-gray-600 font-mono" id="n3-date">2026</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3" id="n3-title">
+                    ИИ в алготрейдинге: от хайпа к прикладным системам
+                </h2>
+                <div class="article-body" id="n3-body-ru">
+                    <p>2025–2026 годы стали периодом практического осмысления ИИ в алгоритмической торговле. Первая волна хайпа (ChatGPT предскажет рынок!) сменилась более трезвой картиной: ИИ не заменяет стратегии, но существенно улучшает инструменты их параметрической оптимизации.</p>
+
+                    <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=900&q=80&auto=format&fit=crop"
+                         alt="Графики и данные" class="w-full rounded-xl my-5" style="height:200px;object-fit:cover;filter:brightness(.7)" loading="lazy">
+
+                    <h2>Что реально используется в production</h2>
+                    <p>По данным аналитических компаний, доля AI-assisted торговых систем в общем объёме алгоритмической торговли на крипторынке заметно выросла за последние два года. ИИ применяется в нескольких конкретных задачах:</p>
+                    <ul>
+                        <li><strong>Адаптивная оптимизация параметров</strong> — Grid-бот сам корректирует шаг сетки исходя из текущей волатильности, а не фиксированных настроек.</li>
+                        <li><strong>Динамическое управление спредом</strong> в маркетмейкерских системах — модель учитывает режим рынка (трендовый или боковой).</li>
+                        <li><strong>Аномальная детекция</strong> — выявление нетипичного поведения ордербука до того, как оно видно по цене.</li>
+                        <li><strong>Классификация рыночного режима</strong> — сигнал для переключения между стратегиями или изменения агрессивности.</li>
+                    </ul>
+
+                    <h2>Что биржи добавили в 2025–2026</h2>
+                    <p>Крупные биржи — Bybit, OKX, Binance — выпустили встроенные AI-рекомендации для ботов. Система анализирует историческую волатильность конкретной пары и предлагает параметры сетки, тейк-профит и стоп-лосс. Это не замена собственной аналитики, но удобная отправная точка для новых стратегий.</p>
+
+                    <h2>Что ИИ не умеет в трейдинге</h2>
+                    <p>Честная картина: ИИ по-прежнему не умеет стабильно предсказывать направление рынка. Большинство систем, претендующих на это, переобучены на исторических данных и плохо работают в реальном времени. Сильная сторона ИИ — оптимизация и адаптация существующих стратегий, а не генерация принципиально новой торговой логики.</p>
+
+                    <div class="callout">
+                        <strong>Наш подход:</strong> мы используем ML-компоненты для адаптивной настройки параметров в ботах клиентов — там, где это действительно даёт результат. Полностью «AI-управляемые» стратегии предлагаем только с явным предупреждением об их ограничениях.
+                    </div>
+                </div>
+                <div id="n3-body-en" style="display:none" class="article-body">
+                    <p>2025–2026 became the period of practical AI adoption in algo trading. The first hype wave (ChatGPT will predict markets!) gave way to a more sober picture: AI doesn't replace strategies, but significantly improves parametric optimisation tools.</p>
+
+                    <h2>What's actually used in production</h2>
+                    <ul>
+                        <li><strong>Adaptive parameter optimisation</strong> — a grid bot self-adjusts step size based on current volatility.</li>
+                        <li><strong>Dynamic spread management</strong> in market-making systems — model accounts for market regime.</li>
+                        <li><strong>Anomaly detection</strong> — identifying unusual order book behaviour before it's visible in price.</li>
+                        <li><strong>Market regime classification</strong> — signal to switch strategies or adjust aggression.</li>
+                    </ul>
+
+                    <h2>What AI still can't do in trading</h2>
+                    <p>AI still cannot consistently predict market direction. Most systems claiming to do this are overfit to historical data and perform poorly in live trading. AI's strength is optimising and adapting existing strategies, not generating fundamentally new trading logic.</p>
+
+                    <div class="callout">
+                        <strong>Our approach:</strong> we use ML components for adaptive parameter tuning where it genuinely adds value. Fully "AI-driven" strategies are offered only with clear caveats about their limitations.
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <hr class="news-divider">
+
+        <!-- NEWS 4: Exchange APIs -->
+        <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news4">
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80&auto=format&fit=crop"
+                 alt="Серверная инфраструктура" class="news-img" loading="lazy">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4 flex-wrap">
+                    <span class="tag" style="color:#22d3ee;border-color:rgba(34,211,238,.3)" id="n4-tag">Технологии</span>
+                    <span class="text-xs text-gray-600 font-mono" id="n4-date">Январь 2026</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3" id="n4-title">
+                    OKX и Bybit обновили WebSocket API: частота обновлений выросла до 10 мс
+                </h2>
+                <div class="article-body" id="n4-body-ru">
+                    <p>OKX и Bybit анонсировали обновление WebSocket-инфраструктуры для профессиональных участников рынка. Новые потоки данных обеспечивают частоту обновления ордербука до 10 мс вместо прежних 100 мс — десятикратное ускорение, которое критично для маркетмейкерских и арбитражных стратегий.</p>
+
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop"
+                         alt="Данные в реальном времени" class="w-full rounded-xl my-5" style="height:200px;object-fit:cover;filter:brightness(.7)" loading="lazy">
+
+                    <h2>Что изменилось технически</h2>
+                    <p>Помимо частоты обновлений, оба обновления принесли:</p>
+                    <ul>
+                        <li><strong>Расширенные данные об агрессорах сделок</strong> — информация о направлении инициатора для каждой сделки в потоке. Это критически важно для маркетмейкерских стратегий.</li>
+                        <li><strong>Улучшенные incremental updates</strong> — более компактный формат дифференциальных обновлений ордербука, снижающий объём трафика.</li>
+                        <li><strong>Более стабильное соединение</strong> — обновлённая логика ping/pong с меньшей вероятностью разрыва под нагрузкой.</li>
+                    </ul>
+
+                    <h2>Кому доступно</h2>
+                    <p>Доступ к потокам с минимальной задержкой предоставляется участникам с VIP-уровнем (у OKX — VIP 3+, у Bybit — VIP 2+) или через отдельное соглашение с биржей для институциональных клиентов.</p>
+
+                    <h2>Влияние на арбитражные стратегии</h2>
+                    <p>Для кросс-биржевого арбитража между OKX и Bybit это существенное изменение. Арбитражное окно между двумя биржами теперь можно детектировать значительно быстрее — при условии, что ваша система успевает обрабатывать данные с такой частотой. 10 мс ордербук бесполезен, если обработка займёт 50 мс.</p>
+
+                    <div class="callout">
+                        <strong>Практическое следствие:</strong> если вы используете арбитражного или маркетмейкерского бота между этими биржами — стоит обновить подписки на потоки данных и убедиться, что ваш код обрабатывает данные достаточно быстро, чтобы использовать новую частоту.
+                    </div>
+
+                    <h2>Binance пока остаётся на 100 мс</h2>
+                    <p>Стандартный публичный WebSocket ордербука на Binance по-прежнему работает с частотой 100 мс. Binance также предлагает частоту 1000 мс для отдельных потоков. Для профессиональных участников доступны переговоры об институциональных условиях — но публично этот уровень пока не объявлен.</p>
+                </div>
+                <div id="n4-body-en" style="display:none" class="article-body">
+                    <p>OKX and Bybit announced updates to their WebSocket infrastructure for professional market participants. New data streams provide order book update frequency up to 10ms instead of the previous 100ms — a tenfold improvement critical for market-making and arbitrage strategies.</p>
+
+                    <h2>What changed technically</h2>
+                    <ul>
+                        <li><strong>Aggressor data</strong> — direction of the trade initiator for each trade in the stream.</li>
+                        <li><strong>Improved incremental updates</strong> — more compact differential order book format.</li>
+                        <li><strong>More stable connection</strong> — updated ping/pong logic with lower drop rate under load.</li>
+                    </ul>
+
+                    <h2>Who gets access</h2>
+                    <p>Low-latency streams are available to VIP-tier participants (OKX VIP 3+, Bybit VIP 2+) or through separate institutional agreements.</p>
+
+                    <div class="callout">
+                        <strong>Practical note:</strong> if you run arbitrage or market-making between these exchanges — update your stream subscriptions and ensure your processing pipeline can actually handle the new frequency. A 10ms order book is useless if processing takes 50ms.
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <hr class="news-divider">
+
+        <!-- NEWS 5: EU MiCA -->
+        <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news5">
+            <img src="https://images.unsplash.com/photo-1485291571150-772bcfc10da5?w=1200&q=80&auto=format&fit=crop"
+                 alt="Европейский регулятор" class="news-img" loading="lazy">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4 flex-wrap">
+                    <span class="tag" style="color:#a855f7;border-color:rgba(168,85,247,.3)" id="n5-tag">EU MiCA</span>
+                    <span class="text-xs text-gray-600 font-mono" id="n5-date">2025–2026</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3" id="n5-title">
+                    MiCA в полной силе: как европейское регулирование изменило рынок
+                </h2>
+                <div class="article-body" id="n5-body-ru">
+                    <p>Европейский регламент MiCA (Markets in Crypto-Assets) полностью вступил в силу в конце 2024 года и к 2026 году уже показал первые практические результаты. Это первая в мире всеобъемлющая регуляторная рамка для криптоактивов, охватывающая 27 стран ЕС.</p>
+
+                    <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=900&q=80&auto=format&fit=crop"
+                         alt="Европейский союз" class="w-full rounded-xl my-5" style="height:200px;object-fit:cover;filter:brightness(.7)" loading="lazy">
+
+                    <h2>Что MiCA изменил на практике</h2>
+                    <ul>
+                        <li><strong>Лицензирование CASP</strong> — Crypto-Asset Service Provider. Биржи и брокеры, работающие с клиентами из ЕС, обязаны получить лицензию CASP в одной из стран ЕС. Лицензия даёт «паспорт» на работу во всех 27 странах.</li>
+                        <li><strong>Требования к стейблкоинам</strong> — эмитенты обязаны поддерживать резервы 1:1 и публиковать регулярные отчёты. Ряд крупных стейблкоинов был ограничен или исключён с европейских рынков из-за несоответствия.</li>
+                        <li><strong>Защита инвесторов</strong> — требования к раскрытию информации, разделение клиентских средств, порядок работы с жалобами.</li>
+                        <li><strong>White paper</strong> — для большинства криптоактивов обязательно регуляторно-утверждённое описание проекта перед листингом.</li>
+                    </ul>
+
+                    <h2>Последствия для торговой инфраструктуры</h2>
+                    <p>Биржи, обслуживающие европейских клиентов, были вынуждены провести значительную техническую и юридическую работу: разделить клиентские средства, добавить функции Travel Rule для межбиржевых переводов, внедрить расширенный KYC.</p>
+                    <p>Для алготрейдеров, работающих через европейских брокеров, это означает более высокий уровень верификации при открытии счёта, но и более надёжную защиту средств.</p>
+
+                    <h2>Сравнение с другими юрисдикциями</h2>
+                    <p>На фоне продолжающейся неопределённости в США и постепенного регулирования в России, MiCA создал для Европы конкурентное преимущество: инвесторы и компании получили предсказуемую правовую среду. Ряд крупных игроков перенёс европейскую операционную базу из Дубая и Сингапура обратно в ЕС.</p>
+
+                    <div class="callout">
+                        <strong>Итог:</strong> MiCA не остановил крипторынок в ЕС — он его структурировал. Для серьёзного бизнеса это скорее плюс, чем минус: лицензированный европейский CASP открывает доступ к институциональным клиентам, закрытым для нелицензированных операторов.
+                    </div>
+                </div>
+                <div id="n5-body-en" style="display:none" class="article-body">
+                    <p>Europe's MiCA (Markets in Crypto-Assets) regulation fully entered into force in late 2024 and by 2026 has produced measurable practical results — the world's first comprehensive regulatory framework for crypto-assets, covering all 27 EU member states.</p>
+
+                    <h2>What MiCA changed in practice</h2>
+                    <ul>
+                        <li><strong>CASP licensing</strong> — exchanges serving EU clients must hold a Crypto-Asset Service Provider licence. One licence gives a "passport" to operate across all 27 countries.</li>
+                        <li><strong>Stablecoin requirements</strong> — 1:1 reserves, regular reporting. Some major stablecoins were restricted or delisted from European markets.</li>
+                        <li><strong>Investor protection</strong> — disclosure requirements, client asset segregation, complaints handling.</li>
+                        <li><strong>White paper</strong> — regulatory-approved project documentation required before listing most crypto-assets.</li>
+                    </ul>
+
+                    <div class="callout">
+                        <strong>Conclusion:</strong> MiCA didn't stop the EU crypto market — it structured it. For serious businesses this is an advantage: a licensed European CASP gains access to institutional clients closed to unlicensed operators.
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Subscribe CTA -->
+        <div class="glass rounded-2xl p-8 sm:p-10 text-center mt-8">
+            <h2 class="text-xl sm:text-2xl font-black text-white mb-2" id="cta-title">Нужна торговая система под новые реалии?</h2>
+            <p class="text-gray-400 mb-6 max-w-lg mx-auto" id="cta-desc">Помогаем спроектировать архитектуру с учётом регуляторных требований. Бесплатная консультация в Telegram.</p>
+            <a href="https://t.me/Algo_Forge_S" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-neon-green to-accent-400 text-black font-bold hover:shadow-xl hover:shadow-neon-green/20 transition-all hover:scale-105" id="cta-btn">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span>Написать в Telegram</span>
+            </a>
+        </div>
+    </main>
+
+    <footer class="border-t border-white/5 py-8">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono">
+            <span id="copy">© 2026 AlgoForge. Все права защищены.</span>
+            <div class="flex gap-6">
+                <a href="../" class="hover:text-neon-green transition-colors" id="f-home">Главная</a>
+                <a href="../blog/" class="hover:text-neon-green transition-colors" id="f-blog">Блог</a>
+                <a href="./" class="hover:text-neon-green transition-colors" id="f-news">Новости</a>
+                <a href="../#contact" class="hover:text-neon-green transition-colors" id="f-contact">Связаться</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => { document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40); });
+        document.getElementById('mobile-btn').addEventListener('click', () => { document.getElementById('mobile-menu').classList.toggle('hidden'); });
+
+        const STRINGS = {
+            ru: {
+                badge:'НОВОСТИ','h1-a':'Рынок. Регуляторы. ','h1-b':'Технологии.',
+                'hero-lead':'Разбираем события, которые меняют правила игры для алготрейдеров: новые законы, обновления API бирж, изменения в инфраструктуре.',
+                'nav-services':'Услуги','nav-blog':'Блог','nav-cases':'Кейсы','nav-news':'Новости','nav-contact':'Связаться',
+                'm-services':'Услуги','m-blog':'Блог','m-cases':'Кейсы','m-news':'Новости','m-contact':'Связаться',
+                'n1-tag':'Регулирование','n1-date':'27 апреля 2026',
+                'n1-title':'SEC и CFTC — единый сигнал рынку: цифровые активы выходят из серой зоны',
+                'n2-tag':'Россия','n2-date':'23 марта 2026',
+                'n2-title':'Россия переводит криптооборот в лицензированный режим: что это значит для алготрейдеров',
+                'n3-tag':'Тренды','n3-date':'2026',
+                'n3-title':'ИИ в алготрейдинге: от хайпа к прикладным системам',
+                'n4-tag':'Технологии','n4-date':'Январь 2026',
+                'n4-title':'OKX и Bybit обновили WebSocket API: частота обновлений выросла до 10 мс',
+                'n5-tag':'EU MiCA','n5-date':'2025–2026',
+                'n5-title':'MiCA в полной силе: как европейское регулирование изменило рынок',
+                'cta-title':'Нужна торговая система под новые реалии?',
+                'cta-desc':'Помогаем спроектировать архитектуру с учётом регуляторных требований. Бесплатная консультация в Telegram.',
+                'cta-btn':'Написать в Telegram',
+                copy:'© 2026 AlgoForge. Все права защищены.',
+                'f-home':'Главная','f-blog':'Блог','f-news':'Новости','f-contact':'Связаться',lang:'EN'
+            },
+            en: {
+                badge:'NEWS','h1-a':'Markets. Regulators. ','h1-b':'Technology.',
+                'hero-lead':'We break down events that change the rules for algo traders: new laws, exchange API updates, infrastructure changes.',
+                'nav-services':'Services','nav-blog':'Blog','nav-cases':'Cases','nav-news':'News','nav-contact':'Contact',
+                'm-services':'Services','m-blog':'Blog','m-cases':'Cases','m-news':'News','m-contact':'Contact',
+                'n1-tag':'Regulation','n1-date':'April 27, 2026',
+                'n1-title':'SEC and CFTC together: digital assets exiting the grey zone',
+                'n2-tag':'Russia','n2-date':'March 23, 2026',
+                'n2-title':'Russia moves crypto to licensed regime: what it means for algo traders',
+                'n3-tag':'Trends','n3-date':'2026',
+                'n3-title':'AI in algo trading: from hype to practical systems',
+                'n4-tag':'Technology','n4-date':'January 2026',
+                'n4-title':'OKX and Bybit upgrade WebSocket API: order book frequency reaches 10ms',
+                'n5-tag':'EU MiCA','n5-date':'2025–2026',
+                'n5-title':'MiCA in full force: how European regulation changed the market',
+                'cta-title':'Need a trading system for the new reality?',
+                'cta-desc':'We help design architecture with regulatory requirements in mind. Free consultation on Telegram.',
+                'cta-btn':'Message on Telegram',
+                copy:'© 2026 AlgoForge. All rights reserved.',
+                'f-home':'Home','f-blog':'Blog','f-news':'News','f-contact':'Contact',lang:'RU'
+            }
+        };
+        let lang = localStorage.getItem('site_lang') === 'en' ? 'en' : 'ru';
+        function applyLang(l) {
+            lang = l; localStorage.setItem('site_lang', l); document.documentElement.lang = l;
+            const s = STRINGS[l];
+            Object.keys(s).forEach(id => {
+                if(id==='lang') return;
+                const el = document.getElementById(id);
+                if(el) el.textContent = s[id];
+            });
+            document.getElementById('lang-btn').textContent = s.lang;
+            document.getElementById('lang-btn-m').textContent = s.lang;
+            ['n1','n2','n3','n4','n5'].forEach(n => {
+                document.getElementById(n+'-body-ru').style.display = l==='ru'?'':'none';
+                document.getElementById(n+'-body-en').style.display = l==='en'?'':'none';
+            });
+        }
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+    <script src="../bg-animation.js"></script>
+</body>
+</html>
