@@ -431,8 +431,7 @@
     </footer>
 
     <script>
-        window.addEventListener('scroll', () => { document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40); });
-        document.getElementById('mobile-btn').addEventListener('click', () => { document.getElementById('mobile-menu').classList.toggle('hidden'); });
+        
 
         const STRINGS = {
             ru: {
@@ -499,6 +498,7 @@
         document.getElementById('lang-btn-m').addEventListener('click', () => applyLang(lang==='ru'?'en':'ru'));
         lucide.createIcons();
     </script>
+    <script src="../nav.js"></script>
     <script src="../bg-animation.js"></script>
 </body>
 </html>
