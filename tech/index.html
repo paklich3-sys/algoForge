@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Описание технологий AlgoForge: Python, Rust, Go, Node.js, React, Next.js, TypeScript, Flutter, PostgreSQL, Redis, Docker и Kubernetes.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://unpkg.com https://mc.yandex.ru; connect-src 'self' https:; frame-src 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=()">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="canonical" href="https://algoforge.ru/tech/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Технологии AlgoForge">
+    <meta property="og:description" content="Как AlgoForge использует Python, Rust, Go, React, Docker, Kubernetes и другие технологии в проектах.">
+    <meta property="og:url" content="https://algoforge.ru/tech/">
+    <meta property="og:image" content="https://algoforge.ru/favicon.png?v=4">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Технологии AlgoForge",
+        "description": "Технологический стек для разработки торговых ботов, API-интеграций, веб-сервисов, мобильных приложений и инфраструктуры.",
+        "url": "https://algoforge.ru/tech/",
+        "publisher": {
+            "@type": "Organization",
+            "name": "AlgoForge",
+            "url": "https://algoforge.ru/",
+            "logo": "https://algoforge.ru/logo-v3.png?v=1"
+        },
+        "itemListElement": [
+            {"@type":"ListItem","position":1,"name":"Python","url":"https://algoforge.ru/tech/?stack=python"},
+            {"@type":"ListItem","position":2,"name":"Rust","url":"https://algoforge.ru/tech/?stack=rust"},
+            {"@type":"ListItem","position":3,"name":"Go","url":"https://algoforge.ru/tech/?stack=go"},
+            {"@type":"ListItem","position":4,"name":"Node.js","url":"https://algoforge.ru/tech/?stack=nodejs"},
+            {"@type":"ListItem","position":5,"name":"React","url":"https://algoforge.ru/tech/?stack=react"},
+            {"@type":"ListItem","position":6,"name":"Next.js","url":"https://algoforge.ru/tech/?stack=nextjs"},
+            {"@type":"ListItem","position":7,"name":"TypeScript","url":"https://algoforge.ru/tech/?stack=typescript"},
+            {"@type":"ListItem","position":8,"name":"Flutter","url":"https://algoforge.ru/tech/?stack=flutter"},
+            {"@type":"ListItem","position":9,"name":"PostgreSQL","url":"https://algoforge.ru/tech/?stack=postgresql"},
+            {"@type":"ListItem","position":10,"name":"Redis","url":"https://algoforge.ru/tech/?stack=redis"},
+            {"@type":"ListItem","position":11,"name":"Docker","url":"https://algoforge.ru/tech/?stack=docker"},
+            {"@type":"ListItem","position":12,"name":"Kubernetes","url":"https://algoforge.ru/tech/?stack=k8s"}
+        ]
+    }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.559.0/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        #three-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+        body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}
+        main,footer,section{position:relative;z-index:1}
+        .glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}
+        .gradient-text{background:linear-gradient(135deg,#00ff88,#00d4ff,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.72rem;font-family:'JetBrains Mono',monospace;color:#00ff88;border:1px solid rgba(0,255,136,.28);background:rgba(0,255,136,.05)}
+        .tech-link{transition:all .25s ease}
+        .tech-link.active,.tech-link:hover{background:rgba(0,255,136,.1);border-color:rgba(0,255,136,.35);color:#fff}
+        nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}
+    </style>
+    <!-- Yandex.Metrika counter -->
+    <script src="../ym.js"></script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/109257949" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+    <!-- /Yandex.Metrika counter -->
+    <title>Технологии AlgoForge</title>
+</head>
+<body>
+    <canvas id="three-canvas"></canvas>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="../" aria-label="AlgoForge — на главную">
+                    <img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager">
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="../#services" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-services">Услуги</a>
+                    <a href="../#tech" class="text-sm text-white font-medium" id="nav-tech">Технологии</a>
+                    <a href="../blog/" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-blog">Блог</a>
+                    <a href="../cases/" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-cases">Кейсы</a>
+                    <a href="../news/" class="text-sm text-gray-400 hover:text-white transition-colors" id="nav-news">Новости</a>
+                    <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                    <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+                </div>
+                <div class="flex md:hidden items-center gap-3">
+                    <button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white transition-colors">EN</button>
+                    <button id="mobile-btn" class="p-2 rounded-lg border border-white/10 text-gray-300 hover:text-white hover:border-white/20 transition-colors" aria-label="Меню">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="2" y1="4" x2="18" y2="4"/><line x1="2" y1="10" x2="18" y2="10"/><line x1="2" y1="16" x2="18" y2="16"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden glass mx-4 mb-3 rounded-2xl overflow-hidden">
+            <div class="flex flex-col p-4 gap-1">
+                <a href="../#services" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-services">Услуги</a>
+                <a href="../#tech" class="px-4 py-3 rounded-xl text-white font-medium hover:bg-white/5 transition-colors" id="m-tech">Технологии</a>
+                <a href="../blog/" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-blog">Блог</a>
+                <a href="../cases/" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-cases">Кейсы</a>
+                <a href="../news/" class="px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors" id="m-news">Новости</a>
+                <a href="../#contact" class="mt-1 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-center" id="m-contact">Связаться</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-20 px-4">
+        <section class="max-w-6xl mx-auto">
+            <div class="text-center mb-10">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20 mb-5" id="badge">ТЕХНОЛОГИИ</span>
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-4">
+                    <span id="title-a">Как мы используем </span><span class="gradient-text" id="tech-name">Python</span>
+                </h1>
+                <p class="text-gray-400 text-base sm:text-lg max-w-2xl mx-auto" id="lead">Выберите технологию ниже, чтобы увидеть где она уместна, какие задачи решает и почему мы используем её в проектах.</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8" id="tech-list"></div>
+
+            <article class="glass rounded-3xl p-6 sm:p-8 lg:p-10 max-w-4xl mx-auto">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="text-4xl" id="icon">🐍</div>
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white" id="card-title">Python</h2>
+                        <p class="text-sm text-gray-500 font-mono" id="card-subtitle">Backend · bots · automation</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-base sm:text-lg leading-relaxed mb-6" id="description"></p>
+                <div class="grid sm:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-white font-bold mb-3" id="use-title">Где применяем</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm leading-relaxed" id="use-list"></ul>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-bold mb-3" id="why-title">Почему выбираем</h3>
+                        <ul class="space-y-2 text-gray-400 text-sm leading-relaxed" id="why-list"></ul>
+                    </div>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-2" id="tags"></div>
+                <a href="../#contact" class="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-neon-green to-accent-400 text-black font-bold hover:scale-105 transition-transform" id="cta">
+                    Обсудить проект
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </article>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/5 py-8">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono">
+            <span id="copy">© 2026 AlgoForge. Все права защищены.</span>
+            <div class="flex gap-6">
+                <a href="../" class="hover:text-neon-green transition-colors" id="f-home">Главная</a>
+                <a href="../#tech" class="hover:text-neon-green transition-colors" id="f-tech">Технологии</a>
+                <a href="../#contact" class="hover:text-neon-green transition-colors" id="f-contact">Связаться</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const TECH = {
+            python:{icon:'🐍',name:'Python',sub:'Backend · bots · automation',tags:['FastAPI','Django','Pandas','AsyncIO'],ru:{desc:'Python используем для торговых ботов, API-сервисов, аналитики, автоматизации и интеграций с биржами. Он хорошо подходит там, где важны скорость разработки, богатая экосистема и понятная поддержка проекта.',use:['торговые боты и исполнители стратегий','API-интеграции с биржами и сервисами','аналитика данных, отчёты и backtesting','админ-панели, скрипты и автоматизация процессов'],why:['быстрая разработка MVP и production-сервисов','много библиотек для FinTech, данных и API','понятный код, который проще поддерживать','удобная асинхронная работа с WebSocket и очередями']},en:{desc:'We use Python for trading bots, API services, analytics, automation, and exchange integrations. It fits projects where development speed, ecosystem maturity, and maintainability matter.',use:['trading bots and strategy executors','exchange and service API integrations','data analytics, reports, and backtesting','admin tools, scripts, and process automation'],why:['fast MVP and production development','rich FinTech, data, and API ecosystem','readable code that is easier to maintain','convenient async work with WebSocket and queues']}},
+            rust:{icon:'🦀',name:'Rust',sub:'low latency · desktop · core',tags:['Tauri','Tokio','WASM','Low latency'],ru:{desc:'Rust выбираем для модулей, где важны производительность, безопасность памяти и стабильность под нагрузкой: торговые терминалы, low-latency сервисы и системные компоненты.',use:['десктопные терминалы на Tauri','low-latency обработчики рыночных данных','критичные модули исполнения ордеров','надёжные сервисы без сборщика мусора'],why:['высокая производительность без компромиссов','безопасность памяти на уровне языка','предсказуемое поведение под нагрузкой','хороший выбор для долгоживущей инфраструктуры']},en:{desc:'We choose Rust for modules where performance, memory safety, and stability under load are critical: trading terminals, low-latency services, and system components.',use:['Tauri desktop terminals','low-latency market data handlers','critical order execution modules','reliable services without garbage collection'],why:['high performance without compromises','language-level memory safety','predictable behavior under load','strong fit for long-lived infrastructure']}},
+            go:{icon:'⚡',name:'Go',sub:'services · concurrency · APIs',tags:['gRPC','REST','Microservices','Workers'],ru:{desc:'Go подходит для быстрых серверных сервисов, микросервисов, воркеров и API-шлюзов. Мы используем его там, где нужна простая эксплуатация и высокая конкурентность.',use:['микросервисы и API-шлюзы','фоновые воркеры и очереди','сервисы мониторинга и обработки событий','gRPC-сервисы между компонентами'],why:['простая сборка и деплой одним бинарником','сильная модель конкурентности','стабильная производительность','минималистичный код без лишней сложности']},en:{desc:'Go is a strong fit for fast backend services, microservices, workers, and API gateways. We use it where easy operations and high concurrency are important.',use:['microservices and API gateways','background workers and queues','monitoring and event processing services','gRPC services between components'],why:['simple single-binary deployment','strong concurrency model','stable performance','minimal code without unnecessary complexity']}},
+            nodejs:{icon:'🟢',name:'Node.js',sub:'realtime · integrations · backend',tags:['WebSocket','NestJS','Express','Queues'],ru:{desc:'Node.js используем для realtime-сервисов, интеграций, веб-приложений и быстрых backend API. Он удобен, когда frontend и backend должны развиваться в единой TypeScript-экосистеме.',use:['realtime API и WebSocket-сервисы','интеграции с внешними платформами','backend для dashboards и SaaS','очереди, webhooks и событийная логика'],why:['единый язык с frontend-командой','большая экосистема npm','удобная работа с I/O и realtime','быстрый выпуск продуктовых функций']},en:{desc:'We use Node.js for realtime services, integrations, web apps, and fast backend APIs. It is convenient when frontend and backend evolve in one TypeScript ecosystem.',use:['realtime APIs and WebSocket services','external platform integrations','backend for dashboards and SaaS','queues, webhooks, and event-driven logic'],why:['same language as frontend','large npm ecosystem','convenient I/O and realtime work','fast product feature delivery']}},
+            react:{icon:'⚛️',name:'React',sub:'interfaces · dashboards · SaaS',tags:['SPA','Dashboards','UI','Components'],ru:{desc:'React используем для интерфейсов, торговых dashboards, кабинетов и SaaS-платформ. Он хорошо подходит для сложных UI с большим количеством состояний и компонентов.',use:['панели управления и dashboards','кабинеты пользователей','торговые интерфейсы и виджеты','SaaS-продукты с интерактивной логикой'],why:['богатая экосистема компонентов','удобная разработка сложных интерфейсов','хорошо сочетается с TypeScript','легче масштабировать frontend-команду']},en:{desc:'We use React for interfaces, trading dashboards, user accounts, and SaaS platforms. It fits complex UI with many states and components.',use:['admin panels and dashboards','user accounts','trading interfaces and widgets','SaaS products with interactive logic'],why:['rich component ecosystem','convenient complex UI development','works well with TypeScript','easier frontend team scaling']}},
+            nextjs:{icon:'▲',name:'Next.js',sub:'SEO · SSR · web apps',tags:['SSR','SEO','App Router','Landing'],ru:{desc:'Next.js выбираем для сайтов, личных кабинетов и SaaS, где важны SEO, скорость загрузки и серверный рендеринг. Это хороший вариант для публичных страниц и продуктовых интерфейсов.',use:['SEO-страницы и лендинги','корпоративные сайты и блоги','SaaS-интерфейсы с авторизацией','гибридные приложения SSR/CSR'],why:['лучше индексируется поисковиками','быстрая первая загрузка','удобная маршрутизация и API routes','хорошо подходит для контентных проектов']},en:{desc:'We choose Next.js for websites, user accounts, and SaaS where SEO, loading speed, and server rendering matter. It is a good option for public pages and product interfaces.',use:['SEO pages and landing pages','corporate sites and blogs','SaaS interfaces with auth','hybrid SSR/CSR apps'],why:['better search indexing','fast first load','convenient routing and API routes','strong fit for content projects']}},
+            typescript:{icon:'🔵',name:'TypeScript',sub:'typed JS · frontend · backend',tags:['Types','DX','Frontend','Backend'],ru:{desc:'TypeScript добавляет строгие типы в JavaScript-проекты и снижает количество ошибок на этапе разработки. Используем его почти во всех frontend и Node.js проектах.',use:['React и Next.js приложения','Node.js backend и API','общие типы между frontend и backend','сложные формы и бизнес-логика'],why:['меньше ошибок до запуска','лучше автодополнение и навигация по коду','проще поддерживать большие проекты','понятнее контракты между модулями']},en:{desc:'TypeScript adds strong typing to JavaScript projects and reduces development-time errors. We use it in almost all frontend and Node.js projects.',use:['React and Next.js apps','Node.js backend and APIs','shared types between frontend and backend','complex forms and business logic'],why:['fewer errors before runtime','better autocomplete and code navigation','easier large project maintenance','clearer contracts between modules']}},
+            flutter:{icon:'🔥',name:'Flutter',sub:'mobile · Android · cross-platform',tags:['Android','Dart','Mobile UI','Cross-platform'],ru:{desc:'Flutter используем для мобильных приложений и терминалов, когда нужно быстро получить современный интерфейс и стабильную работу на Android, а при необходимости — расширение на другие платформы.',use:['мобильные терминалы и dashboards','приложения для управления портфелем','push-уведомления и realtime-экраны','кроссплатформенные MVP'],why:['быстрая разработка красивого UI','единая кодовая база для нескольких платформ','хорошая производительность интерфейса','удобно для FinTech и trading tools']},en:{desc:'We use Flutter for mobile apps and terminals when we need a modern interface, stable Android experience, and optional expansion to other platforms.',use:['mobile terminals and dashboards','portfolio management apps','push notifications and realtime screens','cross-platform MVPs'],why:['fast development of polished UI','single codebase for several platforms','good interface performance','convenient for FinTech and trading tools']}},
+            postgresql:{icon:'🐘',name:'PostgreSQL',sub:'database · analytics · reliability',tags:['SQL','Indexes','JSONB','Timeseries'],ru:{desc:'PostgreSQL — основная база данных для проектов, где важны целостность данных, сложные запросы, аналитика и надёжное хранение событий, пользователей и транзакций.',use:['хранение пользователей и заявок','история сделок и событий','аналитические запросы и отчёты','JSONB-структуры и гибкие справочники'],why:['надёжная ACID-база','сильный SQL и индексы','удобно хранить структурированные и JSON-данные','хорошо масштабируется для большинства задач']},en:{desc:'PostgreSQL is our primary database for projects where data integrity, complex queries, analytics, and reliable storage of events, users, and transactions matter.',use:['users and requests storage','trade and event history','analytics queries and reports','JSONB structures and flexible dictionaries'],why:['reliable ACID database','strong SQL and indexing','good for structured and JSON data','scales well for most products']}},
+            redis:{icon:'🔴',name:'Redis',sub:'cache · queues · realtime',tags:['Cache','Pub/Sub','Queues','Rate limits'],ru:{desc:'Redis применяем для кэша, очередей, rate-limit, realtime-состояний и временных данных. Он помогает разгружать основную базу и ускорять ответ системы.',use:['кэширование API-ответов','очереди задач и событий','rate-limit для внешних API','хранение временных состояний и сессий'],why:['очень быстрый доступ к данным','простые структуры для realtime-задач','удобный Pub/Sub и очереди','хорошо снижает нагрузку на базу']},en:{desc:'We use Redis for cache, queues, rate limits, realtime state, and temporary data. It reduces database load and speeds up system responses.',use:['API response caching','task and event queues','external API rate limits','temporary state and sessions'],why:['very fast data access','simple structures for realtime tasks','convenient Pub/Sub and queues','reduces database load well']}},
+            docker:{icon:'🐳',name:'Docker',sub:'deployment · isolation · CI/CD',tags:['Containers','Compose','CI/CD','Environments'],ru:{desc:'Docker помогает запускать проект одинаково локально, на staging и production. Мы используем контейнеры для backend, баз данных, воркеров, dashboards и сервисной инфраструктуры.',use:['упаковка backend и worker-сервисов','локальная разработка через compose','предсказуемый staging и production','быстрый rollback и перенос окружений'],why:['меньше проблем “у меня работает”','удобная изоляция сервисов','быстрый деплой и CI/CD','легко масштабировать инфраструктуру']},en:{desc:'Docker helps run a project consistently locally, on staging, and in production. We use containers for backend, databases, workers, dashboards, and service infrastructure.',use:['packaging backend and workers','local development with compose','predictable staging and production','fast rollback and environment transfer'],why:['fewer “works on my machine” issues','convenient service isolation','fast deployment and CI/CD','easy infrastructure scaling']}},
+            k8s:{icon:'☸️',name:'Kubernetes',sub:'orchestration · scaling · reliability',tags:['K8s','Scaling','Helm','Monitoring'],ru:{desc:'Kubernetes используем для проектов, которым нужны масштабирование, отказоустойчивость, rolling updates и управление множеством сервисов. Это инструмент для зрелой инфраструктуры.',use:['масштабируемые SaaS-платформы','много сервисов и воркеров','rolling updates без простоя','мониторинг, health checks и автоперезапуск'],why:['автоматическое восстановление сервисов','гибкое масштабирование нагрузки','единый стандарт деплоя','удобно для долгосрочной эксплуатации']},en:{desc:'We use Kubernetes for projects that need scaling, fault tolerance, rolling updates, and management of many services. It is a tool for mature infrastructure.',use:['scalable SaaS platforms','many services and workers','zero-downtime rolling updates','monitoring, health checks, and autorestart'],why:['automatic service recovery','flexible load scaling','single deployment standard','convenient for long-term operations']}}
+        };
+
+        const STRINGS = {
+            ru:{navServices:'Услуги',navTech:'Технологии',navBlog:'Блог',navCases:'Кейсы',navNews:'Новости',contact:'Связаться',badge:'ТЕХНОЛОГИИ',titleA:'Как мы используем ',lead:'Выберите технологию ниже, чтобы увидеть где она уместна, какие задачи решает и почему мы используем её в проектах.',use:'Где применяем',why:'Почему выбираем',cta:'Обсудить проект',home:'Главная',copy:'© 2026 AlgoForge. Все права защищены.',lang:'EN'},
+            en:{navServices:'Services',navTech:'Tech',navBlog:'Blog',navCases:'Cases',navNews:'News',contact:'Contact',badge:'TECH',titleA:'How we use ',lead:'Choose a technology below to see where it fits, what it solves, and why we use it in projects.',use:'Where we use it',why:'Why we choose it',cta:'Discuss project',home:'Home',copy:'© 2026 AlgoForge. All rights reserved.',lang:'RU'}
+        };
+
+        let lang = localStorage.getItem('site_lang') === 'en' ? 'en' : 'ru';
+        const keys = Object.keys(TECH);
+
+        function currentKey(){
+            const raw = new URLSearchParams(window.location.search).get('stack') || 'python';
+            return TECH[raw] ? raw : 'python';
+        }
+
+        function renderList(active){
+            const root = document.getElementById('tech-list');
+            root.innerHTML = keys.map((key) => {
+                const item = TECH[key];
+                return `<a href="?stack=${key}" class="tech-link glass rounded-2xl p-4 text-center border border-white/[0.06] ${key===active?'active':''}">
+                    <div class="text-2xl mb-2">${item.icon}</div>
+                    <div class="text-xs font-mono text-gray-300">${item.name}</div>
+                </a>`;
+            }).join('');
+        }
+
+        function render(){
+            const active = currentKey();
+            const item = TECH[active];
+            const copy = item[lang];
+            const s = STRINGS[lang];
+            document.documentElement.lang = lang;
+            document.title = `${item.name} — ${s.navTech} AlgoForge`;
+            document.getElementById('nav-services').textContent = s.navServices;
+            document.getElementById('nav-tech').textContent = s.navTech;
+            document.getElementById('nav-blog').textContent = s.navBlog;
+            document.getElementById('nav-cases').textContent = s.navCases;
+            document.getElementById('nav-news').textContent = s.navNews;
+            document.getElementById('nav-contact').textContent = s.contact;
+            document.getElementById('m-services').textContent = s.navServices;
+            document.getElementById('m-tech').textContent = s.navTech;
+            document.getElementById('m-blog').textContent = s.navBlog;
+            document.getElementById('m-cases').textContent = s.navCases;
+            document.getElementById('m-news').textContent = s.navNews;
+            document.getElementById('m-contact').textContent = s.contact;
+            document.getElementById('lang-btn').textContent = s.lang;
+            document.getElementById('lang-btn-m').textContent = s.lang;
+            document.getElementById('badge').textContent = s.badge;
+            document.getElementById('title-a').textContent = s.titleA;
+            document.getElementById('lead').textContent = s.lead;
+            document.getElementById('use-title').textContent = s.use;
+            document.getElementById('why-title').textContent = s.why;
+            document.getElementById('cta').firstChild.textContent = s.cta + ' ';
+            document.getElementById('f-home').textContent = s.home;
+            document.getElementById('f-tech').textContent = s.navTech;
+            document.getElementById('f-contact').textContent = s.contact;
+            document.getElementById('copy').textContent = s.copy;
+            document.getElementById('tech-name').textContent = item.name;
+            document.getElementById('icon').textContent = item.icon;
+            document.getElementById('card-title').textContent = item.name;
+            document.getElementById('card-subtitle').textContent = item.sub;
+            document.getElementById('description').textContent = copy.desc;
+            document.getElementById('use-list').innerHTML = copy.use.map((x) => `<li class="flex gap-2"><span class="text-neon-green">•</span><span>${x}</span></li>`).join('');
+            document.getElementById('why-list').innerHTML = copy.why.map((x) => `<li class="flex gap-2"><span class="text-neon-green">•</span><span>${x}</span></li>`).join('');
+            document.getElementById('tags').innerHTML = item.tags.map((x) => `<span class="tag">${x}</span>`).join('');
+            renderList(active);
+            if (window.lucide) lucide.createIcons();
+        }
+
+        document.getElementById('lang-btn').addEventListener('click', () => { lang = lang === 'ru' ? 'en' : 'ru'; localStorage.setItem('site_lang', lang); render(); });
+        document.getElementById('lang-btn-m').addEventListener('click', () => { lang = lang === 'ru' ? 'en' : 'ru'; localStorage.setItem('site_lang', lang); render(); });
+        document.getElementById('mobile-btn').addEventListener('click', () => document.getElementById('mobile-menu').classList.toggle('hidden'));
+        document.getElementById('mobile-menu').querySelectorAll('a').forEach((a) => a.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden')));
+        window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50), {passive:true});
+        render();
+    </script>
+    <script src="../bg-animation.js"></script>
+</body>
+</html>
