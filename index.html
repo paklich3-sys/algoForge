@@ -385,11 +385,6 @@
     <!-- Hero Section -->
     <section id="hero" class="relative min-h-screen flex items-center justify-center hero-gradient pt-20">
         <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6 sm:mb-8">
-                <div class="pulse-dot"></div>
-                <span data-i18n="hero.badge" class="text-xs sm:text-sm text-gray-400 font-mono">Принимаем новые проекты</span>
-            </div>
-
             <h1 data-i18n-html="hero.title" data-i18n-attr-aria-label="hero.aria" class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-6 sm:mb-8 max-w-5xl mx-auto" aria-label="Автоматизация, которая делает деньги. От криптоботов до энтерпрайза.">
                 <span class="block">Автоматизация, которая делает <span class="gradient-text glow-green">деньги</span>.</span>
                 <span class="block mt-1 sm:mt-2">От криптоботов до энтерпрайза.</span>
@@ -861,28 +856,98 @@
                 </h2>
                 <p data-i18n="faq.subtitle" class="text-gray-500 text-sm sm:text-base max-w-xl mx-auto">Коротко о праве на код, платформах, безопасности ключей и том, как мы подключаемся к биржам.</p>
             </div>
-            <dl class="space-y-4">
-                <div class="reveal glass rounded-2xl p-5 sm:p-6 border border-white/[0.06]">
-                    <dt data-i18n="faq.q1" class="text-sm sm:text-base font-semibold text-gray-200 mb-2">Кому принадлежит исходный код после разработки?</dt>
-                    <dd data-i18n="faq.a1" class="text-gray-400 text-sm leading-relaxed">После полной оплаты проекта вы получаете все права на интеллектуальную собственность и исходный код. Мы работаем по договору и подписываем NDA — ваша торговая логика остаётся только вашей.</dd>
+            <div class="space-y-4" id="faq-list">
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-1">
+                        <span data-i18n="faq.q1" class="text-sm sm:text-base font-semibold text-gray-200">Кому принадлежит исходный код после разработки?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-1" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a1" class="text-gray-400 text-sm leading-relaxed">После полной оплаты проекта вы получаете все права на интеллектуальную собственность и исходный код. Мы работаем по договору и подписываем NDA — ваша торговая логика остаётся только вашей.</p>
+                    </div>
                 </div>
-                <div class="reveal glass rounded-2xl p-5 sm:p-6 border border-white/[0.06]">
-                    <dt data-i18n="faq.q2" class="text-sm sm:text-base font-semibold text-gray-200 mb-2">На каких операционных системах работает ваш софт?</dt>
-                    <dd data-i18n-html="faq.a2" class="text-gray-400 text-sm leading-relaxed">Мы специализируемся на высокопроизводительных решениях для <strong class="text-gray-300 font-medium">Windows</strong> и <strong class="text-gray-300 font-medium">Linux</strong>. Также разрабатываем мобильные терминалы и системы управления для <strong class="text-gray-300 font-medium">Android</strong>.</dd>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-2">
+                        <span data-i18n="faq.q2" class="text-sm sm:text-base font-semibold text-gray-200">На каких операционных системах работает ваш софт?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-2" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n-html="faq.a2" class="text-gray-400 text-sm leading-relaxed">Мы специализируемся на высокопроизводительных решениях для <strong class="text-gray-300 font-medium">Windows</strong> и <strong class="text-gray-300 font-medium">Linux</strong>. Также разрабатываем мобильные терминалы и системы управления для <strong class="text-gray-300 font-medium">Android</strong>.</p>
+                    </div>
                 </div>
-                <div class="reveal glass rounded-2xl p-5 sm:p-6 border border-white/[0.06]">
-                    <dt data-i18n="faq.q3" class="text-sm sm:text-base font-semibold text-gray-200 mb-2">Как обстоит дело с безопасностью моих API-ключей?</dt>
-                    <dd data-i18n="faq.a3" class="text-gray-400 text-sm leading-relaxed">Мы проектируем системы так, чтобы у нас не было доступа к вашим средствам. Софт устанавливается на ваш сервер. В API-ключах вы настраиваете доступ только на «Торговлю», блокируя возможность «Вывода средств».</dd>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-3">
+                        <span data-i18n="faq.q3" class="text-sm sm:text-base font-semibold text-gray-200">Как обстоит дело с безопасностью моих API-ключей?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-3" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a3" class="text-gray-400 text-sm leading-relaxed">Мы проектируем системы так, чтобы у нас не было доступа к вашим средствам. Софт устанавливается на ваш сервер. В API-ключах вы настраиваете доступ только на «Торговлю», блокируя возможность «Вывода средств».</p>
+                    </div>
                 </div>
-                <div class="reveal glass rounded-2xl p-5 sm:p-6 border border-white/[0.06]">
-                    <dt data-i18n="faq.q4" class="text-sm sm:text-base font-semibold text-gray-200 mb-2">Какие протоколы вы используете для подключения к биржам?</dt>
-                    <dd data-i18n="faq.a4" class="text-gray-400 text-sm leading-relaxed">Мы не используем медленный REST для высокочастотных задач. Только WebSockets, gRPC и FIX API для обеспечения минимального пинга и мгновенного исполнения ордеров.</dd>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-4">
+                        <span data-i18n="faq.q4" class="text-sm sm:text-base font-semibold text-gray-200">Какие протоколы вы используете для подключения к биржам?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-4" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a4" class="text-gray-400 text-sm leading-relaxed">Мы не используем медленный REST для высокочастотных задач. Только WebSockets, gRPC и FIX API для обеспечения минимального пинга и мгновенного исполнения ордеров.</p>
+                    </div>
                 </div>
-                <div class="reveal glass rounded-2xl p-5 sm:p-6 border border-white/[0.06]">
-                    <dt data-i18n="faq.q5" class="text-sm sm:text-base font-semibold text-gray-200 mb-2">Вы предоставляете готовые стратегии?</dt>
-                    <dd data-i18n="faq.a5" class="text-gray-400 text-sm leading-relaxed">Нет, мы — инженеры: превращаем вашу уникальную логику или бизнес-задачу в устойчивый программный код. Мы не занимаемся прогнозированием рынка за вас, но при необходимости можем направить в нужное русло.</dd>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-5">
+                        <span data-i18n="faq.q5" class="text-sm sm:text-base font-semibold text-gray-200">Вы предоставляете готовые стратегии?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-5" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a5" class="text-gray-400 text-sm leading-relaxed">Нет, мы — инженеры: превращаем вашу уникальную логику или бизнес-задачу в устойчивый программный код. Мы не занимаемся прогнозированием рынка за вас, но при необходимости можем направить в нужное русло.</p>
+                    </div>
                 </div>
-            </dl>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-6">
+                        <span data-i18n="faq.q6" class="text-sm sm:text-base font-semibold text-gray-200">Сколько времени занимает разработка?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-6" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a6" class="text-gray-400 text-sm leading-relaxed">Срок зависит от сложности логики и количества интеграций. Простой бот или MVP обычно занимает от 2–4 недель, сложная торговая система, терминал или SaaS-платформа — от 2–3 месяцев. Точную оценку даём после короткого технического разбора задачи.</p>
+                    </div>
+                </div>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-7">
+                        <span data-i18n="faq.q7" class="text-sm sm:text-base font-semibold text-gray-200">Можно ли доработать уже существующий проект?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-7" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a7" class="text-gray-400 text-sm leading-relaxed">Да. Мы можем провести аудит текущего кода, найти узкие места, исправить ошибки, добавить новые биржи, переписать нестабильные модули или подготовить проект к запуску на сервере.</p>
+                    </div>
+                </div>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-8">
+                        <span data-i18n="faq.q8" class="text-sm sm:text-base font-semibold text-gray-200">Как проходит оплата проекта?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-8" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a8" class="text-gray-400 text-sm leading-relaxed">Обычно проект делится на этапы: аналитика, прототип, разработка, тестирование и запуск. Оплата также может идти по этапам — это фиксируется в договоре или согласованном техническом задании.</p>
+                    </div>
+                </div>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-9">
+                        <span data-i18n="faq.q9" class="text-sm sm:text-base font-semibold text-gray-200">Вы помогаете с запуском на сервере?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-9" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a9" class="text-gray-400 text-sm leading-relaxed">Да. Настраиваем сервер, окружение, автозапуск, логи, мониторинг, резервные копии и базовую защиту. Для торговых систем отдельно проверяем стабильность подключения к API и поведение при сбоях сети.</p>
+                    </div>
+                </div>
+                <div class="reveal glass rounded-2xl border border-white/[0.06] overflow-hidden">
+                    <button type="button" class="faq-trigger w-full p-5 sm:p-6 flex items-center justify-between gap-4 text-left" aria-expanded="false" aria-controls="faq-answer-10">
+                        <span data-i18n="faq.q10" class="text-sm sm:text-base font-semibold text-gray-200">Есть ли поддержка после релиза?</span>
+                        <i data-lucide="chevron-down" class="faq-icon w-5 h-5 text-neon-green shrink-0 transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-answer-10" class="faq-answer hidden px-5 sm:px-6 pb-5 sm:pb-6">
+                        <p data-i18n="faq.a10" class="text-gray-400 text-sm leading-relaxed">Да. После запуска можно подключить сопровождение: исправление ошибок, обновления API бирж, добавление функций, мониторинг и оптимизацию производительности.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -942,7 +1007,7 @@
             <div class="border-t border-white/5 pt-8 mt-2 mb-10 max-w-5xl">
                 <p class="text-[10px] sm:text-[11px] leading-relaxed text-gray-600 font-mono tracking-tight">
                     <span data-i18n="footer.legal_title" class="block text-gray-500 font-semibold mb-3 uppercase tracking-wider">Юридическая информация и уведомление о рисках</span>
-                    <span data-i18n-html="footer.legal_p1" class="block mb-3"><strong class="text-gray-500">Отказ от ответственности.</strong> Проект AlgoForge занимается исключительно разработкой программного обеспечения на заказ. Мы не являемся финансовыми консультантами, не предоставляем инвестиционные рекомендации и не управляем активами пользователей.</span>
+                    <span data-i18n-html="footer.legal_p1" class="block mb-3"><strong class="text-gray-500">Правовая информация.</strong> Исполнитель: ИП КОНОВАЛОВ, ОГРНИП 320532100016343. Сайт AlgoForge оказывает услуги по разработке программного обеспечения на заказ. Информация на сайте не является публичной офертой; итоговые условия, сроки и стоимость фиксируются в договоре или согласованном техническом задании.</span>
                     <span data-i18n-html="footer.legal_p2" class="block mb-3"><strong class="text-gray-500">Риски.</strong> Торговля на финансовых и криптовалютных рынках сопряжена с высоким риском полной или частичной потери денежных средств. Любые алгоритмы, боты и стратегии являются инструментами автоматизации и не гарантируют получение прибыли в будущем. Результаты, продемонстрированные в кейсах, являются субъективными и не являются обещанием аналогичной доходности.</span>
                     <span data-i18n-html="footer.legal_p3" class="block"><strong class="text-gray-500">Использование сервиса.</strong> Весь контент на сайте носит информационно-образовательный характер. Пользователь самостоятельно принимает решения о запуске торговых систем и несёт полную ответственность за любые финансовые результаты. Мы не принимаем денежные средства для торговли и не предлагаем финансовые продукты.</span>
                 </p>
@@ -980,6 +1045,6 @@
             githubUrl: '',
         };
     </script>
-    <script src="script.js?v=15"></script>
+    <script src="script.js?v=18"></script>
 </body>
 </html>

@@ -155,6 +155,16 @@ const I18N = {
         'faq.a4': 'Мы не используем медленный REST для высокочастотных задач. Только WebSockets, gRPC и FIX API для обеспечения минимального пинга и мгновенного исполнения ордеров.',
         'faq.q5': 'Вы предоставляете готовые стратегии?',
         'faq.a5': 'Нет, мы — инженеры: превращаем вашу уникальную логику или бизнес-задачу в устойчивый программный код. Мы не занимаемся прогнозированием рынка за вас, но при необходимости можем направить в нужное русло.',
+        'faq.q6': 'Сколько времени занимает разработка?',
+        'faq.a6': 'Срок зависит от сложности логики и количества интеграций. Простой бот или MVP обычно занимает от 2–4 недель, сложная торговая система, терминал или SaaS-платформа — от 2–3 месяцев. Точную оценку даём после короткого технического разбора задачи.',
+        'faq.q7': 'Можно ли доработать уже существующий проект?',
+        'faq.a7': 'Да. Мы можем провести аудит текущего кода, найти узкие места, исправить ошибки, добавить новые биржи, переписать нестабильные модули или подготовить проект к запуску на сервере.',
+        'faq.q8': 'Как проходит оплата проекта?',
+        'faq.a8': 'Обычно проект делится на этапы: аналитика, прототип, разработка, тестирование и запуск. Оплата также может идти по этапам — это фиксируется в договоре или согласованном техническом задании.',
+        'faq.q9': 'Вы помогаете с запуском на сервере?',
+        'faq.a9': 'Да. Настраиваем сервер, окружение, автозапуск, логи, мониторинг, резервные копии и базовую защиту. Для торговых систем отдельно проверяем стабильность подключения к API и поведение при сбоях сети.',
+        'faq.q10': 'Есть ли поддержка после релиза?',
+        'faq.a10': 'Да. После запуска можно подключить сопровождение: исправление ошибок, обновления API бирж, добавление функций, мониторинг и оптимизацию производительности.',
 
         'footer.brand_desc': 'Создаём технологии, которые работают на вас. Торговые алгоритмы, боты, софт и приложения под ключ.',
         'footer.col_services': 'Услуги',
@@ -173,7 +183,7 @@ const I18N = {
         'footer.link.cases': 'Кейсы',
         'footer.link.news': 'Новости',
         'footer.legal_title': 'Юридическая информация и уведомление о рисках',
-        'footer.legal_p1': '<strong class="text-gray-500">Отказ от ответственности.</strong> Проект AlgoForge занимается исключительно разработкой программного обеспечения на заказ. Мы не являемся финансовыми консультантами, не предоставляем инвестиционные рекомендации и не управляем активами пользователей.',
+        'footer.legal_p1': '<strong class="text-gray-500">Правовая информация.</strong> Исполнитель: ИП КОНОВАЛОВ, ОГРНИП 320532100016343. Сайт AlgoForge оказывает услуги по разработке программного обеспечения на заказ. Информация на сайте не является публичной офертой; итоговые условия, сроки и стоимость фиксируются в договоре или согласованном техническом задании.',
         'footer.legal_p2': '<strong class="text-gray-500">Риски.</strong> Торговля на финансовых и криптовалютных рынках сопряжена с высоким риском полной или частичной потери денежных средств. Любые алгоритмы, боты и стратегии являются инструментами автоматизации и не гарантируют получение прибыли в будущем. Результаты, продемонстрированные в кейсах, являются субъективными и не являются обещанием аналогичной доходности.',
         'footer.legal_p3': '<strong class="text-gray-500">Использование сервиса.</strong> Весь контент на сайте носит информационно-образовательный характер. Пользователь самостоятельно принимает решения о запуске торговых систем и несёт полную ответственность за любые финансовые результаты. Мы не принимаем денежные средства для торговли и не предлагаем финансовые продукты.',
         'footer.copy_rights': 'Все права защищены.',
@@ -304,6 +314,16 @@ const I18N = {
         'faq.a4': 'We don’t use slow REST for high-frequency tasks. Only WebSockets, gRPC, and FIX API for minimal latency and instant order execution.',
         'faq.q5': 'Do you provide ready-made strategies?',
         'faq.a5': 'No — we are engineers. We turn your unique logic or business case into resilient code. We don’t predict the market for you, but we can guide you in the right direction.',
+        'faq.q6': 'How long does development take?',
+        'faq.a6': 'Timing depends on logic complexity and the number of integrations. A simple bot or MVP usually takes 2–4 weeks, while a complex trading system, terminal, or SaaS platform can take 2–3 months. We provide an accurate estimate after a short technical review.',
+        'faq.q7': 'Can you improve an existing project?',
+        'faq.a7': 'Yes. We can audit existing code, find bottlenecks, fix bugs, add new exchanges, rewrite unstable modules, or prepare the project for server deployment.',
+        'faq.q8': 'How does payment work?',
+        'faq.a8': 'Usually the project is split into stages: analysis, prototype, development, testing, and launch. Payment can also be split by stages — this is fixed in the agreement or approved technical specification.',
+        'faq.q9': 'Do you help with server deployment?',
+        'faq.a9': 'Yes. We configure the server, runtime environment, autostart, logs, monitoring, backups, and basic protection. For trading systems we additionally check API connection stability and behavior during network failures.',
+        'faq.q10': 'Do you provide support after release?',
+        'faq.a10': 'Yes. After launch, support can include bug fixes, exchange API updates, new features, monitoring, and performance optimization.',
 
         'footer.brand_desc': 'We build technology that works for you. Trading algorithms, bots, software, and apps end-to-end.',
         'footer.col_services': 'Services',
@@ -322,7 +342,7 @@ const I18N = {
         'footer.link.cases': 'Cases',
         'footer.link.news': 'News',
         'footer.legal_title': 'Legal information and risk notice',
-        'footer.legal_p1': '<strong class="text-gray-500">Disclaimer.</strong> AlgoForge is exclusively engaged in custom software development. We are not financial advisors, do not provide investment recommendations, and do not manage user assets.',
+        'footer.legal_p1': '<strong class="text-gray-500">Legal information.</strong> Contractor: Individual Entrepreneur KONOVALOV, OGRNIP 320532100016343. AlgoForge provides custom software development services. Information on this website is not a public offer; final terms, timelines, and pricing are fixed in an agreement or approved technical specification.',
         'footer.legal_p2': '<strong class="text-gray-500">Risks.</strong> Trading on financial and crypto markets carries a high risk of partial or full loss of funds. Any algorithms, bots, and strategies are automation tools and do not guarantee future profits. Results shown in case studies are subjective and are not a promise of similar returns.',
         'footer.legal_p3': '<strong class="text-gray-500">Use of service.</strong> All content on the website is for informational and educational purposes. The user makes independent decisions on running trading systems and bears full responsibility for any financial results. We do not accept funds for trading and do not offer financial products.',
         'footer.copy_rights': 'All rights reserved.',
@@ -766,6 +786,32 @@ document.querySelectorAll('.mobile-link').forEach(link => {
 
 
 // ==========================================
+// FAQ Accordion
+// ==========================================
+function initFaqAccordion() {
+    const triggers = document.querySelectorAll('.faq-trigger');
+    if (!triggers.length) return;
+
+    function setOpen(trigger, shouldOpen) {
+        const answerId = trigger.getAttribute('aria-controls');
+        const answer = answerId ? document.getElementById(answerId) : null;
+        const icon = trigger.querySelector('.faq-icon');
+        trigger.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        if (answer) answer.classList.toggle('hidden', !shouldOpen);
+        if (icon) icon.classList.toggle('rotate-180', shouldOpen);
+    }
+
+    triggers.forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+            const willOpen = trigger.getAttribute('aria-expanded') !== 'true';
+            triggers.forEach((item) => setOpen(item, false));
+            setOpen(trigger, willOpen);
+        });
+    });
+}
+
+
+// ==========================================
 // Stat Counter Animation
 // ==========================================
 const statNumbers = document.querySelectorAll('.stat-number');
@@ -985,6 +1031,7 @@ document.querySelectorAll('.card-3d').forEach(card => {
 lucide.createIcons();
 initCustomProjectTypeSelect();
 initLanguageToggle();
+initFaqAccordion();
 applyLanguage(currentLanguage);
 
 
