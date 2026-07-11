@@ -5,6 +5,7 @@ const SITE_DEFAULTS = {
     brandName: 'AlgoForge',
     telegramUsername: 'your_username',
     email: 'your@email.com',
+    phone: '',
     githubUrl: '',
 };
 
@@ -28,6 +29,15 @@ function normalizeEmail(raw) {
     if (!mail) return '';
     // Simple safe check for mailto link rendering.
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail) ? mail : '';
+}
+
+function normalizePhone(raw) {
+    if (raw == null || raw === '') return '';
+    const digits = String(raw).replace(/\D/g, '');
+    if (digits.length === 11 && digits[0] === '7') return '+' + digits;
+    if (digits.length === 11 && digits[0] === '8') return '+7' + digits.slice(1);
+    if (digits.length === 10) return '+7' + digits;
+    return '';
 }
 
 function sanitizeHttpUrl(raw) {
@@ -59,6 +69,7 @@ const I18N = {
         'nav.cases': 'Кейсы',
         'nav.news': 'Новости',
         'nav.contact': 'Связаться',
+        'nav.call': 'Позвонить',
 
         'hero.badge': 'Принимаем новые проекты',
         'hero.title': 'Автоматизация, которая делает <span class="gradient-text glow-green">деньги</span>.<span class="block mt-1 sm:mt-2">От криптоботов до энтерпрайза.</span>',
@@ -129,11 +140,19 @@ const I18N = {
         'contact.title': 'Готовы <span class="gradient-text">создать</span>?',
         'contact.lead': 'Расскажите о вашем проекте — мы подготовим оценку и предложение в течение 24 часов',
         'form.name': 'Имя',
+        'form.name_ph': 'Иван',
         'form.tg': 'Ваш Telegram (@username)',
+        'form.tg_ph': '@username',
         'form.tg_title': 'Латиница, 5–32 символа, с @ или без',
+        'form.phone': 'Телефон',
+        'form.phone_ph': '+7 900 000-00-00',
+        'form.optional': '(необязательно)',
+        'form.message_label': 'Описание проекта',
         'form.message': 'Опишите ваш проект...',
+        'form.hint': 'После отправки откроется Telegram с текстом заявки — проверьте и нажмите «Отправить».',
         'form.submit': 'Отправить заявку',
         'form.type': 'Тип проекта',
+        'form.type.site': 'Создание или написание сайта',
         'form.type.algo': 'Торговый алгоритм',
         'form.type.bot': 'Торговый бот',
         'form.type.api': 'API интеграция',
@@ -197,6 +216,7 @@ const I18N = {
         requestTitle: 'Заявка с сайта',
         requestName: 'Имя',
         requestClientTelegram: 'Telegram клиента',
+        requestClientPhone: 'Телефон клиента',
         requestProjectType: 'Тип проекта',
         submitOpening: 'Открываем Telegram…',
         submitDone: 'Готово — проверьте Telegram',
@@ -218,6 +238,7 @@ const I18N = {
         'nav.cases': 'Cases',
         'nav.news': 'News',
         'nav.contact': 'Contact',
+        'nav.call': 'Call',
 
         'hero.badge': 'Accepting new projects',
         'hero.title': 'Automation that makes <span class="gradient-text glow-green">money</span>.<span class="block mt-1 sm:mt-2">From crypto bots to enterprise.</span>',
@@ -288,11 +309,19 @@ const I18N = {
         'contact.title': 'Ready to <span class="gradient-text">build</span>?',
         'contact.lead': 'Tell us about your project — we will prepare an estimate and proposal within 24 hours.',
         'form.name': 'Name',
+        'form.name_ph': 'John',
         'form.tg': 'Your Telegram (@username)',
+        'form.tg_ph': '@username',
         'form.tg_title': 'Latin letters, 5–32 chars, with or without @',
+        'form.phone': 'Phone',
+        'form.phone_ph': '+1 555 000-0000',
+        'form.optional': '(optional)',
+        'form.message_label': 'Project description',
         'form.message': 'Describe your project...',
+        'form.hint': 'After submit, Telegram opens with your request text — review it and tap Send.',
         'form.submit': 'Send request',
         'form.type': 'Project type',
+        'form.type.site': 'Website creation or development',
         'form.type.algo': 'Trading algorithm',
         'form.type.bot': 'Trading bot',
         'form.type.api': 'API integration',
@@ -356,6 +385,7 @@ const I18N = {
         requestTitle: 'Website request',
         requestName: 'Name',
         requestClientTelegram: 'Client Telegram',
+        requestClientPhone: 'Client phone',
         requestProjectType: 'Project type',
         submitOpening: 'Opening Telegram…',
         submitDone: 'Done — check Telegram',
@@ -455,6 +485,21 @@ function applySiteConfig() {
     document.querySelectorAll('[data-site-telegram-footer]').forEach((el) => { el.textContent = tg ? '@' + tg : t('telegramLabel'); });
     document.querySelectorAll('[data-site-telegram-link], [data-site-telegram-link-footer], [data-site-social-telegram]').forEach((el) => {
         el.href = tgUrl;
+    });
+
+    const phone = normalizePhone(c.phone);
+    const telUrl = phone ? 'tel:' + phone : '#';
+    document.querySelectorAll('[data-site-phone-call], [data-site-phone-call-mobile], [data-site-phone-call-mobile-menu]').forEach((el) => {
+        el.href = telUrl;
+    });
+    document.querySelectorAll('[data-site-phone-row]').forEach((el) => {
+        if (!phone) {
+            el.classList.add('hidden');
+            el.setAttribute('aria-hidden', 'true');
+        } else {
+            el.classList.remove('hidden');
+            el.removeAttribute('aria-hidden');
+        }
     });
 
     const gh = sanitizeHttpUrl(c.githubUrl);
@@ -856,6 +901,14 @@ function resetCustomProjectTypeSelect() {
     }
     if (panel) panel.classList.add('hidden');
     if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    if (trigger) trigger.classList.remove('border-red-400/60');
+}
+
+function markProjectTypeInvalid(invalid) {
+    const trigger = document.getElementById('custom-type-trigger');
+    if (!trigger) return;
+    trigger.classList.toggle('border-red-400/60', invalid);
+    trigger.classList.toggle('border-white/10', !invalid);
 }
 
 function initCustomProjectTypeSelect() {
@@ -889,6 +942,7 @@ function initCustomProjectTypeSelect() {
             label.textContent = val ? t('form.type.' + val) : btn.textContent.trim();
             label.classList.remove('text-gray-400');
             label.classList.add('text-white');
+            markProjectTypeInvalid(false);
             closePanel();
         });
     });
@@ -914,6 +968,7 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
 
     const nameEl = document.getElementById('contact-name');
     const tgEl = document.getElementById('contact-telegram');
+    const phoneEl = document.getElementById('contact-phone');
     const msgEl = document.getElementById('contact-message');
     const typeVal = document.getElementById('contact-type').value;
 
@@ -930,9 +985,11 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
         return;
     }
     if (!typeVal) {
+        markProjectTypeInvalid(true);
         showSiteModal(t('modalSelectProjectType'));
         return;
     }
+    markProjectTypeInvalid(false);
 
     const clientTg = normalizeTelegramUser(tgEl.value);
     if (!clientTg || !/^[a-zA-Z][a-zA-Z0-9_]{4,31}$/.test(clientTg)) {
@@ -949,16 +1006,17 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
 
     const name = nameEl.value.trim();
     const message = msgEl.value.trim();
+    const clientPhone = phoneEl ? phoneEl.value.trim() : '';
     const typeLabel = t('form.type.' + typeVal) || typeVal;
 
-    const text = [
+    const textLines = [
         t('requestTitle'),
         t('requestName') + ': ' + name,
         t('requestClientTelegram') + ': @' + clientTg,
-        t('requestProjectType') + ': ' + typeLabel,
-        '',
-        message,
-    ].join('\n');
+    ];
+    if (clientPhone) textLines.push(t('requestClientPhone') + ': ' + clientPhone);
+    textLines.push(t('requestProjectType') + ': ' + typeLabel, '', message);
+    const text = textLines.join('\n');
 
     const url = 'https://t.me/' + tg + '?text=' + encodeURIComponent(text);
     if (url.length > 3500) {

@@ -354,14 +354,23 @@
                     <a href="blog/" data-i18n="nav.blog" class="text-sm text-gray-400 hover:text-white transition-colors">Блог</a>
                     <a href="cases/" data-i18n="nav.cases" class="text-sm text-gray-400 hover:text-white transition-colors">Кейсы</a>
                     <a href="news/" data-i18n="nav.news" class="text-sm text-gray-400 hover:text-white transition-colors">Новости</a>
+                    <a data-site-phone-call data-site-phone-row href="#" class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-neon-green/25 text-neon-green text-xs font-semibold hover:bg-neon-green/10 transition-colors shrink-0">
+                        <i data-lucide="phone" class="w-3.5 h-3.5"></i>
+                        <span data-i18n="nav.call">Позвонить</span>
+                    </a>
                     <button type="button" data-lang-toggle class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors" aria-label="Переключить язык">EN</button>
                     <a href="#contact" data-i18n="nav.contact" class="ml-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:shadow-lg hover:shadow-neon-green/20 transition-all hover:scale-105">Связаться</a>
                 </div>
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg border border-white/10 text-gray-300 hover:text-white hover:border-white/20 transition-colors" aria-label="Меню">
+                <div class="flex md:hidden items-center gap-2">
+                    <a data-site-phone-call-mobile data-site-phone-row href="#" class="hidden p-2 rounded-lg border border-neon-green/25 text-neon-green hover:bg-neon-green/10 transition-colors" data-i18n-attr-aria-label="nav.call" aria-label="Позвонить">
+                        <i data-lucide="phone" class="w-5 h-5"></i>
+                    </a>
+                <button id="mobile-menu-btn" class="p-2 rounded-lg border border-white/10 text-gray-300 hover:text-white hover:border-white/20 transition-colors" aria-label="Меню">
                     <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                         <line x1="2" y1="5" x2="20" y2="5"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="17" x2="20" y2="17"/>
                     </svg>
                 </button>
+                </div>
             </div>
         </div>
         <!-- Mobile Menu -->
@@ -376,6 +385,10 @@
                 <a href="blog/" data-i18n="nav.blog" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Блог</a>
                 <a href="cases/" data-i18n="nav.cases" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Кейсы</a>
                 <a href="news/" data-i18n="nav.news" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Новости</a>
+                <a data-site-phone-call-mobile-menu data-site-phone-row href="#" class="mobile-link hidden px-4 py-3 rounded-xl text-neon-green border border-neon-green/20 hover:bg-neon-green/10 transition-colors flex items-center justify-center gap-2 font-semibold">
+                    <i data-lucide="phone" class="w-4 h-4"></i>
+                    <span data-i18n="nav.call">Позвонить</span>
+                </a>
                 <button type="button" data-lang-toggle class="mobile-link w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">EN</button>
                 <a href="#contact" data-i18n="nav.contact" class="mobile-link mt-2 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-center">Связаться</a>
             </div>
@@ -804,18 +817,30 @@
                         Расскажите о вашем проекте — мы подготовим оценку и предложение в течение 24 часов
                     </p>
 
-                    <form id="contact-form" class="max-w-lg mx-auto space-y-4 mb-8">
+                    <form id="contact-form" class="max-w-lg mx-auto space-y-4 mb-8 text-left">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input id="contact-name" name="name" type="text" required maxlength="80" placeholder="Имя" data-i18n-attr-placeholder="form.name" autocomplete="name" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm">
-                            <input id="contact-telegram" name="clientTelegram" type="text" required maxlength="33" minlength="5" autocomplete="off" placeholder="Ваш Telegram (@username)" data-i18n-attr-placeholder="form.tg" title="Латиница, 5–32 символа, с @ или без" data-i18n-attr-title="form.tg_title" pattern="^@?[a-zA-Z][a-zA-Z0-9_]{4,31}$" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm font-mono">
+                            <div>
+                                <label for="contact-name" data-i18n="form.name" class="block text-xs font-mono text-gray-500 mb-1.5">Имя</label>
+                                <input id="contact-name" name="name" type="text" required maxlength="80" placeholder="Иван" data-i18n-attr-placeholder="form.name_ph" autocomplete="name" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm">
+                            </div>
+                            <div>
+                                <label for="contact-telegram" data-i18n="form.tg" class="block text-xs font-mono text-gray-500 mb-1.5">Ваш Telegram (@username)</label>
+                                <input id="contact-telegram" name="clientTelegram" type="text" required maxlength="33" minlength="5" autocomplete="off" placeholder="@username" data-i18n-attr-placeholder="form.tg_ph" title="Латиница, 5–32 символа, с @ или без" data-i18n-attr-title="form.tg_title" pattern="^@?[a-zA-Z][a-zA-Z0-9_]{4,31}$" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="contact-phone" data-i18n="form.phone" class="block text-xs font-mono text-gray-500 mb-1.5">Телефон <span data-i18n="form.optional" class="text-gray-600">(необязательно)</span></label>
+                            <input id="contact-phone" name="clientPhone" type="tel" maxlength="20" autocomplete="tel" placeholder="+7 900 000-00-00" data-i18n-attr-placeholder="form.phone_ph" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm font-mono">
                         </div>
                         <div class="relative z-20" id="custom-type-root">
+                            <label id="custom-type-label-caption" data-i18n="form.type" class="block text-xs font-mono text-gray-500 mb-1.5">Тип проекта</label>
                             <input type="hidden" id="contact-type" name="projectType" value="">
                             <button type="button" id="custom-type-trigger" aria-haspopup="listbox" aria-expanded="false" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-left text-gray-400 focus:outline-none focus:border-neon-green/50 transition-colors text-sm flex items-center justify-between gap-2 hover:border-white/15">
                                 <span id="custom-type-label">Тип проекта</span>
                                 <i data-lucide="chevron-down" class="custom-type-chevron w-4 h-4 text-gray-500 shrink-0 transition-transform duration-200"></i>
                             </button>
                             <div id="custom-type-panel" class="hidden absolute left-0 right-0 top-full mt-2 py-1.5 rounded-xl border border-white/10 shadow-2xl max-h-60 overflow-y-auto z-50" style="background: rgba(11,11,24,0.97); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
+                                <button type="button" data-i18n="form.type.site" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="site" role="option">Создание или написание сайта</button>
                                 <button type="button" data-i18n="form.type.algo" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="algo" role="option">Торговый алгоритм</button>
                                 <button type="button" data-i18n="form.type.bot" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="bot" role="option">Торговый бот</button>
                                 <button type="button" data-i18n="form.type.api" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="api" role="option">API интеграция</button>
@@ -825,7 +850,11 @@
                                 <button type="button" data-i18n="form.type.other" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="other" role="option">Другое</button>
                             </div>
                         </div>
-                        <textarea id="contact-message" name="message" required minlength="10" maxlength="2000" placeholder="Опишите ваш проект..." data-i18n-attr-placeholder="form.message" rows="4" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors resize-none text-sm"></textarea>
+                        <div>
+                            <label for="contact-message" data-i18n="form.message_label" class="block text-xs font-mono text-gray-500 mb-1.5">Описание проекта</label>
+                            <textarea id="contact-message" name="message" required minlength="10" maxlength="2000" placeholder="Опишите ваш проект..." data-i18n-attr-placeholder="form.message" rows="4" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors resize-none text-sm"></textarea>
+                        </div>
+                        <p data-i18n="form.hint" class="text-xs text-gray-600 leading-relaxed -mt-1">После отправки откроется Telegram с текстом заявки — проверьте и нажмите «Отправить».</p>
                         <button type="submit" class="w-full px-8 py-4 rounded-xl bg-gradient-to-r from-neon-green to-accent-400 text-black font-bold text-base hover:shadow-2xl hover:shadow-neon-green/20 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
                             <span data-i18n="form.submit">Отправить заявку</span>
                             <i data-lucide="send" class="w-5 h-5"></i>
@@ -840,6 +869,10 @@
                         <a data-site-telegram-link href="#" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-neon-green transition-colors">
                             <i data-lucide="message-circle" class="w-4 h-4"></i>
                             <span data-site-telegram-label></span>
+                        </a>
+                        <a data-site-phone-call data-site-phone-row href="#" class="hidden sm:inline-flex items-center gap-2 hover:text-neon-green transition-colors text-sm">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                            <span data-i18n="nav.call">Позвонить</span>
                         </a>
                     </div>
                 </div>
@@ -1042,10 +1075,11 @@
         window.SITE_CONFIG = {
             brandName: 'AlgoForge',
             telegramUsername: 'Algo_Forge_S',
+            phone: '+79506888862',
             email: '',
             githubUrl: '',
         };
     </script>
-    <script src="script.js?v=18"></script>
+    <script src="script.js?v=19"></script>
 </body>
 </html>
