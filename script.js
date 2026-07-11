@@ -40,6 +40,16 @@ function normalizePhone(raw) {
     return '';
 }
 
+function formatPhoneDisplay(raw) {
+    const tel = normalizePhone(raw);
+    if (!tel) return '';
+    const d = tel.replace(/\D/g, '');
+    if (d.length === 11 && d[0] === '7') {
+        return `+7 (${d.slice(1, 4)}) ${d.slice(4, 7)}-${d.slice(7, 9)}-${d.slice(9, 11)}`;
+    }
+    return tel;
+}
+
 function sanitizeHttpUrl(raw) {
     if (!raw) return '';
     try {
@@ -152,7 +162,7 @@ const I18N = {
         'form.hint': 'После отправки откроется Telegram с текстом заявки — проверьте и нажмите «Отправить».',
         'form.submit': 'Отправить заявку',
         'form.type': 'Тип проекта',
-        'form.type.site': 'Создание или написание сайта',
+        'form.type.site': 'Написание сайта',
         'form.type.algo': 'Торговый алгоритм',
         'form.type.bot': 'Торговый бот',
         'form.type.api': 'API интеграция',
@@ -213,6 +223,7 @@ const I18N = {
         modalInvalidTelegram: 'В поле Telegram укажите корректный username: латиница, 5–32 символа, как в ссылке t.me/username (можно с @ или без).',
         modalConfigTelegram: 'Внизу файла index.html найдите блок window.SITE_CONFIG и укажите telegramUsername — ваш логин в Telegram без символа @ (как в ссылке t.me/username).',
         modalTooLong: 'Текст слишком длинный для одной ссылки Telegram. Сократите описание проекта.',
+        phoneModalLead: 'Наш номер для звонка:',
         requestTitle: 'Заявка с сайта',
         requestName: 'Имя',
         requestClientTelegram: 'Telegram клиента',
@@ -321,7 +332,7 @@ const I18N = {
         'form.hint': 'After submit, Telegram opens with your request text — review it and tap Send.',
         'form.submit': 'Send request',
         'form.type': 'Project type',
-        'form.type.site': 'Website creation or development',
+        'form.type.site': 'Website development',
         'form.type.algo': 'Trading algorithm',
         'form.type.bot': 'Trading bot',
         'form.type.api': 'API integration',
@@ -382,6 +393,7 @@ const I18N = {
         modalInvalidTelegram: 'Enter a valid Telegram username: latin letters, 5–32 characters, as in t.me/username (with or without @).',
         modalConfigTelegram: 'In index.html, find window.SITE_CONFIG and set telegramUsername — your Telegram handle without @ (as in t.me/username).',
         modalTooLong: 'The message is too long for a single Telegram link. Please shorten the project description.',
+        phoneModalLead: 'Our phone number:',
         requestTitle: 'Website request',
         requestName: 'Name',
         requestClientTelegram: 'Client Telegram',
@@ -489,7 +501,7 @@ function applySiteConfig() {
 
     const phone = normalizePhone(c.phone);
     const telUrl = phone ? 'tel:' + phone : '#';
-    document.querySelectorAll('[data-site-phone-call], [data-site-phone-call-mobile], [data-site-phone-call-mobile-menu]').forEach((el) => {
+    document.querySelectorAll('[data-site-phone-call-mobile], [data-site-phone-call-mobile-menu]').forEach((el) => {
         el.href = telUrl;
     });
     document.querySelectorAll('[data-site-phone-row]').forEach((el) => {
@@ -558,6 +570,21 @@ function hideSiteModal() {
         if (e.key === 'Escape' && modal.classList.contains('is-open')) hideSiteModal();
     });
 })();
+
+function showPhoneNumberModal() {
+    const phone = normalizePhone(getSiteConfig().phone);
+    if (!phone) return;
+    showSiteModal(t('phoneModalLead') + '\n\n' + formatPhoneDisplay(phone));
+}
+
+function initPhoneCallButtons() {
+    document.querySelectorAll('[data-site-phone-show]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPhoneNumberModal();
+        });
+    });
+}
 
 // ==========================================
 // Three.js 3D Background Animation
@@ -1090,6 +1117,7 @@ lucide.createIcons();
 initCustomProjectTypeSelect();
 initLanguageToggle();
 initFaqAccordion();
+initPhoneCallButtons();
 applyLanguage(currentLanguage);
 
 

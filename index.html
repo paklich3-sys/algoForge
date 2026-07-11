@@ -354,10 +354,10 @@
                     <a href="blog/" data-i18n="nav.blog" class="text-sm text-gray-400 hover:text-white transition-colors">Блог</a>
                     <a href="cases/" data-i18n="nav.cases" class="text-sm text-gray-400 hover:text-white transition-colors">Кейсы</a>
                     <a href="news/" data-i18n="nav.news" class="text-sm text-gray-400 hover:text-white transition-colors">Новости</a>
-                    <a data-site-phone-call data-site-phone-row href="#" class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-neon-green/25 text-neon-green text-xs font-semibold hover:bg-neon-green/10 transition-colors shrink-0">
+                    <button type="button" data-site-phone-show data-site-phone-row class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-neon-green/25 text-neon-green text-xs font-semibold hover:bg-neon-green/10 transition-colors shrink-0">
                         <i data-lucide="phone" class="w-3.5 h-3.5"></i>
                         <span data-i18n="nav.call">Позвонить</span>
-                    </a>
+                    </button>
                     <button type="button" data-lang-toggle class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors" aria-label="Переключить язык">EN</button>
                     <a href="#contact" data-i18n="nav.contact" class="ml-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:shadow-lg hover:shadow-neon-green/20 transition-all hover:scale-105">Связаться</a>
                 </div>
@@ -840,7 +840,7 @@
                                 <i data-lucide="chevron-down" class="custom-type-chevron w-4 h-4 text-gray-500 shrink-0 transition-transform duration-200"></i>
                             </button>
                             <div id="custom-type-panel" class="hidden absolute left-0 right-0 top-full mt-2 py-1.5 rounded-xl border border-white/10 shadow-2xl max-h-60 overflow-y-auto z-50" style="background: rgba(11,11,24,0.97); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
-                                <button type="button" data-i18n="form.type.site" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="site" role="option">Создание или написание сайта</button>
+                                <button type="button" data-i18n="form.type.site" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="site" role="option">Написание сайта</button>
                                 <button type="button" data-i18n="form.type.algo" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="algo" role="option">Торговый алгоритм</button>
                                 <button type="button" data-i18n="form.type.bot" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="bot" role="option">Торговый бот</button>
                                 <button type="button" data-i18n="form.type.api" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="api" role="option">API интеграция</button>
@@ -870,10 +870,10 @@
                             <i data-lucide="message-circle" class="w-4 h-4"></i>
                             <span data-site-telegram-label></span>
                         </a>
-                        <a data-site-phone-call data-site-phone-row href="#" class="hidden sm:inline-flex items-center gap-2 hover:text-neon-green transition-colors text-sm">
+                        <button type="button" data-site-phone-show data-site-phone-row class="hidden sm:inline-flex items-center gap-2 hover:text-neon-green transition-colors text-sm bg-transparent border-0 p-0 cursor-pointer">
                             <i data-lucide="phone" class="w-4 h-4"></i>
                             <span data-i18n="nav.call">Позвонить</span>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1080,6 +1080,6 @@
             githubUrl: '',
         };
     </script>
-    <script src="script.js?v=19"></script>
+    <script src="script.js?v=20"></script>
 </body>
 </html>
