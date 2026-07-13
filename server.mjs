@@ -33,8 +33,7 @@ const attempts = new Map();
 const ALLOWED_ORIGINS = new Set([
   "https://algoforge.ru",
   "https://www.algoforge.ru",
-  "https://algoforge-uau2.onrender.com",
-  "https://algoforge-uux2.onrender.com",
+  "https://algoforge-uus2.onrender.com",
   "http://127.0.0.1:4173",
   "http://localhost:4173",
 ]);
