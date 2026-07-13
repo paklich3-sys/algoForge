@@ -1179,7 +1179,11 @@ if (contactFormEl) contactFormEl.addEventListener('submit', async function(e) {
     } catch (error) {
         btn.innerHTML = originalHtml;
         btn.disabled = false;
-        showContactFormError(error.message || t('form.errorGeneric'));
+        showContactFormError(
+            (error && error.message === 'Failed to fetch')
+                ? 'Сервер заявок сейчас просыпается или недоступен. Подождите 30–60 сек и нажмите ещё раз.'
+                : (error.message || t('form.errorGeneric'))
+        );
         if (window.lucide) lucide.createIcons();
     }
 });
