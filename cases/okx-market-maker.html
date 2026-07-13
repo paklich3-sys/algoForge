@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Кейс AlgoForge: маркетмейкер для OKX (USDT-SWAP) — динамическая лестница, адаптивная сетка, режим Чаппи, риск-контур и веб-пульт. Алгоритм доступен к покупке.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://unpkg.com https://mc.yandex.ru; connect-src 'self' https:; frame-src 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=()">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="canonical" href="https://algoforge.ru/cases/okx-market-maker.html">
+    <meta property="og:title" content="OKX Market Maker — маркетмейкер с тремя стратегиями | AlgoForge">
+    <meta property="og:url" content="https://algoforge.ru/cases/okx-market-maker.html">
+    <meta property="og:image" content="https://algoforge.ru/cases/assets/okx-market-maker.png">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <title>OKX Market Maker — маркетмейкер для OKX USDT-SWAP | AlgoForge</title>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"OKX Market Maker — маркетмейкер для OKX USDT-SWAP","datePublished":"2026-07-13","author":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"},"publisher":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Кейсы","item":"https://algoforge.ru/cases/"},{"@type":"ListItem","position":3,"name":"OKX Market Maker","item":"https://algoforge.ru/cases/okx-market-maker.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.559.0/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}.glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}article h2{font-size:1.35rem;font-weight:700;color:#fff;margin:2rem 0 .7rem}article h3{font-size:1.05rem;font-weight:600;color:#e2e2e2;margin:1.4rem 0 .45rem}article p{margin-bottom:.95rem;color:#b0b0b0}article ul,article ol{margin:0 0 .95rem 1.5rem;color:#b0b0b0}article li{margin-bottom:.35rem}article strong{color:#e2e2e2}article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}.callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.callout strong{color:#00ff88}.warn{border-left:3px solid #f59e0b;background:rgba(245,158,11,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.warn strong{color:#f59e0b}.metric{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:1rem 1.25rem;text-align:center}.metric-val{font-size:1.6rem;font-weight:800;font-family:'JetBrains Mono',monospace;color:#00ff88}.metric-lbl{font-size:.78rem;color:#888;margin-top:.2rem}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}</style>
+    <script src="../ym.js"></script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/109257949" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6"><div class="flex items-center justify-between h-16">
+            <a href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="./" class="text-sm text-gray-400 hover:text-white" id="nav-back">&#8592; Кейсы</a>
+                <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+            </div>
+            <div class="flex md:hidden gap-3 items-center"><button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button><a href="./" class="text-gray-400 text-sm" id="nav-back-m">&#8592; Кейсы</a></div>
+        </div></div>
+    </nav>
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-purple-400 border border-purple-400/20">Bot</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">Python · OKX · Market Making</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-3" id="art-title">OKX Market Maker</h1>
+            <p class="text-gray-400 text-lg font-medium" id="art-sub">Автоматический маркетмейкер для бессрочных контрактов OKX (USDT-SWAP)</p>
+        </div>
+        <img src="assets/okx-market-maker.png" alt="Веб-пульт OKX Market Maker: стратегии, PnL и позиции" class="w-full rounded-2xl mb-8 border border-white/10" style="height:auto;max-height:420px;object-fit:cover;object-position:top" loading="lazy">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+            <div class="metric"><div class="metric-val">3</div><div class="metric-lbl" id="m1">стратегии</div></div>
+            <div class="metric"><div class="metric-val">post-only</div><div class="metric-lbl" id="m2">MM / grid</div></div>
+            <div class="metric"><div class="metric-val">130+</div><div class="metric-lbl" id="m3">автотестов</div></div>
+            <div class="metric"><div class="metric-val">kill switch</div><div class="metric-lbl" id="m4">риск-контур</div></div>
+        </div>
+        <article id="art-body-ru">
+            <h2>Что это за продукт</h2>
+            <p><strong>OKX</strong> — крупная криптобиржа. <strong>USDT-SWAP</strong> — её бессрочные фьючерсы с расчётом в USDT (perpetual): нет даты экспирации, PnL считается относительно маркировочной цены, можно держать long и short с плечом.</p>
+            <p><strong>OKX Market Maker</strong> — серверный бот на Python, который круглосуточно выставляет и обновляет лимитные заявки на выбранных инструментах USDT-SWAP, ведёт позиции, считает торговый PnL <em>без ребейта</em> как KPI и даёт оператору веб-пульт плюс Telegram-управление.</p>
+            <p>На скрине выше — реальный интерфейс пульта: старт/пауза, режимы риска, выбор стратегии, метрики дня, активный символ и открытые позиции.</p>
+
+            <h2>Функционал бота</h2>
+            <ul>
+                <li>Подключение к OKX через REST и WebSocket (публичный стакан/сделки и приватные ордера/позиции).</li>
+                <li>Три взаимоисключающие стратегии в одном процессе — активна только одна.</li>
+                <li>Исполнение маркетмейкинга и сетки в режиме <strong>post-only</strong> (заявки остаются maker; случайный taker-fill ставит символ на паузу и шлёт алерт).</li>
+                <li>Единый риск-слой: дневной лимит убытка, drawdown, лимит экспозиции, movement guard, многоступенчатый выход из позиции.</li>
+                <li>Учёт: FIFO PnL по сделкам; rebate учитывается отдельно и не подменяет торговый результат.</li>
+                <li>Операторский пульт в браузере и команды в Telegram; состояние пишется в SQLite и поднимается после рестарта.</li>
+            </ul>
+
+            <h2>Алгоритмы</h2>
+            <h3>1. Динамическая лестница (режим по умолчанию)</h3>
+            <p>Классический market making вокруг mid-цены. Бот автоматически выбирает инструмент по волатильности и ликвидности (например, SOL-USDT-SWAP) и выставляет <strong>лестницу</strong> из нескольких уровней bid/ask (обычно 3 на сторону) с заданным спредом.</p>
+            <ul>
+                <li>После исполнения уровня ордера переставляются (amend/replace), чтобы лестница снова стояла вокруг рынка.</li>
+                <li>Для позиции задаются take-profit, stop-loss и time-exit (выход по времени, если рынок «завис»).</li>
+                <li>Цель — собирать спред мелкими кругами, а не держать направленный прогноз.</li>
+            </ul>
+
+            <h3>2. Адаптивная сетка</h3>
+            <p>Replenishing grid: сетка уровней вокруг цены, которая пополняется по мере исполнения. Алгоритм переключает режимы рынка — <strong>SCAN → RANGE → VOLATILITY → MOMENTUM → RECOVERY</strong> — и подстраивает шаг сетки, размер уровней и агрессивность.</p>
+            <ul>
+                <li>Может работать сразу по нескольким инструментам (до 3) с корреляционным фильтром, чтобы не открыть «одинаковые» позиции на связанных альтах.</li>
+                <li>Отдельные параметры шага и TP для BTC/ETH и для альтов; аварийный тренд-стоп при сильном направленном движении.</li>
+            </ul>
+
+            <h3>3. Чаппи (импульсный режим)</h3>
+            <p>Не маркетмейкинг, а следование импульсу: сигнал берётся с <strong>Binance Spot BTC</strong>, вход исполняется market-ордером в альты на OKX USDT-SWAP. Короткий горизонт удержания, ручной или полуавтоматический выбор символа.</p>
+            <p>В валидации бэктесты и короткие live-серии по этому режиму были <strong>убыточными</strong>, поэтому он не включается автоматически и остаётся опциональным / исследовательским.</p>
+            <p>Сменить стратегию можно только при плоских позициях — нельзя «переключить логику» поверх живого inventory.</p>
+
+            <h2>Риск-контур</h2>
+            <ul>
+                <li><strong>Kill switch</strong> — останавливает торговлю при дневном убытке, просадке, превышении экспозиции или серии убыточных кругов.</li>
+                <li><strong>Movement guard</strong> — реакция на резкие импульсы цены на окнах 5 / 15 / 60 секунд.</li>
+                <li><strong>Выход из позиции:</strong> ступени breakeven → soft → hard (market), плюс опциональный trend-stop.</li>
+                <li>Режимы оператора: Осторожный / Обычный / Агрессивный / Защитный — меняют лимиты без правки кода.</li>
+                <li>Блокировка второго экземпляра процесса и восстановление ордеров/позиций после перезапуска.</li>
+            </ul>
+
+            <h2>Стек</h2>
+            <p>Python 3.11, asyncio, OKX REST/WebSocket (<code>python-okx</code>), SQLite, локальный веб-дашборд, Telegram-бот управления, 130+ автотестов на исполнение и риск.</p>
+
+            <div class="warn"><strong>Важно:</strong> торговля деривативами связана с риском потери депозита. Бот автоматизирует исполнение и контроль риска, но не гарантирует прибыль.</div>
+
+            <div class="callout"><strong>Алгоритм можно купить или адаптировать</strong> под ваш депозит и лимиты риска. <a href="../#contact">Оставьте заявку</a> — разберём стратегию по умолчанию, деплой и сопровождение. Подробный разбор инженерии — в <a href="../blog/okx-market-maker-bot.html">статье блога</a>.</div>
+        </article>
+        <article id="art-body-en" style="display:none">
+            <h2>What this product is</h2>
+            <p><strong>OKX</strong> is a major crypto exchange. <strong>USDT-SWAP</strong> are its USDT-margined perpetual futures: no expiry, PnL vs mark price, long/short with leverage.</p>
+            <p><strong>OKX Market Maker</strong> is a Python server bot that continuously posts and refreshes limit orders on selected USDT-SWAP instruments, manages inventory, tracks trading PnL <em>excluding rebate</em> as the main KPI, and exposes a web console plus Telegram controls.</p>
+            <p>The screenshot above is the real operator dashboard: start/pause, risk modes, strategy switch, daily metrics, active symbol and open positions.</p>
+
+            <h2>Capabilities</h2>
+            <ul>
+                <li>OKX REST + WebSocket (public book/trades and private orders/positions).</li>
+                <li>Three mutually exclusive strategies in one process.</li>
+                <li><strong>Post-only</strong> quoting for MM/grid; accidental taker fill pauses the symbol and alerts.</li>
+                <li>Shared risk layer: daily loss, drawdown, exposure caps, movement guard, staged exits.</li>
+                <li>FIFO trading PnL; rebate tracked separately and never used as a substitute KPI.</li>
+                <li>Browser dashboard + Telegram; SQLite persistence and restart recovery.</li>
+            </ul>
+
+            <h2>Algorithms</h2>
+            <h3>1. Dynamic ladder (default)</h3>
+            <p>Classic market making around mid: auto-picks a liquid volatile symbol and posts a multi-level bid/ask ladder (typically 3 per side) with a configured spread, TP/SL and time-exit.</p>
+            <h3>2. Adaptive grid</h3>
+            <p>Replenishing grid with regime switching (SCAN / RANGE / VOLATILITY / MOMENTUM / RECOVERY), up to 3 symbols and a correlation filter; separate BTC/ETH vs alt spacing; emergency trend stop.</p>
+            <h3>3. Chappie (impulse)</h3>
+            <p>Binance Spot BTC impulse → market entries into OKX alts. Documented negative validation — not auto-selected. Strategy switch only when flat.</p>
+
+            <h2>Risk</h2>
+            <p>Kill switch, movement guard (5/15/60s), breakeven → soft → hard exits, operator risk modes, single-instance lock, restart recovery.</p>
+            <p>Stack: Python 3.11 + asyncio, OKX APIs, SQLite, 130+ automated tests.</p>
+
+            <div class="callout"><strong>Want to buy or customise the algorithm?</strong> <a href="../#contact">Send a request</a>. Architecture deep-dive: <a href="../blog/okx-market-maker-bot.html">blog article</a>.</div>
+        </article>
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm" id="back-link"><i data-lucide="arrow-left" class="w-4 h-4"></i><span id="back-text">Все кейсы</span></a>
+            <a href="../#contact" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105" id="cta-link"><i data-lucide="send" class="w-4 h-4"></i><span id="cta-text">Купить / адаптировать алгоритм</span></a>
+        </div>
+    </div>
+    <footer class="border-t border-white/5 py-8"><div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono"><span id="copy">&#169; 2026 AlgoForge. Все права защищены.</span><div class="flex gap-6"><a href="../" class="hover:text-neon-green" id="f-home">Главная</a><a href="./" class="hover:text-neon-green" id="f-cases">Кейсы</a><a href="../#contact" class="hover:text-neon-green" id="f-contact">Связаться</a></div></div></footer>
+    <script>
+        window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40);});
+        const STRINGS={ru:{'nav-back':'← Кейсы','nav-contact':'Связаться','art-title':'OKX Market Maker','art-sub':'Автоматический маркетмейкер для бессрочных контрактов OKX (USDT-SWAP)','m1':'стратегии','m2':'MM / grid','m3':'автотестов','m4':'риск-контур','back-text':'Все кейсы','cta-text':'Купить / адаптировать алгоритм',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-cases':'Кейсы','f-contact':'Связаться',lang:'EN'},en:{'nav-back':'← Cases','nav-contact':'Contact','art-title':'OKX Market Maker','art-sub':'Automated market maker for OKX perpetual futures (USDT-SWAP)','m1':'strategies','m2':'MM / grid','m3':'automated tests','m4':'risk layer','back-text':'All cases','cta-text':'Buy / customise the algorithm',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-cases':'Cases','f-contact':'Contact',lang:'RU'}};
+        let lang=localStorage.getItem('site_lang')==='en'?'en':'ru';
+        function applyLang(l){lang=l;localStorage.setItem('site_lang',l);document.documentElement.lang=l;const s=STRINGS[l];Object.keys(s).forEach(id=>{if(id==='lang')return;const el=document.getElementById(id);if(el)el.textContent=s[id];});document.getElementById('lang-btn').textContent=s.lang;document.getElementById('lang-btn-m').textContent=s.lang;document.getElementById('art-body-ru').style.display=l==='ru'?'':'none';document.getElementById('art-body-en').style.display=l==='en'?'':'none';}
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

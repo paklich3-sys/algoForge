@@ -34,10 +34,11 @@
         "url": "https://algoforge.ru/cases/",
         "publisher": {"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/","logo":"https://algoforge.ru/logo-v3.png?v=1"},
         "itemListElement": [
-            {"@type":"ListItem","position":1,"name":"QuantTerminal Pro","url":"https://algoforge.ru/cases/quantterminal-pro.html","description":"Десктопный торговый терминал с единым API для 18 бирж"},
-            {"@type":"ListItem","position":2,"name":"ArbitrageX Bot","url":"https://algoforge.ru/cases/arbitragex-bot.html","description":"Кросс-биржевой арбитражный бот с latency менее 50 мс"},
-            {"@type":"ListItem","position":3,"name":"CryptoAnalytics SaaS","url":"https://algoforge.ru/cases/cryptoanalytics-saas.html","description":"Аналитическая SaaS-платформа с real-time дашбордами"},
-            {"@type":"ListItem","position":4,"name":"TradeFlow Android","url":"https://algoforge.ru/cases/tradeflow-android.html","description":"Мобильное Android-приложение для управления портфелем"}
+            {"@type":"ListItem","position":1,"name":"OKX Market Maker","url":"https://algoforge.ru/cases/okx-market-maker.html","description":"Маркетмейкер для OKX USDT-SWAP: динамическая лестница, адаптивная сетка, режим Чаппи, веб-пульт"},
+            {"@type":"ListItem","position":2,"name":"QuantTerminal Pro","url":"https://algoforge.ru/cases/quantterminal-pro.html","description":"Десктопный торговый терминал с единым API для 18 бирж"},
+            {"@type":"ListItem","position":3,"name":"ArbitrageX Bot","url":"https://algoforge.ru/cases/arbitragex-bot.html","description":"Кросс-биржевой арбитражный бот с latency менее 50 мс"},
+            {"@type":"ListItem","position":4,"name":"CryptoAnalytics SaaS","url":"https://algoforge.ru/cases/cryptoanalytics-saas.html","description":"Аналитическая SaaS-платформа с real-time дашбордами"},
+            {"@type":"ListItem","position":5,"name":"TradeFlow Android","url":"https://algoforge.ru/cases/tradeflow-android.html","description":"Мобильное Android-приложение для управления портфелем"}
         ]
     }
     </script>
@@ -114,6 +115,23 @@
 
     <main class="max-w-5xl mx-auto px-4 pb-24">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+            <!-- Case: OKX Market Maker (new) -->
+            <article class="glass rounded-2xl overflow-hidden card-hover flex flex-col">
+                <img src="assets/okx-market-maker.png"
+                     alt="OKX Market Maker — веб-пульт" class="case-img" loading="lazy">
+                <div class="p-6 flex flex-col gap-3 flex-1">
+                    <div class="flex gap-2 flex-wrap">
+                        <span class="tag" style="color:#a855f7;border-color:rgba(168,85,247,.3)" id="c5-tag">Bot</span>
+                        <span class="tag" style="color:#00ff88;border-color:rgba(0,255,136,.3)">Python · OKX MM</span>
+                    </div>
+                    <h2 class="text-lg font-bold text-white" id="c5-title">OKX Market Maker</h2>
+                    <p class="text-gray-500 text-sm flex-1" id="c5-desc">Маркетмейкер для бессрочных контрактов OKX (USDT-SWAP): динамическая лестница, адаптивная сетка и импульсный режим Чаппи. Веб-пульт, риск-контур, алгоритм доступен к покупке.</p>
+                    <a href="okx-market-maker.html" class="mt-2 text-xs text-neon-green font-mono hover:underline flex items-center gap-1" id="c5-read">
+                        <span>Читать кейс</span><i data-lucide="arrow-right" class="w-3 h-3"></i>
+                    </a>
+                </div>
+            </article>
 
             <!-- Case 1 -->
             <article class="glass rounded-2xl overflow-hidden card-hover flex flex-col">
@@ -208,8 +226,8 @@
     <script>
         
         const STRINGS = {
-            ru: { badge:'КЕЙСЫ','h1-a':'Реальные ','h1-b':'проекты','hero-lead':'Детали масштаба и клиента — под NDA. Здесь — архитектура, технические решения и измеримые результаты.','nav-services':'Услуги','nav-blog':'Блог','nav-cases':'Кейсы','nav-news':'Новости','nav-contact':'Связаться','m-services':'Услуги','m-blog':'Блог','m-cases':'Кейсы','m-news':'Новости','m-contact':'Связаться','c1-tag':'Desktop','c1-title':'QuantTerminal Pro','c1-desc':'Десктопный торговый терминал с единым API для 18 бирж, агрегированным ордербуком и обновлением данных < 5 мс.','c1-read':'Читать кейс','c2-tag':'Bot','c2-title':'ArbitrageX Bot','c2-desc':'Кросс-биржевой арбитраж с latency < 50 мс, параллельным исполнением ордеров и адаптивным обходом rate limits.','c2-read':'Читать кейс','c3-tag':'SaaS','c3-title':'CryptoAnalytics SaaS','c3-desc':'Аналитическая платформа с real-time дашбордами для 500+ одновременных пользователей и задержкой доставки 180 мс.','c3-read':'Читать кейс','c4-tag':'Mobile','c4-title':'TradeFlow Android','c4-desc':'Мобильный терминал для управления портфелем на всех биржах. Закрытие позиции — 2 тапа, push-уведомления < 1,2 сек.','c4-read':'Читать кейс','cta-title':'Похожая задача?','cta-desc':'Опишите проект — расскажем об архитектуре и оценим сроки бесплатно.','cta-btn':'Обсудить проект',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-blog':'Блог','f-cases':'Кейсы','f-contact':'Связаться',lang:'EN' },
-            en: { badge:'CASES','h1-a':'Real ','h1-b':'projects','hero-lead':'Client details are under NDA. Here — architecture, technical decisions and measurable results.','nav-services':'Services','nav-blog':'Blog','nav-cases':'Cases','nav-news':'News','nav-contact':'Contact','m-services':'Services','m-blog':'Blog','m-cases':'Cases','m-news':'News','m-contact':'Contact','c1-tag':'Desktop','c1-title':'QuantTerminal Pro','c1-desc':'Desktop trading terminal with unified API for 18 exchanges, aggregated order book and data latency < 5ms.','c1-read':'Read case','c2-tag':'Bot','c2-title':'ArbitrageX Bot','c2-desc':'Cross-exchange arbitrage with latency < 50ms, parallel order execution and adaptive rate limit bypass.','c2-read':'Read case','c3-tag':'SaaS','c3-title':'CryptoAnalytics SaaS','c3-desc':'Analytics platform with real-time dashboards for 500+ simultaneous users and 180ms delivery latency.','c3-read':'Read case','c4-tag':'Mobile','c4-title':'TradeFlow Android','c4-desc':'Mobile terminal for multi-exchange portfolio management. Position close in 2 taps, push notifications < 1.2s.','c4-read':'Read case','cta-title':'Similar project?','cta-desc':'Describe your project — we will discuss architecture and estimate timeline for free.','cta-btn':'Discuss project',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-blog':'Blog','f-cases':'Cases','f-contact':'Contact',lang:'RU' }
+            ru: { badge:'КЕЙСЫ','h1-a':'Реальные ','h1-b':'проекты','hero-lead':'Детали масштаба и клиента — под NDA. Здесь — архитектура, технические решения и измеримые результаты.','nav-services':'Услуги','nav-blog':'Блог','nav-cases':'Кейсы','nav-news':'Новости','nav-contact':'Связаться','m-services':'Услуги','m-blog':'Блог','m-cases':'Кейсы','m-news':'Новости','m-contact':'Связаться','c5-tag':'Bot','c5-title':'OKX Market Maker','c5-desc':'Маркетмейкер для бессрочных контрактов OKX (USDT-SWAP): динамическая лестница, адаптивная сетка и импульсный режим Чаппи. Веб-пульт, риск-контур, алгоритм доступен к покупке.','c5-read':'Читать кейс','c1-tag':'Desktop','c1-title':'QuantTerminal Pro','c1-desc':'Десктопный торговый терминал с единым API для 18 бирж, агрегированным ордербуком и обновлением данных < 5 мс.','c1-read':'Читать кейс','c2-tag':'Bot','c2-title':'ArbitrageX Bot','c2-desc':'Кросс-биржевой арбитраж с latency < 50 мс, параллельным исполнением ордеров и адаптивным обходом rate limits.','c2-read':'Читать кейс','c3-tag':'SaaS','c3-title':'CryptoAnalytics SaaS','c3-desc':'Аналитическая платформа с real-time дашбордами для 500+ одновременных пользователей и задержкой доставки 180 мс.','c3-read':'Читать кейс','c4-tag':'Mobile','c4-title':'TradeFlow Android','c4-desc':'Мобильный терминал для управления портфелем на всех биржах. Закрытие позиции — 2 тапа, push-уведомления < 1,2 сек.','c4-read':'Читать кейс','cta-title':'Похожая задача?','cta-desc':'Опишите проект — расскажем об архитектуре и оценим сроки бесплатно.','cta-btn':'Обсудить проект',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-blog':'Блог','f-cases':'Кейсы','f-contact':'Связаться',lang:'EN' },
+            en: { badge:'CASES','h1-a':'Real ','h1-b':'projects','hero-lead':'Client details are under NDA. Here — architecture, technical decisions and measurable results.','nav-services':'Services','nav-blog':'Blog','nav-cases':'Cases','nav-news':'News','nav-contact':'Contact','m-services':'Services','m-blog':'Blog','m-cases':'Cases','m-news':'News','m-contact':'Contact','c5-tag':'Bot','c5-title':'OKX Market Maker','c5-desc':'Market maker for OKX perpetual futures (USDT-SWAP): dynamic ladder, adaptive grid and Chappie impulse mode. Web console, risk layer; algorithm available for purchase.','c5-read':'Read case','c1-tag':'Desktop','c1-title':'QuantTerminal Pro','c1-desc':'Desktop trading terminal with unified API for 18 exchanges, aggregated order book and data latency < 5ms.','c1-read':'Read case','c2-tag':'Bot','c2-title':'ArbitrageX Bot','c2-desc':'Cross-exchange arbitrage with latency < 50ms, parallel order execution and adaptive rate limit bypass.','c2-read':'Read case','c3-tag':'SaaS','c3-title':'CryptoAnalytics SaaS','c3-desc':'Analytics platform with real-time dashboards for 500+ simultaneous users and 180ms delivery latency.','c3-read':'Read case','c4-tag':'Mobile','c4-title':'TradeFlow Android','c4-desc':'Mobile terminal for multi-exchange portfolio management. Position close in 2 taps, push notifications < 1.2s.','c4-read':'Read case','cta-title':'Similar project?','cta-desc':'Describe your project — we will discuss architecture and estimate timeline for free.','cta-btn':'Discuss project',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-blog':'Blog','f-cases':'Cases','f-contact':'Contact',lang:'RU' }
         };
         let lang = localStorage.getItem('site_lang') === 'en' ? 'en' : 'ru';
         function applyLang(l) {

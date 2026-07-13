@@ -117,6 +117,171 @@
 
     <main class="max-w-4xl mx-auto px-4 pb-24">
 
+        <!-- NEWS 6: OKX cool-off (свежая) -->
+        <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news6">
+            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80&auto=format&fit=crop"
+                 alt="Торговый терминал и риск-контроль" class="news-img" loading="lazy">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4 flex-wrap">
+                    <span class="tag" style="color:#00ff88;border-color:rgba(0,255,136,.3)" id="n6-tag">Биржи / API</span>
+                    <span class="text-xs text-gray-600 font-mono" id="n6-date">7 июля 2026</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3" id="n6-title">
+                    OKX расширила Futures Cool-off на API и ботов: что переписать в риск-модуле
+                </h2>
+                <div class="article-body" id="n6-body-ru">
+                    <p>С 7 июля 2026 года биржа OKX обновила механизм <strong>Futures Cool-off Period</strong> — добровольное «охлаждение» торговли фьючерсами. Раньше ограничение работало в основном в веб-интерфейсе и приложении. Теперь оно покрывает каналы, которыми пользуются алгоритмы: REST API, WebSocket, Broker OAuth, Agent Trade Kit, стратегические ордера, копитрейдинг и встроенные торговые боты.</p>
+
+                    <img src="https://images.unsplash.com/photo-1642790551116-18e150f248e5?w=900&q=80&auto=format&fit=crop"
+                         alt="Мониторинг ордеров" class="w-full rounded-xl my-5" style="height:200px;object-fit:cover;filter:brightness(.75)" loading="lazy">
+
+                    <h2>Как это работает после апгрейда</h2>
+                    <p>Пока cool-off активен, заявки на <strong>открытие и увеличение</strong> позиции через перечисленные каналы отклоняются. Ордера на сокращение и закрытие позиций продолжают приниматься — это важное различие для автоликвидации и аварийного выхода.</p>
+                    <ul>
+                        <li>Новые ограничения могут вступить в силу с задержкой до <strong>~30 секунд</strong> после активации cool-off.</li>
+                        <li>Ранее включённый cool-off остаётся в «старом» режиме (только веб/приложение). Чтобы получить полное покрытие API, инструмент нужно <strong>включить заново</strong> после окончания текущего периода — досрочно его не снять.</li>
+                    </ul>
+
+                    <h2>Что это значит для продакшен-ботов</h2>
+                    <p>Если ваша система открывает позиции через OKX API «вслепую», без разбора кода ответа, cool-off превратится в каскад ложных сигналов: стратегия думает, что ордер ушёл, а биржа его отклонила. Минимум, который стоит внедрить:</p>
+                    <ul>
+                        <li>Явная обработка reject по cool-off / risk-policy в слое исполнения.</li>
+                        <li>Разделение логики «увеличить позицию» и «закрыть / снизить риск» — второе должно оставаться доступным.</li>
+                        <li>Алерт оператору, если доля reject по risk-policy выросла за короткий интервал.</li>
+                        <li>Документированный runbook: кто и когда включает cool-off на аккаунте (особенно при shared API keys).</li>
+                    </ul>
+
+                    <div class="callout">
+                        <strong>Вывод AlgoForge:</strong> cool-off — не «косметика UI», а часть биржевого риск-контура. Для клиентов с автоторговлей на OKX мы рекомендуем проверить обработку reject-кодов и сценарий аварийного закрытия до того, как ограничение впервые сработает в бою.
+                    </div>
+
+                    <p>Официальное уведомление: <a href="https://www.okx.com/help/notice-on-upgrade-to-the-futures-cool-off-period" target="_blank" rel="noopener noreferrer">OKX Help — Upgrade to the Futures Cool-off Period</a>.</p>
+                </div>
+                <div id="n6-body-en" style="display:none" class="article-body">
+                    <p>As of 7 July 2026, OKX upgraded its Futures Cool-off Period. Previously it mostly restricted web/app order placement. Now it also covers REST API, WebSocket, Broker OAuth, Agent Trade Kit, strategy orders, copy trading and trading bots.</p>
+                    <h2>Behaviour after the upgrade</h2>
+                    <p>While cool-off is active, orders that <strong>open or increase</strong> positions via those channels are rejected. Reduce/close orders remain allowed. New restrictions may take up to ~30 seconds to apply. Pre-upgrade cool-off stays on the old scope unless re-enabled after expiry.</p>
+                    <div class="callout">
+                        <strong>AlgoForge takeaway:</strong> treat cool-off as exchange-side risk policy. Production bots must parse rejects cleanly and keep emergency exit paths working.
+                    </div>
+                    <p>Source: <a href="https://www.okx.com/help/notice-on-upgrade-to-the-futures-cool-off-period" target="_blank" rel="noopener noreferrer">OKX Help notice</a>.</p>
+                </div>
+            </div>
+        </article>
+
+        <hr class="news-divider">
+
+        <!-- NEWS 7: OKX API July changelog -->
+        <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news7">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80&auto=format&fit=crop"
+                 alt="Данные рынка в реальном времени" class="news-img" loading="lazy">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4 flex-wrap">
+                    <span class="tag" style="color:#22d3ee;border-color:rgba(34,211,238,.3)" id="n7-tag">Технологии</span>
+                    <span class="text-xs text-gray-600 font-mono" id="n7-date">9 июля 2026</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3" id="n7-title">
+                    Июльский changelog OKX API: Chase Limit, RPI-стакан и сигнал о даунтайме WebSocket
+                </h2>
+                <div class="article-body" id="n7-body-ru">
+                    <p>В начале июля OKX опубликовала плотный пакет изменений OpenAPI. Для команд, которые держат собственные терминалы, арбитраж или маркетмейкинг, это не «новость для пресс-релиза», а конкретный список миграций в коде и тестах на demo.</p>
+
+                    <img src="https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=900&q=80&auto=format&fit=crop"
+                         alt="Инфраструктура API" class="w-full rounded-xl my-5" style="height:200px;object-fit:cover;filter:brightness(.7)" loading="lazy">
+
+                    <h2>Chase Limit для триггерных ордеров</h2>
+                    <p>Для FUTURES и SWAP trigger-ордеров появился режим <strong>chase limit</strong> (`advanceOrdType = chase` с параметрами в `advChaseParams`). После срабатывания триггера биржа может выставить «догоняющий» лимит. В ответах read-эндпоинтов появляется `subAlgoIdList` с идентификаторами порождённых chase-ордеров; параметры можно править, пока родительский trigger ещё pending.</p>
+                    <ul>
+                        <li>Demo: ориентир <strong>15 июля 2026</strong>.</li>
+                        <li>Production: ориентир <strong>21 июля 2026</strong>.</li>
+                    </ul>
+                    <p>Практический смысл для алго: меньше самописной логики «переставить лимит ближе к рынку» — больше ответственности за корректный разбор дочерних algoId и за отмену/amend в вашем state-machine.</p>
+
+                    <h2>ELP → RPI и новый стакан books-rpi</h2>
+                    <p>Программа Enhanced Liquidity Program переименовывается в <strong>Retail Price Improvement (RPI)</strong>. Вместо `books-elp` приходит консолидированный стакан <code>books-rpi</code> (WebSocket public + REST), maker-тип `rpi` вместо `elp`, расширенный параметр доступа тейкера и правила spacing через `rpiPxRound`.</p>
+                    <ul>
+                        <li>WS: канал `/ws/v5/public`, до 400 уровней, snapshot + инкременты примерно каждые 100 мс, синхронизация через `seqId` / `prevSeqId` (без checksum).</li>
+                        <li>REST: `GET /api/v5/market/books-rpi`, серверный refresh около 200 мс.</li>
+                        <li>Demo: ориентир <strong>21 июля</strong>, production — <strong>28 июля 2026</strong>.</li>
+                    </ul>
+
+                    <h2>Уведомление о disconnect на Business-канале</h2>
+                    <p>Сигнал о плановом апгрейде WebSocket (error code <code>6400</code>) расширен на Business-канал (`/ws/v5/business`). Для ботов это повод проверить: переподключение, буфер ордеров и запрет «тихого» продолжения торговли без подтверждённого стрима.</p>
+
+                    <div class="callout">
+                        <strong>Чеклист на неделю:</strong> поднять фичу на demo, прогнать парсер стакана на `books-rpi`, обновить enum типов ордеров, добавить тест на reject при отсутствии seq-последовательности. Иначе 28 июля прод может «сломать» ликвидность-адаптер без явной ошибки компиляции.
+                    </div>
+
+                    <p>Источник: <a href="https://www.okx.com/docs-v5/log_en/" target="_blank" rel="noopener noreferrer">OKX API changelog</a> (обновление от 9 июля 2026).</p>
+                </div>
+                <div id="n7-body-en" style="display:none" class="article-body">
+                    <p>OKX’s early-July OpenAPI changelog is dense: chase limit for futures/swap triggers, ELP rebranded to RPI with a new `books-rpi` book, and WebSocket upgrade disconnect notices extended to the Business channel.</p>
+                    <h2>Why it matters</h2>
+                    <p>Chase mode shifts “follow the market” logic partly onto the venue. RPI migration means adapters still subscribed to ELP books will go stale. Code 6400 on `/ws/v5/business` should trigger reconnect + halt policies, not silent trading.</p>
+                    <div class="callout">
+                        <strong>Checklist:</strong> validate on demo first, update order-type enums, and regression-test sequence IDs before the late-July production cutovers.
+                    </div>
+                    <p>Source: <a href="https://www.okx.com/docs-v5/log_en/" target="_blank" rel="noopener noreferrer">OKX API changelog</a>.</p>
+                </div>
+            </div>
+        </article>
+
+        <hr class="news-divider">
+
+        <!-- NEWS 8: MiCA July 1 cutoff -->
+        <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news8">
+            <img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=1200&q=80&auto=format&fit=crop"
+                 alt="Регулирование в Европейском союзе" class="news-img" loading="lazy">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center gap-3 mb-4 flex-wrap">
+                    <span class="tag" style="color:#a855f7;border-color:rgba(168,85,247,.3)" id="n8-tag">EU MiCA</span>
+                    <span class="text-xs text-gray-600 font-mono" id="n8-date">1 июля 2026</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-3" id="n8-title">
+                    1 июля 2026: переходный период MiCA закрыт — что это меняет для API-торговли
+                </h2>
+                <div class="article-body" id="n8-body-ru">
+                    <p>С <strong>1 июля 2026</strong> по всему ЕС истекли переходные режимы MiCA (Markets in Crypto-Assets). ESMA прямо зафиксировала позицию: после этой даты предоставление регулируемых криптоуслуг клиентам ЕС <strong>без лицензии CASP</strong> — нарушение права Союза. Неавторизованные провайдеры должны были не «подумать о плане», а <strong>исполнить</strong> orderly wind-down: вывод клиентов, перевод активов к лицензированному CASP или на self-hosted wallet, предварительное уведомление.</p>
+
+                    <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=900&q=80&auto=format&fit=crop"
+                         alt="Юридические документы" class="w-full rounded-xl my-5" style="height:200px;object-fit:cover;filter:brightness(.7)" loading="lazy">
+
+                    <h2>Почему это важно именно алготрейдерам</h2>
+                    <p>Торговый бот сам по себе не «CASP». Но стек, на котором он живёт, часто зависит от биржи или брокера, обслуживающего EU-клиентов. После cut-off типичные эффекты для инженерии:</p>
+                    <ul>
+                        <li><strong>Смена venue / API-endpoint</strong> — миграция аккаунтов на лицензированного CASP, новые ключи, новые лимиты rate limit.</li>
+                        <li><strong>Разрывы ликвидности</strong> — пары и деривативы, доступные «серым» маршрутом, могут исчезнуть для EU-резидентов.</li>
+                        <li><strong>Жёстче KYC/AML при онбординге</strong> — массовый переток клиентов на авторизованных CASP идёт под полным AML/CFT, без «упрощённых» схем.</li>
+                        <li><strong>Контрагентский риск</strong> — third-country модели и «серые» B2B-обходы ESMA прямо относит к зоне повышенного надзора.</li>
+                    </ul>
+
+                    <h2>Что проверить в своей инфраструктуре</h2>
+                    <ul>
+                        <li>Юрисдикция аккаунта и статус CASP у каждой биржи в вашем роутере ордеров.</li>
+                        <li>Failover: если venue отключает EU-доступ, есть ли запасной маршрут и политика «стоп торговли».</li>
+                        <li>Логи и audit trail исполнения — при спорах и комплаенсе они нужны не меньше, чем PnL.</li>
+                        <li>Документы для клиентов: что происходит с ботом, если брокер уходит в wind-down.</li>
+                    </ul>
+
+                    <div class="callout">
+                        <strong>Позиция AlgoForge:</strong> MiCA не «запрещает ботов» — она убирает серую инфраструктуру вокруг них. Проекты, которые заранее закладывали мультиюрисдикционный доступ и смену API-шлюза, проходят cut-off спокойнее, чем системы, жёстко привязанные к одному нелицензированному endpoint.
+                    </div>
+
+                    <p>Опорные материалы: заявления ESMA о конце transitional periods и последующие разъяснения национальных регуляторов (в т.ч. по orderly wind-down и защите клиентов).</p>
+                </div>
+                <div id="n8-body-en" style="display:none" class="article-body">
+                    <p>On <strong>1 July 2026</strong> MiCA transitional regimes expired across the EU. ESMA’s line is blunt: after that date, serving EU clients without a CASP licence breaches EU law. Unauthorised providers were expected to execute an orderly wind-down, not merely draft one.</p>
+                    <h2>Impact on algo stacks</h2>
+                    <p>Bots aren’t CASPs, but venues are. Expect account migrations, API key rotation, liquidity gaps for EU residents, stricter AML onboarding, and less tolerance for grey third-country routing.</p>
+                    <div class="callout">
+                        <strong>AlgoForge view:</strong> MiCA doesn’t ban automation — it removes grey rails under it. Multi-venue failover and documented stop-trading policies matter more after the cut-off than before.
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <hr class="news-divider">
+
         <!-- NEWS 1: SEC/CFTC -->
         <article class="glass rounded-2xl overflow-hidden news-card mb-8" id="news1">
             <img src="https://images.unsplash.com/photo-1569025690938-a00729c9e1f9?w=1200&q=80&auto=format&fit=crop"
@@ -422,10 +587,10 @@
         <div class="glass rounded-2xl p-8 sm:p-10 text-center mt-8">
             <h2 class="text-xl sm:text-2xl font-black text-white mb-2" id="cta-title">Нужна торговая система под новые реалии?</h2>
             <p class="text-gray-400 mb-6 max-w-lg mx-auto" id="cta-desc">Помогаем спроектировать архитектуру с учётом регуляторных требований. Бесплатная консультация в Telegram.</p>
-            <a href="https://t.me/Algo_Forge_S" target="_blank" rel="noopener noreferrer"
+            <a href="../#contact"
                class="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-neon-green to-accent-400 text-black font-bold hover:shadow-xl hover:shadow-neon-green/20 transition-all hover:scale-105" id="cta-btn">
-                <i data-lucide="send" class="w-4 h-4"></i>
-                <span>Написать в Telegram</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                <span>Оставить заявку</span>
             </a>
         </div>
     </main>
@@ -461,9 +626,15 @@
                 'n4-title':'OKX и Bybit обновили WebSocket API: частота обновлений выросла до 10 мс',
                 'n5-tag':'EU MiCA','n5-date':'2025–2026',
                 'n5-title':'MiCA в полной силе: как европейское регулирование изменило рынок',
+                'n6-tag':'Биржи / API','n6-date':'7 июля 2026',
+                'n6-title':'OKX расширила Futures Cool-off на API и ботов: что переписать в риск-модуле',
+                'n7-tag':'Технологии','n7-date':'9 июля 2026',
+                'n7-title':'Июльский changelog OKX API: Chase Limit, RPI-стакан и сигнал о даунтайме WebSocket',
+                'n8-tag':'EU MiCA','n8-date':'1 июля 2026',
+                'n8-title':'1 июля 2026: переходный период MiCA закрыт — что это меняет для API-торговли',
                 'cta-title':'Нужна торговая система под новые реалии?',
-                'cta-desc':'Помогаем спроектировать архитектуру с учётом регуляторных требований. Бесплатная консультация в Telegram.',
-                'cta-btn':'Написать в Telegram',
+                'cta-desc':'Помогаем спроектировать архитектуру с учётом регуляторных требований и обновлений биржевых API.',
+                'cta-btn':'Оставить заявку',
                 copy:'© 2026 AlgoForge. Все права защищены.',
                 'f-home':'Главная','f-blog':'Блог','f-news':'Новости','f-contact':'Связаться',lang:'EN'
             },
@@ -482,9 +653,15 @@
                 'n4-title':'OKX and Bybit upgrade WebSocket API: order book frequency reaches 10ms',
                 'n5-tag':'EU MiCA','n5-date':'2025–2026',
                 'n5-title':'MiCA in full force: how European regulation changed the market',
+                'n6-tag':'Exchanges / API','n6-date':'July 7, 2026',
+                'n6-title':'OKX extends Futures Cool-off to API and bots: what to change in risk logic',
+                'n7-tag':'Technology','n7-date':'July 9, 2026',
+                'n7-title':'OKX July API changelog: Chase Limit, RPI book, WebSocket downtime signal',
+                'n8-tag':'EU MiCA','n8-date':'July 1, 2026',
+                'n8-title':'1 July 2026: MiCA transition closed — what changes for API trading',
                 'cta-title':'Need a trading system for the new reality?',
-                'cta-desc':'We help design architecture with regulatory requirements in mind. Free consultation on Telegram.',
-                'cta-btn':'Message on Telegram',
+                'cta-desc':'We help design architecture around regulatory requirements and exchange API upgrades.',
+                'cta-btn':'Send a request',
                 copy:'© 2026 AlgoForge. All rights reserved.',
                 'f-home':'Home','f-blog':'Blog','f-news':'News','f-contact':'Contact',lang:'RU'
             }
@@ -500,7 +677,7 @@
             });
             document.getElementById('lang-btn').textContent = s.lang;
             document.getElementById('lang-btn-m').textContent = s.lang;
-            ['n1','n2','n3','n4','n5'].forEach(n => {
+            ['n1','n2','n3','n4','n5','n6','n7','n8'].forEach(n => {
                 document.getElementById(n+'-body-ru').style.display = l==='ru'?'':'none';
                 document.getElementById(n+'-body-en').style.display = l==='en'?'':'none';
             });

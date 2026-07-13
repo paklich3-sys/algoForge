@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Как устроен маркетмейкер для OKX USDT-SWAP: динамическая лестница, адаптивная сетка, режим Чаппи, fee-aware PnL и kill switch. Алгоритм можно купить.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://unpkg.com https://mc.yandex.ru; connect-src 'self' https:; frame-src 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=()">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <link rel="canonical" href="https://algoforge.ru/blog/okx-market-maker-bot.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Маркетмейкер для OKX: три стратегии и риск-контур | AlgoForge">
+    <meta property="og:url" content="https://algoforge.ru/blog/okx-market-maker-bot.html">
+    <meta property="og:image" content="https://algoforge.ru/cases/assets/okx-market-maker.png">
+    <meta name="theme-color" content="#0d0d12">
+    <link rel="icon" href="../favicon.png?v=4" type="image/png">
+    <title>Маркетмейкер для OKX: три стратегии и риск-контур | AlgoForge</title>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Маркетмейкер для OKX: три стратегии и риск-контур","description":"Как устроен маркетмейкер для OKX USDT-SWAP: динамическая лестница, адаптивная сетка, режим Чаппи, fee-aware PnL и kill switch.","datePublished":"2026-07-13","dateModified":"2026-07-13","author":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"},"publisher":{"@type":"Organization","name":"AlgoForge","url":"https://algoforge.ru/"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Главная","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Блог","item":"https://algoforge.ru/blog/"},{"@type":"ListItem","position":3,"name":"Маркетмейкер для OKX","item":"https://algoforge.ru/blog/okx-market-maker-bot.html"}]}</script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@0.559.0/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>tailwind.config={theme:{extend:{colors:{accent:{400:'#22d3ee'},neon:{green:'#00ff88'}},fontFamily:{sans:['Inter','sans-serif'],mono:['JetBrains Mono','monospace']}}}}</script>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0d0d12;color:#d4d4d4;font-family:'Inter',sans-serif;line-height:1.75}.glass{background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.06)}nav.scrolled{background:rgba(5,5,16,.9)!important;backdrop-filter:blur(20px)!important;border-bottom:1px solid rgba(255,255,255,.05)}article h2{font-size:1.4rem;font-weight:700;color:#fff;margin:2rem 0 .75rem}article h3{font-size:1.1rem;font-weight:600;color:#e2e2e2;margin:1.5rem 0 .5rem}article p{margin-bottom:1rem;color:#b0b0b0}article ul,article ol{margin:0 0 1rem 1.5rem;color:#b0b0b0}article li{margin-bottom:.4rem}article strong{color:#e2e2e2}article a{color:#00ff88;text-decoration:underline;text-underline-offset:3px}pre{background:#0a0a14;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:1.25rem;overflow-x:auto;margin:1.25rem 0;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.65;color:#c9d1d9}code{font-family:'JetBrains Mono',monospace;font-size:.85em;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:5px;color:#00ff88}pre code{background:none;padding:0;color:#c9d1d9}.callout{border-left:3px solid #00ff88;background:rgba(0,255,136,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.callout strong{color:#00ff88}.warn{border-left:3px solid #f59e0b;background:rgba(245,158,11,.04);border-radius:0 8px 8px 0;padding:.8rem 1.1rem;margin:1.25rem 0;color:#b0b0b0}.warn strong{color:#f59e0b}::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0d0d12}::-webkit-scrollbar-thumb{background:rgba(0,255,136,.3);border-radius:3px}</style>
+    <script src="../ym.js"></script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/109257949" style="position:absolute;left:-9999px;" alt=""/></div></noscript>
+</head>
+<body>
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6"><div class="flex items-center justify-between h-16">
+            <a href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" class="h-14 w-auto object-contain" loading="eager"></a>
+            <div class="hidden md:flex items-center gap-6">
+                <a href="./" class="text-sm text-gray-400 hover:text-white" id="nav-blog">← Блог</a>
+                <button id="lang-btn" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300 hover:text-white hover:border-neon-green/40 transition-colors">EN</button>
+                <a href="../#contact" class="px-5 py-2 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:scale-105 transition-all" id="nav-contact">Связаться</a>
+            </div>
+            <div class="flex md:hidden gap-3 items-center"><button id="lang-btn-m" class="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono text-gray-300">EN</button><a href="./" class="text-gray-400 text-sm" id="nav-blog-m">← Блог</a></div>
+        </div></div>
+    </nav>
+
+    <div class="max-w-3xl mx-auto px-4 pt-28 pb-20">
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20">Market Making</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-mono text-accent-400 border border-accent-400/20">OKX</span>
+                <span class="text-xs text-gray-600 font-mono">13 июля 2026 · 12 мин</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black text-white leading-tight mb-4" id="art-title">Маркетмейкер для OKX: три стратегии и риск-контур</h1>
+            <p class="text-gray-400 text-lg" id="art-lead">Как устроен серверный бот для бессрочных контрактов OKX (USDT-SWAP): лестница, адаптивная сетка, импульсный режим и единый слой риска.</p>
+        </div>
+
+        <article id="art-body-ru">
+            <h2>Контекст: OKX и USDT-SWAP</h2>
+            <p><strong>OKX</strong> — криптобиржа с API для алгоритмической торговли. <strong>USDT-SWAP</strong> — бессрочные фьючерсы с маржой в USDT: нет даты экспирации, позиции long/short с плечом, PnL относительно маркировочной цены.</p>
+            <p>Встроенные биржевые сетки удобны для старта, но обычно не дают нормального разделения стратегий, честного торгового PnL без ребейта и полноценного аварийного контура. Поэтому собран отдельный серверный бот: три взаимоисключающих движка, общий risk-слой, веб-пульт и Telegram. Продуктовый обзор и скрин пульта — в <a href="../cases/okx-market-maker.html">кейсе</a>. Ниже — инженерия.</p>
+
+            <h2>Архитектура одним взглядом</h2>
+            <pre><code>BotApp (asyncio)
+ ├─ market/      universe scan + scoring + volatility
+ ├─ strategy/    ladder | adaptive grid | chappie
+ ├─ execution/   post-only, amend/replace, fills
+ ├─ risk/        kill switch, movement guard, exits
+ ├─ accounting/  FIFO PnL, rebate отдельно
+ ├─ monitoring/  web dashboard + Telegram
+ └─ storage/     SQLite (fills, lots, runtime)</code></pre>
+            <p>Один процесс, общее состояние, hot-reload части параметров через дашборд без рестарта. Стратегии не смешиваются: переключение только при нулевых позициях.</p>
+
+            <h2>Стратегия 1. Динамическая лестница</h2>
+            <p>Базовый режим. Maker-лестница (обычно 3 уровня на сторону) вокруг mid-цены, фиксированные TP/SL и time-exit. Сканер ранжирует universe USDT-SWAP и выбирает инструмент по связке волатильности и ликвидности.</p>
+            <p>Режимы aggressiveness (<code>safe</code> / <code>normal</code> / <code>aggressive</code> / <code>tight</code> / <code>defensive</code>) меняют спреды и активность котирования, не ломая единый риск-контур.</p>
+
+            <h2>Стратегия 2. Адаптивная сетка</h2>
+            <p>Replenishing grid с режимами SCAN → RANGE_GRID / VOLATILITY_GRID / MOMENTUM_PULLBACK / RECOVERY. Есть multi-symbol allocator (до трёх пар) и фильтр корреляции, чтобы не держать три клона одного и того же риска.</p>
+            <p>На walk-forward свечных прогонах 2026 года adaptive grid показывал положительный test PnL. Это не гарантия live-результата: свечи ≠ очередь заявок. Но это лучше, чем «стратегия, которую никогда не аудировали».</p>
+
+            <h2>Стратегия 3. Chappie</h2>
+            <p>Импульсный режим: лидер — BTC на Binance Spot, исполнение — альты на OKX market-ордером. Короткий горизонт удержания. Бэктесты и короткие live-серии в аудите <strong>убыточны</strong>, поэтому режим не выбирается автоматически и остаётся опциональным.</p>
+
+            <div class="warn"><strong>Важно:</strong> если режим не проходит валидацию, он не должен торговать депозитом по умолчанию.</div>
+
+            <h2>Fee-aware edge и rebate</h2>
+            <p>Rebate — бонус, а не оправдание плохой сделки. Торговый KPI ведётся без ребейта: если круг не закрывает комиссии и буфер, котирование не имеет смысла. Post-only для MM/grid; неожиданный taker fill — повод поставить символ на паузу и разобрать причину, а не «продолжить как будто ничего не было».</p>
+
+            <h2>Риск-слой, без которого MM бесполезен</h2>
+            <ul>
+                <li><strong>Kill switch</strong> — дневной убыток, drawdown, экспозиция, серия минусовых кругов</li>
+                <li><strong>Movement guard</strong> — пауза при импульсах рынка на коротких окнах</li>
+                <li><strong>Position exit</strong> — breakeven → soft → hard (market)</li>
+                <li><strong>Inventory skew</strong> — сдвиг котировок при перекосе позиции</li>
+                <li><strong>Recovery</strong> — восстановление состояния и single-instance lock после рестарта</li>
+            </ul>
+            <p>Именно здесь обычно «ломаются» самописные боты: стратегия красивая, а аварийный контур — заглушка.</p>
+
+            <h2>Что купить и что доработать</h2>
+            <p>Алгоритм и исходный код можно <strong>приобрести</strong> как готовую базу под ваш депозит. Типичная адаптация:</p>
+            <ul>
+                <li>лимиты риска и стартовый режим под размер счёта;</li>
+                <li>белый список символов / запрет отдельных пар;</li>
+                <li>деплой на VPS рядом с OKX, ключи только trade (без withdraw);</li>
+                <li>донастройка Telegram-алертов и операторских пресетов;</li>
+                <li>отключение Chappie или вынос в отдельный контур.</li>
+            </ul>
+
+            <div class="callout"><strong>Готовы обсудить покупку или кастом?</strong> <a href="../#contact">Оставьте заявку на сайте</a> или откройте <a href="../cases/okx-market-maker.html">страницу кейса</a>. Без обещаний «пассивного дохода» — с разбором рисков и архитектуры под ваш сценарий.</div>
+
+            <p>Торговля фьючерсами связана с риском полной или частичной потери средств. Прошлые бэктесты не гарантируют будущий результат.</p>
+        </article>
+
+        <article id="art-body-en" style="display:none">
+            <h2>Why a custom market maker</h2>
+            <p><strong>OKX</strong> is a major crypto exchange; <strong>USDT-SWAP</strong> are its USDT-margined perpetual futures. Built-in grid widgets rarely provide clean strategy separation, trading PnL without rebate, or a full emergency path — so this project is a dedicated server bot with three engines, a shared risk layer, web console and Telegram.</p>
+            <h2>Architecture</h2>
+            <p>Python 3.11 + asyncio with shared state: market scanner, three strategy engines, post-only execution, kill switch / movement guard / staged exits, FIFO accounting, SQLite, web + Telegram ops.</p>
+            <h2>Strategies</h2>
+            <ul>
+                <li>Volatility ladder — default maker ladder with auto symbol pick</li>
+                <li>Adaptive grid — regime-aware replenishing grid (positive walk-forward candle tests; candles ≠ live book)</li>
+                <li>Chappie — Binance BTC impulse → OKX alts (documented negative validation; not auto-selected)</li>
+            </ul>
+            <div class="callout"><strong>Want to buy or customise?</strong> <a href="../#contact">Send a request</a>. Case overview: <a href="../cases/okx-market-maker.html">OKX Market Maker</a>.</div>
+        </article>
+
+        <div class="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <a href="./" class="flex items-center gap-2 text-gray-400 hover:text-white text-sm" id="back-link"><i data-lucide="arrow-left" class="w-4 h-4"></i><span id="back-text">Все статьи</span></a>
+            <a href="../#contact" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-bold text-sm hover:shadow-lg transition-all hover:scale-105" id="cta-link"><i data-lucide="send" class="w-4 h-4"></i><span id="cta-text">Купить алгоритм</span></a>
+        </div>
+    </div>
+    <footer class="border-t border-white/5 py-8"><div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600 font-mono"><span id="copy">&#169; 2026 AlgoForge. Все права защищены.</span><div class="flex gap-6"><a href="../" class="hover:text-neon-green" id="f-home">Главная</a><a href="./" class="hover:text-neon-green" id="f-blog">Блог</a><a href="../#contact" class="hover:text-neon-green" id="f-contact">Связаться</a></div></div></footer>
+    <script>
+        window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>40);});
+        const STRINGS={ru:{'nav-blog':'← Блог','nav-contact':'Связаться','art-title':'Маркетмейкер для OKX: три стратегии и риск-контур','art-lead':'Как устроен серверный бот для бессрочных контрактов OKX (USDT-SWAP): лестница, адаптивная сетка, импульсный режим и единый слой риска.','back-text':'Все статьи','cta-text':'Купить алгоритм',copy:'© 2026 AlgoForge. Все права защищены.','f-home':'Главная','f-blog':'Блог','f-contact':'Связаться',lang:'EN'},en:{'nav-blog':'← Blog','nav-contact':'Contact','art-title':'OKX market maker: three strategies and a shared risk layer','art-lead':'How the server bot for OKX perpetual futures (USDT-SWAP) works: ladder, adaptive grid, impulse mode and a unified risk layer.','back-text':'All articles','cta-text':'Buy the algorithm',copy:'© 2026 AlgoForge. All rights reserved.','f-home':'Home','f-blog':'Blog','f-contact':'Contact',lang:'RU'}};
+        let lang=localStorage.getItem('site_lang')==='en'?'en':'ru';
+        function applyLang(l){lang=l;localStorage.setItem('site_lang',l);document.documentElement.lang=l;const s=STRINGS[l];Object.keys(s).forEach(id=>{if(id==='lang')return;const el=document.getElementById(id);if(el)el.textContent=s[id];});document.getElementById('lang-btn').textContent=s.lang;document.getElementById('lang-btn-m').textContent=s.lang;document.getElementById('art-body-ru').style.display=l==='ru'?'':'none';document.getElementById('art-body-en').style.display=l==='en'?'':'none';}
+        applyLang(lang);
+        document.getElementById('lang-btn').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        document.getElementById('lang-btn-m').addEventListener('click',()=>applyLang(lang==='ru'?'en':'ru'));
+        lucide.createIcons();
+    </script>
+</body>
+</html>

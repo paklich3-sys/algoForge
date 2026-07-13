@@ -147,21 +147,33 @@ const I18N = {
         'portfolio.read_case': 'Читать кейс',
 
         'contact.badge': 'НАЧАТЬ ПРОЕКТ',
-        'contact.title': 'Готовы <span class="gradient-text">создать</span>?',
-        'contact.lead': 'Расскажите о вашем проекте — мы подготовим оценку и предложение в течение 24 часов',
-        'form.name': 'Имя',
-        'form.name_ph': 'Иван',
-        'form.tg': 'Ваш Telegram (@username)',
-        'form.tg_ph': '@username',
-        'form.tg_title': 'Латиница, 5–32 символа, с @ или без',
-        'form.phone': 'Телефон',
-        'form.phone_ph': '+7 900 000-00-00',
-        'form.optional': '(необязательно)',
-        'form.message_label': 'Описание проекта',
-        'form.message': 'Опишите ваш проект...',
-        'form.hint': 'После отправки откроется Telegram с текстом заявки — проверьте и нажмите «Отправить».',
-        'form.submit': 'Отправить заявку',
-        'form.type': 'Тип проекта',
+        'contact.titleLeft': 'Расскажите о проекте.',
+        'contact.leadLeft': 'Опишите задачу, стек и сроки. Мы оценим объём работ и перезвоним в течение 24 часов.',
+        'form.name': 'Ваше имя *',
+        'form.name_ph': 'Как к вам обращаться',
+        'form.phone': 'Телефон *',
+        'form.phone_ph': '+7 999 000-00-00',
+        'form.company': 'Компания',
+        'form.company_ph': 'Необязательно',
+        'form.timeline': 'Желаемые сроки',
+        'form.timeline.unknown': 'Пока не знаю',
+        'form.timeline.w24': '2–4 недели',
+        'form.timeline.m12': '1–2 месяца',
+        'form.timeline.m3': '3+ месяца',
+        'form.budget': 'Ориентировочный бюджет',
+        'form.budget.b100': 'до 100 000 ₽',
+        'form.budget.b300': '100 000 – 300 000 ₽',
+        'form.budget.b700': '300 000 – 700 000 ₽',
+        'form.budget.b700p': '700 000 ₽+',
+        'form.message_label': 'Описание проекта *',
+        'form.message': 'Что нужно сделать, какие интеграции, на каких платформах...',
+        'form.submit': 'Получить оценку',
+        'form.sending': 'Отправляем…',
+        'form.success': 'Заявка уже у нас',
+        'form.successText': 'Скоро свяжемся с вами и уточним детали проекта.',
+        'form.consent': 'Даю согласие на обработку персональных данных в соответствии с <a href="privacy.html" target="_blank" rel="noreferrer">Политикой конфиденциальности</a>. <a href="consent.html" target="_blank" rel="noreferrer">Согласие на обработку персональных данных</a>.',
+        'form.errorGeneric': 'Не удалось отправить заявку. Попробуйте ещё раз или позвоните нам.',
+        'form.type': 'Тип проекта *',
         'form.type.site': 'Написание сайта',
         'form.type.algo': 'Торговый алгоритм',
         'form.type.bot': 'Торговый бот',
@@ -211,6 +223,9 @@ const I18N = {
         'footer.link.blog': 'Блог',
         'footer.link.cases': 'Кейсы',
         'footer.link.news': 'Новости',
+        'footer.link.sitemap': 'Карта сайта',
+        'footer.link.privacy': 'Политика конфиденциальности',
+        'footer.link.consent': 'Согласие на обработку ПД',
         'footer.legal_title': 'Юридическая информация и уведомление о рисках',
         'footer.legal_p1': '<strong class="text-gray-500">Правовая информация.</strong> Исполнитель: ИП КОНОВАЛОВ, ОГРНИП 320532100016343. Сайт AlgoForge оказывает услуги по разработке программного обеспечения на заказ. Информация на сайте не является публичной офертой; итоговые условия, сроки и стоимость фиксируются в договоре или согласованном техническом задании.',
         'footer.legal_p2': '<strong class="text-gray-500">Риски.</strong> Торговля на финансовых и криптовалютных рынках сопряжена с высоким риском полной или частичной потери денежных средств. Любые алгоритмы, боты и стратегии являются инструментами автоматизации и не гарантируют получение прибыли в будущем. Результаты, продемонстрированные в кейсах, являются субъективными и не являются обещанием аналогичной доходности.',
@@ -220,17 +235,13 @@ const I18N = {
         'modal.title': 'Сообщение',
         'modal.ok': 'Понятно',
         modalSelectProjectType: 'Выберите тип проекта в списке.',
-        modalInvalidTelegram: 'В поле Telegram укажите корректный username: латиница, 5–32 символа, как в ссылке t.me/username (можно с @ или без).',
-        modalConfigTelegram: 'Внизу файла index.html найдите блок window.SITE_CONFIG и укажите telegramUsername — ваш логин в Telegram без символа @ (как в ссылке t.me/username).',
-        modalTooLong: 'Текст слишком длинный для одной ссылки Telegram. Сократите описание проекта.',
+        modalConfigTelegram: 'Сервер заявок не настроен. Позвоните +7 950 688-88-62.',
         phoneModalLead: 'Наш номер для звонка:',
         requestTitle: 'Заявка с сайта',
         requestName: 'Имя',
-        requestClientTelegram: 'Telegram клиента',
         requestClientPhone: 'Телефон клиента',
         requestProjectType: 'Тип проекта',
-        submitOpening: 'Открываем Telegram…',
-        submitDone: 'Готово — проверьте Telegram',
+        requestTimeline: 'Желаемые сроки',
     },
     en: {
         titleSuffix: 'Algorithms. Bots. Software. Websites.',
@@ -317,21 +328,33 @@ const I18N = {
         'portfolio.read_case': 'Read case',
 
         'contact.badge': 'START PROJECT',
-        'contact.title': 'Ready to <span class="gradient-text">build</span>?',
-        'contact.lead': 'Tell us about your project — we will prepare an estimate and proposal within 24 hours.',
-        'form.name': 'Name',
-        'form.name_ph': 'John',
-        'form.tg': 'Your Telegram (@username)',
-        'form.tg_ph': '@username',
-        'form.tg_title': 'Latin letters, 5–32 chars, with or without @',
-        'form.phone': 'Phone',
+        'contact.titleLeft': 'Tell us about your project.',
+        'contact.leadLeft': 'Describe the task, stack, and timeline. We will estimate the scope and call you back within 24 hours.',
+        'form.name': 'Your name *',
+        'form.name_ph': 'How should we address you',
+        'form.phone': 'Phone *',
         'form.phone_ph': '+1 555 000-0000',
-        'form.optional': '(optional)',
-        'form.message_label': 'Project description',
-        'form.message': 'Describe your project...',
-        'form.hint': 'After submit, Telegram opens with your request text — review it and tap Send.',
-        'form.submit': 'Send request',
-        'form.type': 'Project type',
+        'form.company': 'Company',
+        'form.company_ph': 'Optional',
+        'form.timeline': 'Desired timeline',
+        'form.timeline.unknown': 'Not sure yet',
+        'form.timeline.w24': '2–4 weeks',
+        'form.timeline.m12': '1–2 months',
+        'form.timeline.m3': '3+ months',
+        'form.budget': 'Estimated budget',
+        'form.budget.b100': 'up to 100,000 ₽',
+        'form.budget.b300': '100,000 – 300,000 ₽',
+        'form.budget.b700': '300,000 – 700,000 ₽',
+        'form.budget.b700p': '700,000 ₽+',
+        'form.message_label': 'Project description *',
+        'form.message': 'What needs to be built, integrations, platforms...',
+        'form.submit': 'Get estimate',
+        'form.sending': 'Sending…',
+        'form.success': 'Request received',
+        'form.successText': 'We will contact you soon to clarify project details.',
+        'form.consent': 'I consent to the processing of personal data in accordance with the <a href="privacy.html" target="_blank" rel="noreferrer">Privacy Policy</a>. <a href="consent.html" target="_blank" rel="noreferrer">Personal data consent</a>.',
+        'form.errorGeneric': 'Could not send the request. Please try again or call us.',
+        'form.type': 'Project type *',
         'form.type.site': 'Website development',
         'form.type.algo': 'Trading algorithm',
         'form.type.bot': 'Trading bot',
@@ -381,6 +404,9 @@ const I18N = {
         'footer.link.blog': 'Blog',
         'footer.link.cases': 'Cases',
         'footer.link.news': 'News',
+        'footer.link.sitemap': 'Site map',
+        'footer.link.privacy': 'Privacy policy',
+        'footer.link.consent': 'Personal data consent',
         'footer.legal_title': 'Legal information and risk notice',
         'footer.legal_p1': '<strong class="text-gray-500">Legal information.</strong> Contractor: Individual Entrepreneur KONOVALOV, OGRNIP 320532100016343. AlgoForge provides custom software development services. Information on this website is not a public offer; final terms, timelines, and pricing are fixed in an agreement or approved technical specification.',
         'footer.legal_p2': '<strong class="text-gray-500">Risks.</strong> Trading on financial and crypto markets carries a high risk of partial or full loss of funds. Any algorithms, bots, and strategies are automation tools and do not guarantee future profits. Results shown in case studies are subjective and are not a promise of similar returns.',
@@ -390,17 +416,13 @@ const I18N = {
         'modal.title': 'Message',
         'modal.ok': 'OK',
         modalSelectProjectType: 'Please select a project type from the list.',
-        modalInvalidTelegram: 'Enter a valid Telegram username: latin letters, 5–32 characters, as in t.me/username (with or without @).',
-        modalConfigTelegram: 'In index.html, find window.SITE_CONFIG and set telegramUsername — your Telegram handle without @ (as in t.me/username).',
-        modalTooLong: 'The message is too long for a single Telegram link. Please shorten the project description.',
+        modalConfigTelegram: 'Lead server is not configured. Call +7 950 688-88-62.',
         phoneModalLead: 'Our phone number:',
         requestTitle: 'Website request',
         requestName: 'Name',
-        requestClientTelegram: 'Client Telegram',
         requestClientPhone: 'Client phone',
         requestProjectType: 'Project type',
-        submitOpening: 'Opening Telegram…',
-        submitDone: 'Done — check Telegram',
+        requestTimeline: 'Desired timeline',
     },
 };
 
@@ -441,18 +463,11 @@ function applyLanguage(lang) {
     localStorage.setItem('site_lang', currentLanguage);
 
     applyDataI18n();
-
-    const triggerLabel = document.getElementById('custom-type-label');
-    const hiddenType = document.getElementById('contact-type');
-    if (triggerLabel && hiddenType && !hiddenType.value) triggerLabel.textContent = t('form.type');
-    if (triggerLabel && hiddenType && hiddenType.value) {
-        const currentVal = hiddenType.value;
-        triggerLabel.textContent = t('form.type.' + currentVal);
-    }
+    syncCustomSelectLabels();
 
     const submitBtn = document.querySelector('#contact-form button[type="submit"]');
     if (submitBtn && !submitBtn.disabled) {
-        submitBtn.innerHTML = `${t('form.submit')}<i data-lucide="send" class="w-5 h-5"></i>`;
+        submitBtn.innerHTML = `<span>${t('form.submit')}</span><i data-lucide="arrow-right" class="w-5 h-5"></i>`;
         if (window.lucide) lucide.createIcons();
     }
 
@@ -501,6 +516,12 @@ function applySiteConfig() {
 
     const phone = normalizePhone(c.phone);
     const telUrl = phone ? 'tel:' + phone : '#';
+    document.querySelectorAll('[data-site-phone-display]').forEach((el) => {
+        el.textContent = phone ? formatPhoneDisplay(phone) : '';
+    });
+    document.querySelectorAll('[data-site-phone-contact]').forEach((el) => {
+        el.href = telUrl;
+    });
     document.querySelectorAll('[data-site-phone-call-mobile], [data-site-phone-call-mobile-menu]').forEach((el) => {
         el.href = telUrl;
     });
@@ -915,68 +936,139 @@ statNumbers.forEach(stat => {
 // ==========================================
 // Form Submission
 // ==========================================
-function resetCustomProjectTypeSelect() {
-    const hidden = document.getElementById('contact-type');
-    const label = document.getElementById('custom-type-label');
-    const panel = document.getElementById('custom-type-panel');
-    const trigger = document.getElementById('custom-type-trigger');
-    if (hidden) hidden.value = '';
+function getCustomSelectParts(root) {
+    return {
+        root,
+        hidden: root.querySelector('input[type="hidden"]'),
+        trigger: root.querySelector('.custom-select-trigger'),
+        panel: root.querySelector('.custom-select-panel'),
+        label: root.querySelector('.custom-select-value'),
+        placeholderKey: root.getAttribute('data-placeholder-key') || '',
+    };
+}
+
+function closeAllCustomSelects(exceptRoot) {
+    document.querySelectorAll('[data-custom-select]').forEach((root) => {
+        if (exceptRoot && root === exceptRoot) return;
+        const { trigger, panel } = getCustomSelectParts(root);
+        if (panel) panel.classList.add('hidden');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+    });
+}
+
+function setCustomSelectValue(root, value, labelText) {
+    const { hidden, label, panel } = getCustomSelectParts(root);
+    if (hidden) hidden.value = value;
     if (label) {
-        label.textContent = t('form.type');
-        label.classList.add('text-gray-400');
-        label.classList.remove('text-white');
+        label.textContent = labelText;
+        if (value) {
+            label.classList.remove('text-gray-400');
+            label.classList.add('text-white');
+        } else {
+            label.classList.add('text-gray-400');
+            label.classList.remove('text-white');
+        }
     }
-    if (panel) panel.classList.add('hidden');
-    if (trigger) trigger.setAttribute('aria-expanded', 'false');
-    if (trigger) trigger.classList.remove('border-red-400/60');
+    if (panel) {
+        panel.querySelectorAll('.custom-select-opt').forEach((opt) => {
+            opt.classList.toggle('is-active', (opt.getAttribute('data-value') || '') === value);
+        });
+    }
+}
+
+function syncCustomSelectLabels() {
+    document.querySelectorAll('[data-custom-select]').forEach((root) => {
+        const { hidden, label, placeholderKey } = getCustomSelectParts(root);
+        if (!hidden || !label) return;
+        const value = hidden.value;
+        if (!value) {
+            label.textContent = placeholderKey ? t(placeholderKey) : label.textContent;
+            label.classList.add('text-gray-400');
+            label.classList.remove('text-white');
+            return;
+        }
+        const active = Array.from(root.querySelectorAll('.custom-select-opt')).find(
+            (opt) => (opt.getAttribute('data-value') || '') === value
+        );
+        if (active) {
+            const i18nKey = active.getAttribute('data-i18n');
+            label.textContent = i18nKey ? t(i18nKey) : active.textContent.trim();
+            label.classList.remove('text-gray-400');
+            label.classList.add('text-white');
+        }
+    });
+}
+
+function resetCustomProjectTypeSelect() {
+    document.querySelectorAll('[data-custom-select]').forEach((root) => {
+        const placeholderKey = root.getAttribute('data-placeholder-key') || '';
+        setCustomSelectValue(root, '', placeholderKey ? t(placeholderKey) : '');
+        const { trigger, panel } = getCustomSelectParts(root);
+        if (panel) panel.classList.add('hidden');
+        if (trigger) {
+            trigger.setAttribute('aria-expanded', 'false');
+            trigger.classList.remove('lead-invalid');
+        }
+    });
 }
 
 function markProjectTypeInvalid(invalid) {
     const trigger = document.getElementById('custom-type-trigger');
     if (!trigger) return;
-    trigger.classList.toggle('border-red-400/60', invalid);
-    trigger.classList.toggle('border-white/10', !invalid);
+    trigger.classList.toggle('lead-invalid', invalid);
+}
+
+function hideContactFormError() {
+    const el = document.getElementById('contact-form-error');
+    if (!el) return;
+    el.textContent = '';
+    el.classList.add('hidden');
+}
+
+function showContactFormError(msg) {
+    const el = document.getElementById('contact-form-error');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+}
+
+function showContactFormSuccess() {
+    const form = document.getElementById('contact-form');
+    const success = document.getElementById('contact-form-success');
+    if (form) form.classList.add('hidden');
+    if (success) success.classList.remove('hidden');
+    if (window.lucide) lucide.createIcons();
 }
 
 function initCustomProjectTypeSelect() {
-    const root = document.getElementById('custom-type-root');
-    const trigger = document.getElementById('custom-type-trigger');
-    const panel = document.getElementById('custom-type-panel');
-    const hidden = document.getElementById('contact-type');
-    const label = document.getElementById('custom-type-label');
-    if (!root || !trigger || !panel || !hidden || !label) return;
+    document.querySelectorAll('[data-custom-select]').forEach((root) => {
+        const { trigger, panel, hidden, label, placeholderKey } = getCustomSelectParts(root);
+        if (!trigger || !panel || !hidden || !label) return;
 
-    function closePanel() {
-        panel.classList.add('hidden');
-        trigger.setAttribute('aria-expanded', 'false');
-    }
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const willOpen = panel.classList.contains('hidden');
+            closeAllCustomSelects();
+            if (willOpen) {
+                panel.classList.remove('hidden');
+                trigger.setAttribute('aria-expanded', 'true');
+            }
+        });
 
-    function openPanel() {
-        panel.classList.remove('hidden');
-        trigger.setAttribute('aria-expanded', 'true');
-    }
-
-    trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (panel.classList.contains('hidden')) openPanel();
-        else closePanel();
-    });
-
-    panel.querySelectorAll('.custom-type-opt').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const val = btn.getAttribute('data-value') || '';
-            hidden.value = val;
-            label.textContent = val ? t('form.type.' + val) : btn.textContent.trim();
-            label.classList.remove('text-gray-400');
-            label.classList.add('text-white');
-            markProjectTypeInvalid(false);
-            closePanel();
+        panel.querySelectorAll('.custom-select-opt').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const val = btn.getAttribute('data-value') || '';
+                const i18nKey = btn.getAttribute('data-i18n');
+                const text = i18nKey ? t(i18nKey) : btn.textContent.trim();
+                setCustomSelectValue(root, val, text || (placeholderKey ? t(placeholderKey) : ''));
+                if (root.getAttribute('data-required') === '1') markProjectTypeInvalid(false);
+                panel.classList.add('hidden');
+                trigger.setAttribute('aria-expanded', 'false');
+            });
         });
     });
 
-    document.addEventListener('click', (e) => {
-        if (!root.contains(e.target)) closePanel();
-    });
+    document.addEventListener('click', () => closeAllCustomSelects());
 }
 
 function initLanguageToggle() {
@@ -990,25 +1082,38 @@ function initLanguageToggle() {
     });
 }
 
-document.getElementById('contact-form').addEventListener('submit', function(e) {
+const contactFormEl = document.getElementById('contact-form');
+if (contactFormEl) contactFormEl.addEventListener('submit', async function(e) {
     e.preventDefault();
+    hideContactFormError();
+
+    const honeypot = this.querySelector('input[name="website"]');
+    if (honeypot && honeypot.value.trim()) {
+        showContactFormSuccess();
+        return;
+    }
 
     const nameEl = document.getElementById('contact-name');
-    const tgEl = document.getElementById('contact-telegram');
     const phoneEl = document.getElementById('contact-phone');
     const msgEl = document.getElementById('contact-message');
-    const typeVal = document.getElementById('contact-type').value;
+    const consentEl = document.getElementById('contact-consent');
+    const typeEl = document.getElementById('contact-type');
+    const typeVal = typeEl ? typeEl.value : '';
 
     if (!nameEl.checkValidity()) {
         nameEl.reportValidity();
         return;
     }
-    if (!tgEl.checkValidity()) {
-        tgEl.reportValidity();
+    if (phoneEl && !phoneEl.checkValidity()) {
+        phoneEl.reportValidity();
         return;
     }
     if (!msgEl.checkValidity()) {
         msgEl.reportValidity();
+        return;
+    }
+    if (consentEl && !consentEl.checkValidity()) {
+        consentEl.reportValidity();
         return;
     }
     if (!typeVal) {
@@ -1018,73 +1123,45 @@ document.getElementById('contact-form').addEventListener('submit', function(e) {
     }
     markProjectTypeInvalid(false);
 
-    const clientTg = normalizeTelegramUser(tgEl.value);
-    if (!clientTg || !/^[a-zA-Z][a-zA-Z0-9_]{4,31}$/.test(clientTg)) {
-        showSiteModal(t('modalInvalidTelegram'));
-        return;
-    }
-
-    const cfg = getSiteConfig();
-    const tg = normalizeTelegramUser(cfg.telegramUsername);
-    if (!tg || tg === 'your_username') {
-        showSiteModal(t('modalConfigTelegram'));
-        return;
-    }
-
-    const name = nameEl.value.trim();
-    const message = msgEl.value.trim();
-    const clientPhone = phoneEl ? phoneEl.value.trim() : '';
-    const typeLabel = t('form.type.' + typeVal) || typeVal;
-
-    const textLines = [
-        t('requestTitle'),
-        t('requestName') + ': ' + name,
-        t('requestClientTelegram') + ': @' + clientTg,
-    ];
-    if (clientPhone) textLines.push(t('requestClientPhone') + ': ' + clientPhone);
-    textLines.push(t('requestProjectType') + ': ' + typeLabel, '', message);
-    const text = textLines.join('\n');
-
-    const url = 'https://t.me/' + tg + '?text=' + encodeURIComponent(text);
-    if (url.length > 3500) {
-        showSiteModal(t('modalTooLong'));
-        return;
-    }
-
     const btn = this.querySelector('button[type="submit"]');
-    const originalText = btn.innerHTML;
-
+    const originalHtml = btn.innerHTML;
     btn.innerHTML = `
         <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        ${t('submitOpening')}
+        ${t('form.sending')}
     `;
     btn.disabled = true;
 
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const payload = {
+        ...Object.fromEntries(new FormData(this)),
+        lang: currentLanguage,
+        project_type: typeVal,
+    };
 
-    setTimeout(() => {
-        btn.innerHTML = `
-            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-            ${t('submitDone')}
-        `;
-        btn.classList.remove('from-neon-green', 'to-accent-400');
-        btn.classList.add('from-green-500', 'to-green-400');
-
-        setTimeout(() => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            btn.classList.remove('from-green-500', 'to-green-400');
-            btn.classList.add('from-neon-green', 'to-accent-400');
-            this.reset();
-            resetCustomProjectTypeSelect();
-            lucide.createIcons();
-        }, 2200);
-    }, 400);
+    try {
+        const response = await fetch('/api/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        let result = {};
+        try {
+            result = await response.json();
+        } catch (parseErr) {
+            result = {};
+        }
+        if (!response.ok) {
+            throw new Error(result.message || t('form.errorGeneric'));
+        }
+        showContactFormSuccess();
+    } catch (error) {
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+        showContactFormError(error.message || t('form.errorGeneric'));
+        if (window.lucide) lucide.createIcons();
+    }
 });
 
 

@@ -322,12 +322,192 @@
             position: relative; z-index: 1; width: 100%; max-width: 28rem;
         }
         #site-modal.is-open #site-modal-box { transform: scale(1); }
-        #custom-type-trigger[aria-expanded="true"] .custom-type-chevron { transform: rotate(180deg); }
-        .custom-type-opt:focus-visible {
-            outline: none; background: rgba(255,255,255,0.1); box-shadow: inset 0 0 0 1px rgba(0,255,136,0.35);
+        .custom-select-trigger[aria-expanded="true"] .custom-select-chevron { transform: rotate(180deg); }
+        .custom-select-opt:focus-visible {
+            outline: none; background: rgba(0,255,136,0.12); box-shadow: inset 0 0 0 1px rgba(0,255,136,0.35);
         }
-        #custom-type-panel::-webkit-scrollbar { width: 4px; }
-        #custom-type-panel::-webkit-scrollbar-thumb { background: rgba(0,255,136,0.25); border-radius: 4px; }
+
+        /* Contact / lead form — стиль AlgoForge (glass) */
+        .contact-grid { display: grid; grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr); gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+        .contact-copy { position: sticky; top: 7rem; }
+        .contact-copy h2 { margin: 1.25rem 0 1rem; font-size: clamp(2rem, 5vw, 3.75rem); line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; }
+        .contact-copy .contact-lead-text { color: #9ca3af; line-height: 1.7; font-size: 1rem; max-width: 28rem; }
+        .contact-phone-card { margin-top: 2rem; display: inline-flex; align-items: center; gap: 0.85rem; padding: 0.85rem 1.1rem 0.85rem 0.85rem; text-decoration: none; color: inherit; border-radius: 1rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); transition: border-color 0.2s, background 0.2s; }
+        .contact-phone-card:hover { border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.04); }
+        .contact-phone-card > span { width: 2.75rem; height: 2.75rem; border-radius: 0.85rem; background: linear-gradient(135deg, #00ff88, #06b6d4); display: grid; place-items: center; color: #051018; box-shadow: 0 10px 28px rgba(0,255,136,0.2); flex-shrink: 0; }
+        .contact-phone-card small { color: #6b7280; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; }
+        .contact-phone-card b { display: block; margin-top: 0.15rem; font-size: 1rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+        .contact-telegram-card { margin-top: 0.9rem; display: inline-flex; align-items: center; gap: 0.5rem; color: #9ca3af; font-size: 0.875rem; transition: color 0.2s; }
+        .contact-telegram-card:hover { color: #00ff88; }
+
+        .lead-form {
+            padding: 1.5rem 1.5rem 1.35rem;
+            border-radius: 1.5rem;
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .lead-form label,
+        .lead-form .custom-select-root { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; position: relative; }
+        .lead-form .field-label { color: #6b7280; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'JetBrains Mono', monospace; }
+        .lead-form input,
+        .lead-form textarea,
+        .lead-form .custom-select-trigger {
+            width: 100%;
+            min-height: 3rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.875rem;
+            outline: none;
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+        }
+        .lead-form input::placeholder,
+        .lead-form textarea::placeholder { color: #6b7280; }
+        .lead-form input:focus,
+        .lead-form textarea:focus,
+        .lead-form .custom-select-trigger:focus {
+            border-color: rgba(0,255,136,0.45);
+            background: rgba(0,255,136,0.04);
+            box-shadow: 0 0 0 3px rgba(0,255,136,0.08);
+        }
+        .lead-form input:-webkit-autofill,
+        .lead-form input:-webkit-autofill:hover,
+        .lead-form input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #fff;
+            -webkit-box-shadow: 0 0 0 1000px #14141c inset;
+            transition: background-color 9999s ease-in-out 0s;
+            caret-color: #fff;
+        }
+        .lead-form .custom-select-trigger {
+            text-align: left;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .lead-form .custom-select-trigger.lead-invalid { border-color: rgba(248,113,113,0.65); }
+        .lead-form .custom-select-trigger .custom-select-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lead-form .custom-select-panel {
+            position: absolute;
+            left: 0; right: 0; top: calc(100% + 0.35rem);
+            z-index: 40;
+            padding: 0.4rem;
+            border-radius: 0.875rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(13,13,20,0.98);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+            max-height: 15rem;
+            overflow-y: auto;
+        }
+        .lead-form .custom-select-panel::-webkit-scrollbar { width: 4px; }
+        .lead-form .custom-select-panel::-webkit-scrollbar-thumb { background: rgba(0,255,136,0.25); border-radius: 4px; }
+        .lead-form .custom-select-opt {
+            width: 100%;
+            text-align: left;
+            padding: 0.65rem 0.85rem;
+            border: 0;
+            border-radius: 0.65rem;
+            background: transparent;
+            color: #d1d5db;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+        .lead-form .custom-select-opt:hover,
+        .lead-form .custom-select-opt.is-active { background: rgba(0,255,136,0.1); color: #fff; }
+        .lead-form textarea { resize: vertical; min-height: 6rem; line-height: 1.55; }
+        .lead-form .wide,
+        .lead-form .consent-check,
+        .lead-form .form-error,
+        .lead-form .lead-submit { grid-column: 1 / -1; }
+        .lead-form .lead-submit {
+            min-height: 3.25rem;
+            border: 0;
+            border-radius: 0.875rem;
+            background: linear-gradient(135deg, #00ff88, #06b6d4);
+            color: #051018;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .lead-form .lead-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(0,255,136,0.22); }
+        .lead-form .lead-submit:disabled { opacity: 0.7; cursor: wait; }
+        .lead-form .form-error { color: #fca5a5; font-size: 0.8rem; margin: 0; }
+        .honeypot { position: absolute !important; left: -9999px !important; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+        .consent-check { position: relative; cursor: pointer; margin-top: 0.15rem; }
+        .consent-check > input { position: absolute; opacity: 0; pointer-events: none; }
+        .consent-check > span {
+            display: block;
+            position: relative;
+            min-height: 1.25rem;
+            padding-left: 1.9rem;
+            color: #9ca3af !important;
+            font-size: 0.72rem !important;
+            line-height: 1.55;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            font-family: inherit !important;
+        }
+        .consent-check i {
+            position: absolute;
+            left: 0; top: 0.05rem;
+            width: 1.1rem; height: 1.1rem;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 0.35rem;
+            background: rgba(255,255,255,0.04);
+        }
+        .consent-check input:checked + span i {
+            background: linear-gradient(135deg, #00ff88, #06b6d4);
+            box-shadow: inset 0 0 0 3px #0d0d12;
+            border-color: transparent;
+        }
+        .consent-check a { color: #00ff88; text-decoration: underline; text-underline-offset: 2px; }
+
+        .form-success {
+            min-height: 18rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 1.25rem;
+            border-radius: 1.5rem;
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+        }
+        .form-success svg, .form-success i { width: 2.5rem; height: 2.5rem; color: #00ff88; }
+        .form-success h3 { margin: 1rem 0 0.5rem; font-size: 1.75rem; font-weight: 800; color: #fff; }
+        .form-success p { color: #9ca3af; font-size: 0.9rem; line-height: 1.6; max-width: 22rem; }
+
+        @media (max-width: 900px) {
+            .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .contact-copy { position: static; }
+        }
+        @media (max-width: 640px) {
+            .lead-form { grid-template-columns: 1fr; padding: 1.15rem; border-radius: 1.15rem; }
+            .lead-form > * { grid-column: 1 / -1 !important; }
+        }
     </style>
     <!-- Yandex.Metrika counter -->
     <script src="ym.js"></script>
@@ -800,81 +980,106 @@
         </div>
     </section>
 
-    <!-- CTA / Contact Section -->
+    <!-- CTA / Contact Section (как NOV-Cargo: текст слева, форма справа) -->
     <section id="contact" class="relative z-10 py-20 sm:py-32">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-strong rounded-3xl sm:rounded-[2rem] p-8 sm:p-12 md:p-16 text-center relative overflow-hidden reveal">
-                <div class="absolute inset-0 bg-gradient-to-br from-neon-green/5 via-transparent to-accent-400/5"></div>
-                <div class="absolute top-0 right-0 w-64 h-64 bg-neon-green/5 rounded-full blur-3xl"></div>
-                <div class="absolute bottom-0 left-0 w-64 h-64 bg-accent-400/5 rounded-full blur-3xl"></div>
-                
-                <div class="relative z-10">
-                    <span data-i18n="contact.badge" class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20 mb-6">НАЧАТЬ ПРОЕКТ</span>
-                    <h2 data-i18n-html="contact.title" class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4 sm:mb-6">
-                        Готовы <span class="gradient-text">создать</span>?
-                    </h2>
-                    <p data-i18n="contact.lead" class="max-w-xl mx-auto text-gray-400 text-base sm:text-lg mb-8 sm:mb-10">
-                        Расскажите о вашем проекте — мы подготовим оценку и предложение в течение 24 часов
-                    </p>
-
-                    <form id="contact-form" class="max-w-lg mx-auto space-y-4 mb-8 text-left">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
-                                <label for="contact-name" data-i18n="form.name" class="block text-xs font-mono text-gray-500 mb-1.5">Имя</label>
-                                <input id="contact-name" name="name" type="text" required maxlength="80" placeholder="Иван" data-i18n-attr-placeholder="form.name_ph" autocomplete="name" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm">
-                            </div>
-                            <div>
-                                <label for="contact-telegram" data-i18n="form.tg" class="block text-xs font-mono text-gray-500 mb-1.5">Ваш Telegram (@username)</label>
-                                <input id="contact-telegram" name="clientTelegram" type="text" required maxlength="33" minlength="5" autocomplete="off" placeholder="@username" data-i18n-attr-placeholder="form.tg_ph" title="Латиница, 5–32 символа, с @ или без" data-i18n-attr-title="form.tg_title" pattern="^@?[a-zA-Z][a-zA-Z0-9_]{4,31}$" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm font-mono">
-                            </div>
-                        </div>
-                        <div>
-                            <label for="contact-phone" data-i18n="form.phone" class="block text-xs font-mono text-gray-500 mb-1.5">Телефон <span data-i18n="form.optional" class="text-gray-600">(необязательно)</span></label>
-                            <input id="contact-phone" name="clientPhone" type="tel" maxlength="20" autocomplete="tel" placeholder="+7 900 000-00-00" data-i18n-attr-placeholder="form.phone_ph" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors text-sm font-mono">
-                        </div>
-                        <div class="relative z-20" id="custom-type-root">
-                            <label id="custom-type-label-caption" data-i18n="form.type" class="block text-xs font-mono text-gray-500 mb-1.5">Тип проекта</label>
-                            <input type="hidden" id="contact-type" name="projectType" value="">
-                            <button type="button" id="custom-type-trigger" aria-haspopup="listbox" aria-expanded="false" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-left text-gray-400 focus:outline-none focus:border-neon-green/50 transition-colors text-sm flex items-center justify-between gap-2 hover:border-white/15">
-                                <span id="custom-type-label">Тип проекта</span>
-                                <i data-lucide="chevron-down" class="custom-type-chevron w-4 h-4 text-gray-500 shrink-0 transition-transform duration-200"></i>
-                            </button>
-                            <div id="custom-type-panel" class="hidden absolute left-0 right-0 top-full mt-2 py-1.5 rounded-xl border border-white/10 shadow-2xl max-h-60 overflow-y-auto z-50" style="background: rgba(11,11,24,0.97); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);">
-                                <button type="button" data-i18n="form.type.site" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="site" role="option">Написание сайта</button>
-                                <button type="button" data-i18n="form.type.algo" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="algo" role="option">Торговый алгоритм</button>
-                                <button type="button" data-i18n="form.type.bot" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="bot" role="option">Торговый бот</button>
-                                <button type="button" data-i18n="form.type.api" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="api" role="option">API интеграция</button>
-                                <button type="button" data-i18n="form.type.desktop" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="desktop" role="option">Десктопное приложение</button>
-                                <button type="button" data-i18n="form.type.web" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="web" role="option">Веб-разработка</button>
-                                <button type="button" data-i18n="form.type.mobile" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="mobile" role="option">Мобильное приложение</button>
-                                <button type="button" data-i18n="form.type.other" class="custom-type-opt w-full text-left px-4 py-2.5 text-sm text-gray-200 hover:bg-white/10 transition-colors" data-value="other" role="option">Другое</button>
-                            </div>
-                        </div>
-                        <div>
-                            <label for="contact-message" data-i18n="form.message_label" class="block text-xs font-mono text-gray-500 mb-1.5">Описание проекта</label>
-                            <textarea id="contact-message" name="message" required minlength="10" maxlength="2000" placeholder="Опишите ваш проект..." data-i18n-attr-placeholder="form.message" rows="4" class="w-full px-5 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-neon-green/50 transition-colors resize-none text-sm"></textarea>
-                        </div>
-                        <p data-i18n="form.hint" class="text-xs text-gray-600 leading-relaxed -mt-1">После отправки откроется Telegram с текстом заявки — проверьте и нажмите «Отправить».</p>
-                        <button type="submit" class="w-full px-8 py-4 rounded-xl bg-gradient-to-r from-neon-green to-accent-400 text-black font-bold text-base hover:shadow-2xl hover:shadow-neon-green/20 transition-all hover:scale-[1.02] flex items-center justify-center gap-2">
-                            <span data-i18n="form.submit">Отправить заявку</span>
-                            <i data-lucide="send" class="w-5 h-5"></i>
-                        </button>
-                    </form>
-
-                    <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
-                        <a data-site-email-row data-site-email-link href="#" class="hidden flex items-center gap-2 hover:text-neon-green transition-colors">
-                            <i data-lucide="mail" class="w-4 h-4"></i>
-                            <span data-site-email></span>
-                        </a>
-                        <a data-site-telegram-link href="#" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-neon-green transition-colors">
-                            <i data-lucide="message-circle" class="w-4 h-4"></i>
-                            <span data-site-telegram-label></span>
-                        </a>
-                        <button type="button" data-site-phone-show data-site-phone-row class="hidden sm:inline-flex items-center gap-2 hover:text-neon-green transition-colors text-sm bg-transparent border-0 p-0 cursor-pointer">
-                            <i data-lucide="phone" class="w-4 h-4"></i>
-                            <span data-i18n="nav.call">Позвонить</span>
-                        </button>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 contact-grid reveal">
+            <div class="contact-copy">
+                <span data-i18n="contact.badge" class="inline-block px-3 py-1 rounded-full text-xs font-mono text-neon-green border border-neon-green/20 mb-4">НАЧАТЬ ПРОЕКТ</span>
+                <h2 data-i18n="contact.titleLeft">Расскажите о проекте.</h2>
+                <p data-i18n="contact.leadLeft" class="contact-lead-text">Опишите задачу, стек и сроки. Мы оценим объём работ и перезвоним в течение 24 часов.</p>
+                <a data-site-phone-contact data-site-phone-row href="#" class="contact-phone-card">
+                    <span><i data-lucide="phone" class="w-5 h-5"></i></span>
+                    <div>
+                        <small data-i18n="nav.call">Позвонить</small>
+                        <b data-site-phone-display>+7 (950) 688-88-62</b>
                     </div>
+                </a>
+                <a data-site-telegram-link href="#" target="_blank" rel="noopener noreferrer" class="contact-telegram-card">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    <span data-site-telegram-label>Telegram: @Algo_Forge_S</span>
+                </a>
+            </div>
+
+            <div id="contact-form-shell">
+                <form id="contact-form" class="lead-form">
+                    <label>
+                        <span class="field-label" data-i18n="form.name">Ваше имя *</span>
+                        <input id="contact-name" name="name" type="text" required minlength="2" maxlength="80" placeholder="Как к вам обращаться" data-i18n-attr-placeholder="form.name_ph" autocomplete="name">
+                    </label>
+                    <label>
+                        <span class="field-label" data-i18n="form.phone">Телефон *</span>
+                        <input id="contact-phone" name="phone" type="tel" required inputmode="tel" autocomplete="tel" pattern="[+0-9 ()-]{10,20}" placeholder="+7 999 000-00-00" data-i18n-attr-placeholder="form.phone_ph">
+                    </label>
+                    <label>
+                        <span class="field-label" data-i18n="form.company">Компания</span>
+                        <input id="contact-company" name="company" type="text" maxlength="200" autocomplete="organization" placeholder="Необязательно" data-i18n-attr-placeholder="form.company_ph">
+                    </label>
+                    <div class="custom-select-root" data-custom-select data-select-id="timeline" data-placeholder-key="form.timeline.unknown">
+                        <span class="field-label" data-i18n="form.timeline">Желаемые сроки</span>
+                        <input type="hidden" id="contact-timeline" name="timeline" value="">
+                        <button type="button" class="custom-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="custom-select-value text-gray-400" data-i18n="form.timeline.unknown">Пока не знаю</span>
+                            <i data-lucide="chevron-down" class="custom-select-chevron w-4 h-4 text-gray-500 shrink-0 transition-transform duration-200"></i>
+                        </button>
+                        <div class="custom-select-panel hidden" role="listbox">
+                            <button type="button" class="custom-select-opt is-active" data-value="" data-i18n="form.timeline.unknown" role="option">Пока не знаю</button>
+                            <button type="button" class="custom-select-opt" data-value="2–4 недели" data-i18n="form.timeline.w24" role="option">2–4 недели</button>
+                            <button type="button" class="custom-select-opt" data-value="1–2 месяца" data-i18n="form.timeline.m12" role="option">1–2 месяца</button>
+                            <button type="button" class="custom-select-opt" data-value="3+ месяца" data-i18n="form.timeline.m3" role="option">3+ месяца</button>
+                        </div>
+                    </div>
+                    <div class="custom-select-root" data-custom-select data-select-id="type" data-placeholder-key="form.type" data-required="1">
+                        <span class="field-label" data-i18n="form.type">Тип проекта *</span>
+                        <input type="hidden" id="contact-type" name="project_type" value="">
+                        <button type="button" id="custom-type-trigger" class="custom-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="custom-select-value text-gray-400" id="custom-type-label" data-i18n="form.type">Тип проекта</span>
+                            <i data-lucide="chevron-down" class="custom-select-chevron w-4 h-4 text-gray-500 shrink-0 transition-transform duration-200"></i>
+                        </button>
+                        <div class="custom-select-panel hidden" id="custom-type-panel" role="listbox">
+                            <button type="button" class="custom-select-opt" data-value="site" data-i18n="form.type.site" role="option">Написание сайта</button>
+                            <button type="button" class="custom-select-opt" data-value="algo" data-i18n="form.type.algo" role="option">Торговый алгоритм</button>
+                            <button type="button" class="custom-select-opt" data-value="bot" data-i18n="form.type.bot" role="option">Торговый бот</button>
+                            <button type="button" class="custom-select-opt" data-value="api" data-i18n="form.type.api" role="option">API интеграция</button>
+                            <button type="button" class="custom-select-opt" data-value="desktop" data-i18n="form.type.desktop" role="option">Десктопное приложение</button>
+                            <button type="button" class="custom-select-opt" data-value="web" data-i18n="form.type.web" role="option">Веб-разработка</button>
+                            <button type="button" class="custom-select-opt" data-value="mobile" data-i18n="form.type.mobile" role="option">Мобильное приложение</button>
+                            <button type="button" class="custom-select-opt" data-value="other" data-i18n="form.type.other" role="option">Другое</button>
+                        </div>
+                    </div>
+                    <div class="custom-select-root" data-custom-select data-select-id="budget" data-placeholder-key="form.timeline.unknown">
+                        <span class="field-label" data-i18n="form.budget">Ориентировочный бюджет</span>
+                        <input type="hidden" id="contact-budget" name="budget" value="">
+                        <button type="button" class="custom-select-trigger" aria-haspopup="listbox" aria-expanded="false">
+                            <span class="custom-select-value text-gray-400" data-i18n="form.timeline.unknown">Пока не знаю</span>
+                            <i data-lucide="chevron-down" class="custom-select-chevron w-4 h-4 text-gray-500 shrink-0 transition-transform duration-200"></i>
+                        </button>
+                        <div class="custom-select-panel hidden" role="listbox">
+                            <button type="button" class="custom-select-opt is-active" data-value="" data-i18n="form.timeline.unknown" role="option">Пока не знаю</button>
+                            <button type="button" class="custom-select-opt" data-value="до 100 000 ₽" data-i18n="form.budget.b100" role="option">до 100 000 ₽</button>
+                            <button type="button" class="custom-select-opt" data-value="100 000 – 300 000 ₽" data-i18n="form.budget.b300" role="option">100 000 – 300 000 ₽</button>
+                            <button type="button" class="custom-select-opt" data-value="300 000 – 700 000 ₽" data-i18n="form.budget.b700" role="option">300 000 – 700 000 ₽</button>
+                            <button type="button" class="custom-select-opt" data-value="700 000 ₽+" data-i18n="form.budget.b700p" role="option">700 000 ₽+</button>
+                        </div>
+                    </div>
+                    <label class="wide">
+                        <span class="field-label" data-i18n="form.message_label">Описание проекта *</span>
+                        <textarea id="contact-message" name="message" required minlength="10" maxlength="2000" rows="4" placeholder="Что нужно сделать, какие интеграции, на каких платформах..." data-i18n-attr-placeholder="form.message"></textarea>
+                    </label>
+                    <input class="honeypot" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <label class="consent-check wide">
+                        <input type="checkbox" id="contact-consent" name="personal_consent" value="1" required>
+                        <span><i></i><span data-i18n-html="form.consent">Даю согласие на обработку персональных данных в соответствии с <a href="privacy.html" target="_blank" rel="noreferrer">Политикой конфиденциальности</a>. <a href="consent.html" target="_blank" rel="noreferrer">Согласие на обработку персональных данных</a>.</span></span>
+                    </label>
+                    <button type="submit" class="lead-submit">
+                        <span data-i18n="form.submit">Получить оценку</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                    <p id="contact-form-error" class="form-error hidden" role="alert"></p>
+                </form>
+                <div id="contact-form-success" class="form-success hidden" aria-live="polite">
+                    <i data-lucide="check-circle" class="w-10 h-10 text-neon-green"></i>
+                    <h3 data-i18n="form.success">Заявка уже у нас</h3>
+                    <p data-i18n="form.successText">Скоро свяжемся с вами и уточним детали проекта.</p>
                 </div>
             </div>
         </div>
@@ -1017,6 +1222,9 @@
                         <li><a href="blog/" data-i18n="footer.link.blog" class="hover:text-neon-green transition-colors">Блог</a></li>
                         <li><a href="cases/" data-i18n="footer.link.cases" class="hover:text-neon-green transition-colors">Кейсы</a></li>
                         <li><a href="news/" data-i18n="footer.link.news" class="hover:text-neon-green transition-colors">Новости</a></li>
+                        <li><a href="karta-sayta.html" data-i18n="footer.link.sitemap" class="hover:text-neon-green transition-colors">Карта сайта</a></li>
+                        <li><a href="privacy.html" data-i18n="footer.link.privacy" class="hover:text-neon-green transition-colors">Политика конфиденциальности</a></li>
+                        <li><a href="consent.html" data-i18n="footer.link.consent" class="hover:text-neon-green transition-colors">Согласие на обработку ПД</a></li>
                     </ul>
                 </div>
                 <div>
@@ -1038,7 +1246,7 @@
                 </div>
             </div>
 
-            <div class="border-t border-white/5 pt-8 mt-2 mb-10 max-w-5xl">
+            <div class="border-t border-white/5 pt-8 mt-2 mb-10 max-w-5xl" id="legal">
                 <p class="text-[10px] sm:text-[11px] leading-relaxed text-gray-600 font-mono tracking-tight">
                     <span data-i18n="footer.legal_title" class="block text-gray-500 font-semibold mb-3 uppercase tracking-wider">Юридическая информация и уведомление о рисках</span>
                     <span data-i18n-html="footer.legal_p1" class="block mb-3"><strong class="text-gray-500">Правовая информация.</strong> Исполнитель: ИП КОНОВАЛОВ, ОГРНИП 320532100016343. Сайт AlgoForge оказывает услуги по разработке программного обеспечения на заказ. Информация на сайте не является публичной офертой; итоговые условия, сроки и стоимость фиксируются в договоре или согласованном техническом задании.</span>
@@ -1080,6 +1288,6 @@
             githubUrl: '',
         };
     </script>
-    <script src="script.js?v=20"></script>
+    <script src="script.js?v=23"></script>
 </body>
 </html>

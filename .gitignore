@@ -12,3 +12,7 @@ backup/
 # Локальные заметки по инфраструктуре (не публиковать в GitHub)
 LOCAL-INFRA.md
 LOCAL-PLAN.md
+
+# Node.js (сервер заявок)
+node_modules/
+.env
