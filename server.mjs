@@ -41,6 +41,15 @@ const ALLOWED_ORIGINS = new Set([
 app.set("trust proxy", 1);
 
 app.use((req, res, next) => {
+  const host = String(req.hostname || "").toLowerCase();
+  // Дубль на *.onrender.com не индексируем — канонический домен algoforge.ru
+  if (host.endsWith(".onrender.com")) {
+    res.setHeader("X-Robots-Tag", "noindex, nofollow");
+  }
+  next();
+});
+
+app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (origin && ALLOWED_ORIGINS.has(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);

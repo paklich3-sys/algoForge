@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
 
+# Демо-макет пульта — не для индекса
+Disallow: /cases/assets/okx-mm-dashboard-preview.html
+
 Host: algoforge.ru
 Sitemap: https://algoforge.ru/sitemap.xml
