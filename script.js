@@ -1140,20 +1140,40 @@ if (contactFormEl) contactFormEl.addEventListener('submit', async function(e) {
         project_type: typeVal,
     };
 
+    const leadUrl = (getSiteConfig().leadApiUrl || '/api/lead').trim() || '/api/lead';
+    const maxAttempts = 3;
+
     try {
-        const response = await fetch('/api/lead', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-        });
+        let response;
         let result = {};
-        try {
-            result = await response.json();
-        } catch (parseErr) {
-            result = {};
+        let lastError = null;
+
+        for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+            try {
+                response = await fetch(leadUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                try {
+                    result = await response.json();
+                } catch (parseErr) {
+                    result = {};
+                }
+                if (response.ok) break;
+                // Free Render «просыпается» — повторяем при 502/503/504
+                if (![502, 503, 504].includes(response.status) || attempt === maxAttempts) {
+                    throw new Error(result.message || t('form.errorGeneric'));
+                }
+            } catch (err) {
+                lastError = err;
+                if (attempt === maxAttempts) throw err;
+            }
+            await new Promise((r) => setTimeout(r, 1500 * attempt));
         }
-        if (!response.ok) {
-            throw new Error(result.message || t('form.errorGeneric'));
+
+        if (!response || !response.ok) {
+            throw lastError || new Error(t('form.errorGeneric'));
         }
         showContactFormSuccess();
     } catch (error) {

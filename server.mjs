@@ -30,8 +30,36 @@ const port = Number(process.env.PORT) || 4173;
 const rateWindowMs = 60_000;
 const attempts = new Map();
 
+const ALLOWED_ORIGINS = new Set([
+  "https://algoforge.ru",
+  "https://www.algoforge.ru",
+  "https://algoforge-uux2.onrender.com",
+  "http://127.0.0.1:4173",
+  "http://localhost:4173",
+]);
+
 app.set("trust proxy", 1);
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Vary", "Origin");
+  }
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
 app.use(express.json({ limit: "32kb" }));
+
+app.get("/api/health", (_req, res) => {
+  res.json({
+    ok: true,
+    telegram: Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID),
+  });
+});
 
 const PROJECT_TYPES = {
   site: "Написание сайта",
@@ -153,8 +181,23 @@ app.post("/api/lead", async (req, res) => {
   }
 });
 
-app.use(express.static(__dirname, { extensions: ["html"] }));
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
-app.listen(port, () => {
-  console.log(`AlgoForge server listening on http://127.0.0.1:${port}`);
+app.use(express.static(__dirname, {
+  index: "index.html",
+  extensions: ["html"],
+  dotfiles: "ignore",
+}));
+
+app.use((req, res) => {
+  if (req.path.startsWith("/api/")) {
+    return res.status(404).json({ ok: false, message: "Not found" });
+  }
+  res.status(404).type("text").send("Not Found");
+});
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`AlgoForge server listening on http://0.0.0.0:${port}`);
 });
