@@ -85,7 +85,7 @@ const I18N = {
         'hero.title': 'Автоматизация, которая делает <span class="gradient-text glow-green">деньги</span>.<span class="block mt-1 sm:mt-2">От криптоботов до энтерпрайза.</span>',
         'hero.aria': 'Автоматизация, которая делает деньги. От криптоботов до энтерпрайза.',
         'hero.lead': 'Разрабатываем инфраструктуру для трейдинга и бизнеса. API-интеграции, десктоп, веб и мобильные приложения под ключ. Чистый код и математическая точность в каждом алгоритме.',
-        'hero.cta_primary': 'Начать проект',
+        'hero.cta_primary': 'Заказать сайт',
         'hero.cta_secondary': 'Наши услуги',
         'hero.scroll': 'scroll',
 
@@ -266,7 +266,7 @@ const I18N = {
         'hero.title': 'Automation that makes <span class="gradient-text glow-green">money</span>.<span class="block mt-1 sm:mt-2">From crypto bots to enterprise.</span>',
         'hero.aria': 'Automation that makes money. From crypto bots to enterprise.',
         'hero.lead': 'We build infrastructure for trading and business. API integrations, desktop, web, and mobile apps end-to-end. Clean code and mathematical precision in every algorithm.',
-        'hero.cta_primary': 'Start project',
+        'hero.cta_primary': 'Order a website',
         'hero.cta_secondary': 'Our services',
         'hero.scroll': 'scroll',
 
@@ -1223,14 +1223,44 @@ applyLanguage(currentLanguage);
 
 
 // ==========================================
-// Smooth scroll for anchor links
+// Smooth scroll for anchor links (+ URL #section)
 // ==========================================
+function scrollToHashTarget(hash, behavior = 'smooth') {
+    if (!hash || hash === '#') return false;
+    let target = null;
+    try {
+        target = document.querySelector(hash);
+    } catch (e) {
+        return false;
+    }
+    if (!target) return false;
+    target.scrollIntoView({ behavior, block: 'start' });
+    return true;
+}
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (!href || href === '#') return;
+        if (!scrollToHashTarget(href, 'smooth')) return;
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Чтобы в адресной строке было algoforge.ru/#services, а не только /
+        if (history.pushState) {
+            history.pushState(null, '', href);
+        } else {
+            location.hash = href;
         }
     });
+});
+
+// Открыли ссылку вида https://algoforge.ru/#faq — прокрутить к секции
+if (location.hash) {
+    window.addEventListener('load', () => {
+        setTimeout(() => scrollToHashTarget(location.hash, 'auto'), 80);
+    });
+}
+
+window.addEventListener('popstate', () => {
+    if (location.hash) scrollToHashTarget(location.hash, 'smooth');
+    else window.scrollTo({ top: 0, behavior: 'smooth' });
 });

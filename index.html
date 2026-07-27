@@ -74,8 +74,10 @@
     </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
         body { background: #0d0d12; color: #d4d4d4; overflow-x: hidden; }
+        /* Якоря секций: отступ под фиксированное меню */
+        section[id] { scroll-margin-top: 5.5rem; }
         /* Тема «как в IDE» (VS Code Dark+) */
         body.ide-code-theme {
             font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -597,7 +599,7 @@
             
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-16 sm:mb-20">
                 <a href="#contact" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-neon-green to-accent-400 text-black font-bold text-base hover:shadow-2xl hover:shadow-neon-green/20 transition-all hover:scale-105 flex items-center justify-center gap-2">
-                    <span data-i18n="hero.cta_primary">Начать проект</span>
+                    <span data-i18n="hero.cta_primary">Заказать сайт</span>
                     <i data-lucide="arrow-right" class="w-5 h-5"></i>
                 </a>
                 <a href="#services" class="w-full sm:w-auto px-8 py-4 rounded-2xl glass text-white font-semibold text-base hover:bg-white/10 transition-all flex items-center justify-center gap-2">
@@ -1292,6 +1294,6 @@
             leadApiUrl: 'https://algoforge-uus2.onrender.com/api/lead',
         };
     </script>
-    <script src="script.js?v=27"></script>
+    <script src="script.js?v=29"></script>
 </body>
 </html>
