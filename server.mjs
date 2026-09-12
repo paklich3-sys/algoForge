@@ -103,7 +103,7 @@ async function sendTelegramLead(payload) {
     `Имя: ${cleanTelegramText(payload.name, 100)}`,
     `Телефон: ${cleanTelegramText(payload.phone, 40)}`,
   ];
-  if (payload.company) lines.push(`Компания: ${cleanTelegramText(payload.company, 200)}`);
+  if (payload.telegram) lines.push(`Telegram: ${cleanTelegramText(payload.telegram, 100)}`);
   lines.push(`Тип проекта: ${cleanTelegramText(payload.projectTypeLabel, 80)}`);
   if (payload.timeline) lines.push(`Сроки: ${cleanTelegramText(payload.timeline, 60)}`);
   if (payload.budget) lines.push(`Бюджет: ${cleanTelegramText(payload.budget, 60)}`);
@@ -140,7 +140,7 @@ app.post("/api/lead", async (req, res) => {
   const source = req.body && typeof req.body === "object" ? req.body : {};
   const name = field(source, "name", 100);
   const phone = field(source, "phone", 30);
-  const company = field(source, "company", 200);
+  const telegram = field(source, "telegram", 100) || field(source, "company", 100);
   const projectType = field(source, "project_type", 30);
   const timeline = field(source, "timeline", 60);
   const budget = field(source, "budget", 60);
@@ -176,7 +176,7 @@ app.post("/api/lead", async (req, res) => {
     await sendTelegramLead({
       name,
       phone,
-      company,
+      telegram,
       projectTypeLabel: PROJECT_TYPES[projectType],
       timeline,
       budget,
