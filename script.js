@@ -86,7 +86,7 @@ const I18N = {
         'hero.aria': 'Автоматизация, которая делает деньги. От криптоботов до энтерпрайза.',
         'hero.lead': 'Разрабатываем инфраструктуру для трейдинга и бизнеса. API-интеграции, десктоп, веб и мобильные приложения под ключ. Чистый код и математическая точность в каждом алгоритме.',
         'hero.cta_primary': 'Заказать сайт',
-        'hero.cta_secondary': 'Наши услуги',
+        'hero.cta_secondary': 'Торговые алгоритмы',
         'hero.scroll': 'scroll',
 
         'services.badge': 'УСЛУГИ',
@@ -269,7 +269,7 @@ const I18N = {
         'hero.aria': 'Automation that makes money. From crypto bots to enterprise.',
         'hero.lead': 'We build infrastructure for trading and business. API integrations, desktop, web, and mobile apps end-to-end. Clean code and mathematical precision in every algorithm.',
         'hero.cta_primary': 'Order a website',
-        'hero.cta_secondary': 'Our services',
+        'hero.cta_secondary': 'Trading algorithms',
         'hero.scroll': 'scroll',
 
         'services.badge': 'SERVICES',

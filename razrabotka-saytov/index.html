@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Разработка сайтов на заказ в AlgoForge: лендинги, корпоративные сайты и веб-сервисы. Дизайн, адаптивная вёрстка, CRM, аналитика и запуск.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#0b111b">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <link rel="canonical" href="https://algoforge.ru/razrabotka-saytov/">
+  <link rel="icon" href="../favicon.png?v=4" type="image/png">
+  <link rel="stylesheet" href="/razrabotka-torgovyh-robotov/landing.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{neon:{green:'#00ff88'},accent:{400:'#22d3ee'}}}}}</script>
+<link rel="stylesheet" href="/service-brand.css"><link rel="stylesheet" href="/service-pages.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script><script src="/bg-animation.js" defer></script><script src="/nav.js" defer></script>
+  <title>Разработка сайтов на заказ — AlgoForge</title>
+  
+  <script src="../ym.js"></script>
+</head>
+<body><canvas id="three-canvas" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main">К содержанию</a>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="/" class="flex items-center group" aria-label="AlgoForge — на главную">
+                    <img src="/logo-v3.png?v=1" alt="AlgoForge" width="600" height="192" class="relative top-[15px] sm:top-[15px] h-20 sm:h-24 w-auto object-contain transition-opacity duration-300 group-hover:opacity-90" loading="eager" decoding="async">
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/#services" class="text-sm text-gray-400 hover:text-white transition-colors">Услуги</a>
+                    <a href="/#about" class="text-sm text-gray-400 hover:text-white transition-colors">О нас</a>
+                    <a href="/#process" class="text-sm text-gray-400 hover:text-white transition-colors">Процесс</a>
+                    <a href="/#tech" class="text-sm text-gray-400 hover:text-white transition-colors">Технологии</a>
+                    <a href="/#portfolio" class="text-sm text-gray-400 hover:text-white transition-colors">Портфолио</a>
+                    <a href="/#faq" class="text-sm text-gray-400 hover:text-white transition-colors">FAQ</a>
+                    <a href="/blog/" class="text-sm text-gray-400 hover:text-white transition-colors">Блог</a>
+                    <a href="/cases/" class="text-sm text-gray-400 hover:text-white transition-colors">Кейсы</a>
+                    <a href="/news/" class="text-sm text-gray-400 hover:text-white transition-colors">Новости</a>
+                    
+                    
+                    <a href="#contact" class="ml-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:shadow-lg hover:shadow-neon-green/20 transition-all hover:scale-105">Связаться</a>
+                </div>
+                <div class="flex md:hidden items-center gap-2">
+                    
+                <button id="mobile-menu-btn" class="p-2 rounded-lg border border-white/10 text-gray-300 hover:text-white hover:border-white/20 transition-colors" aria-label="Меню">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                        <line x1="2" y1="5" x2="20" y2="5"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="17" x2="20" y2="17"/>
+                    </svg>
+                </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-strong mx-4 mb-4 rounded-2xl overflow-hidden">
+            <div class="flex flex-col p-4 gap-1">
+                <a href="/#services" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Услуги</a>
+                <a href="/#about" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">О нас</a>
+                <a href="/#process" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Процесс</a>
+                <a href="/#tech" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Технологии</a>
+                <a href="/#portfolio" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Портфолио</a>
+                <a href="/#faq" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">FAQ</a>
+                <a href="/blog/" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Блог</a>
+                <a href="/cases/" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Кейсы</a>
+                <a href="/news/" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Новости</a>
+                
+                
+                <a href="#contact" class="mobile-link mt-2 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-center">Связаться</a>
+            </div>
+        </div>
+    </nav>
+
+
+
+  <main id="main">
+    <section class="hero" id="hero">
+      <div class="container service-breadcrumb"><a href="/">AlgoForge</a><span>/</span><a href="/razrabotka-torgovyh-robotov/">Торговые алгоритмы</a><span>/</span><span>Разработка сайтов</span></div><div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Веб-разработка AlgoForge</p>
+          <h1>Разработка сайтов <span>для бизнеса</span></h1>
+          <p class="hero-lead">Разрабатываем лендинги, корпоративные сайты и веб-сервисы. Продумываем структуру, создаём дизайн, подключаем заявки и публикуем готовый проект.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#contact" data-track="form_open">Обсудить сайт <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="#contact" data-track="brief_open">Прикрепить ТЗ</a>
+          </div>
+          <p class="hero-note">Дизайн, разработка и запуск — в одном проекте</p>
+          <div class="quick-contact" aria-label="Быстрый контакт">
+            <span>Или напишите напрямую:</span>
+            <a href="tel:+79506888862" data-track="contact_phone">+7 950 688-88-62</a>
+            <span aria-hidden="true">·</span>
+            <a href="https://t.me/Algo_Forge_S" target="_blank" rel="noopener noreferrer" data-track="contact_telegram">Telegram @Algo_Forge_S</a>
+          </div>
+        </div>
+        <div class="hero-proof" aria-label="Что входит в работу">
+          <div class="proof-card"><span class="proof-index">01</span><strong>Структура и содержание</strong><p>Помогаем представить услуги, выстроить навигацию и привести посетителя к обращению.</p></div>
+          <div class="proof-card"><span class="proof-index">02</span><strong>Дизайн и разработка</strong><p>Создаём адаптивный интерфейс и подключаем формы, CRM и внешние сервисы.</p></div>
+          <div class="proof-card"><span class="proof-index">03</span><strong>Публикация и развитие</strong><p>Настраиваем домен, хостинг и аналитику. Передаём код и инструкции по управлению.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="what-we-build">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Что разрабатываем</p><h2>Сайт под вашу задачу</h2><p>Запускаете услугу, обновляете сайт компании или создаёте онлайн-сервис? Подберём структуру и функции под ваш продукт, аудиторию и способ продаж.</p></div>
+        <div class="card-grid card-grid-5">
+          <article class="service-card"><span class="card-number">01</span><h3>Посадочные страницы</h3><p>Презентация услуги, ответы на вопросы и форма обращения для рекламного трафика.</p></article>
+          <article class="service-card"><span class="card-number">02</span><h3>Корпоративные сайты</h3><p>Услуги, проекты, команда и контакты в единой структуре с удобной навигацией.</p></article>
+          <article class="service-card"><span class="card-number">03</span><h3>Каталоги и магазины</h3><p>Карточки товаров, поиск, фильтры, корзина и интеграция с учётными системами.</p></article>
+          <article class="service-card"><span class="card-number">04</span><h3>Веб-сервисы</h3><p>Личные кабинеты, панели управления и автоматизация рабочих процессов.</p></article>
+          <article class="service-card"><span class="card-number">05</span><h3>Обновление сайта</h3><p>Перерабатываем дизайн, ускоряем загрузку и добавляем недостающие функции.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="platforms">
+      <div class="container split-section">
+        <div class="section-heading"><p class="eyebrow">Интеграции</p><h2>Сайт связан с вашим бизнесом</h2><p>Передаём обращения в CRM и Telegram, подключаем аналитику, оплату и внешние API. Состав интеграций определяем на этапе оценки.</p></div>
+        <div class="platform-list" aria-label="Примеры интеграций"><span>CRM</span><span>Telegram</span><span>Яндекс Метрика</span><span>Платежи</span><span>CMS</span><span>API</span></div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="process">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Как работаем</p><h2>Как проходит разработка</h2><p>Разбираем задачу, согласуем структуру и дизайн. Затем разрабатываем сайт, проверяем его на разных экранах и публикуем.</p></div>
+        <ol class="process-list">
+          <li><span>01</span><div><h3>Бриф</h3><p>Обсуждаем продукт, аудиторию, содержание и необходимые функции.</p></div></li>
+          <li><span>02</span><div><h3>Оценка и ТЗ</h3><p>Фиксируем состав работ, риски, этапы, сроки и критерии готовности.</p></div></li>
+          <li><span>03</span><div><h3>Прототип и разработка</h3><p>Согласуем макеты страниц и реализуем интерфейс, серверную часть и интеграции.</p></div></li>
+          <li><span>04</span><div><h3>Тестирование</h3><p>Проверяем мобильную версию, формы, ссылки, скорость загрузки и отправку заявок.</p></div></li>
+          <li><span>05</span><div><h3>Запуск и поддержка</h3><p>Подключаем домен, публикуем сайт и передаём доступы. Обсуждаем дальнейшее сопровождение.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="security">
+      <div class="container split-section security-section">
+        <div class="section-heading"><p class="eyebrow">Безопасность</p><h2>Готов к посетителям и заявкам</h2><p>Перед запуском проверяем весь путь посетителя: от первого экрана до отправки формы. Настраиваем базовое SEO и события аналитики.</p></div>
+        <ul class="check-list"><li>Адаптация под телефон и компьютер</li><li>Формы с проверкой заполнения</li><li>Защищённое HTTPS-соединение</li><li>Метаданные и карта сайта</li><li>Оптимизация загрузки страниц</li><li>Уведомления о новых обращениях</li></ul>
+      </div>
+    </section>
+
+    
+
+    <section class="section" id="conditions">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Условия</p><h2>Стоимость после оценки задачи</h2><p>Стоимость зависит от числа страниц, дизайна, функций и интеграций. Пришлите задачу или примеры сайтов — подготовим оценку.</p></div>
+        <div class="conditions-grid"><div><strong>Договор и этапы</strong><p>Фиксируем состав работ, сроки и этапную оплату в договоре или ТЗ.</p></div><div><strong>NDA и права на код</strong><p>Состав передачи исходников и права на результат согласуем заранее.</p></div><div><strong>Поддержка после релиза</strong><p>Помогаем обновлять содержание, добавлять страницы и развивать функциональность.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="faq">
+      <div class="container narrow">
+        <div class="section-heading"><p class="eyebrow">FAQ</p><h2>Вопросы о разработке</h2></div>
+        <div class="faq-list">
+ <details><summary>Что нужно для оценки сайта?</summary><p>Расскажите о бизнесе, нужных страницах и функциях. Если есть ТЗ, тексты или примеры — приложите их к заявке.</p></details>
+ <details><summary>Можно заказать только доработку?</summary><p>Да. Посмотрим текущий сайт и код, уточним изменения и оценим объём работ.</p></details>
+ <details><summary>Сайт будет работать на телефоне?</summary><p>Да. Адаптируем страницы под мобильные экраны и проверяем навигацию, формы и читаемость текста.</p></details>
+ <details><summary>Можно самостоятельно менять содержание?</summary><p>Подключим систему управления, если нужно регулярно обновлять услуги, товары или статьи. Выберем её под задачи проекта.</p></details>
+ <details><summary>Что входит в запуск?</summary><p>Публикация на хостинге, подключение домена и HTTPS, проверка форм и настройка согласованных событий аналитики.</p></details></div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="container contact-grid">
+        <div class="contact-copy"><p class="eyebrow">Первый шаг</p><h2>Обсудим ваш будущий сайт</h2><p>Достаточно контакта и короткого описания. Полный бриф можно прислать файлом или обсудить после первого ответа.</p><div class="contact-links"><a href="tel:+79506888862" data-track="contact_phone">+7 950 688-88-62</a><a href="https://t.me/Algo_Forge_S" target="_blank" rel="noopener noreferrer" data-track="contact_telegram">Telegram @Algo_Forge_S</a></div></div>
+        <div>
+          <form id="landing-lead-form" class="lead-form" novalidate>
+            <input type="hidden" name="form_kind" value="website-landing">
+            <input type="hidden" name="landing_url" value="">
+            <input type="hidden" name="request_id" value="">
+            <label class="honeypot" aria-hidden="true">Ваш сайт<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            <div class="form-field"><label for="lead-name">Как к вам обращаться <b>*</b></label><input id="lead-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="100" placeholder="Имя"></div>
+            <div class="form-field"><label for="lead-exchange">Тип сайта <span>(необязательно)</span></label><select id="lead-exchange" name="exchange"><option value="">Пока не выбрал</option><option>Лендинг</option><option>Корпоративный сайт</option><option>Магазин</option><option>Веб-сервис</option><option>Другое</option></select></div>
+            <fieldset class="contact-method"><legend>Контакт для ответа <b>*</b></legend><div class="method-switch"><label><input type="radio" name="contact_method" value="phone" checked><span>Телефон</span></label><label><input type="radio" name="contact_method" value="telegram"><span>Telegram</span></label></div></fieldset>
+            <div class="form-field" data-contact-field="phone"><label for="lead-phone">Телефон</label><input id="lead-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00"></div>
+            <div class="form-field" data-contact-field="telegram" hidden><label for="lead-telegram">Telegram</label><input id="lead-telegram" name="telegram" type="text" autocomplete="off" placeholder="@username"></div>
+            <div class="form-field full"><label for="lead-message">Какой сайт вам нужен? <b>*</b></label><textarea id="lead-message" name="message" required minlength="20" maxlength="2400" rows="5" placeholder="Расскажите о бизнесе, нужных страницах и функциях. Можно добавить ссылки на примеры."></textarea><small>Минимум 20 символов</small></div>
+            <div class="form-field full"><label for="lead-file">Файл ТЗ <span>(необязательно)</span></label><input id="lead-file" name="brief_file" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"><small>PDF, DOCX или TXT до 5 МБ</small><p id="file-error" class="field-error" hidden></p></div>
+            <label class="consent full"><input id="lead-consent" name="personal_consent" type="checkbox" value="1" required><span>Согласен на обработку персональных данных по <a href="../privacy.html" target="_blank" rel="noopener noreferrer">политике конфиденциальности</a> и <a href="../consent.html" target="_blank" rel="noopener noreferrer">согласию</a>.</span></label>
+            <p id="form-status" class="form-status full" role="alert" aria-live="polite" hidden></p>
+            <button class="button button-primary submit-button full" type="submit"><span>Получить оценку разработки</span><span aria-hidden="true">→</span></button>
+          </form>
+          <div id="form-success" class="form-success" hidden aria-live="polite"><div class="success-mark" aria-hidden="true">✓</div><h3>Заявка принята</h3><p>Свяжемся выбранным способом и уточним задачу.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-grid"><div><a class="brand" href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" width="600" height="192" loading="lazy"></a><p>Разработка сайтов, веб-сервисов и интеграций.</p></div><div class="footer-links"><a href="../privacy.html">Политика конфиденциальности</a><a href="../consent.html">Согласие на обработку ПД</a><a href="../cases/">Портфолио</a></div></div><div class="container risk-notice">AlgoForge · Разработка программного обеспечения. Стоимость и сроки определяются после оценки проекта.</div></footer>
+  <script src="/razrabotka-torgovyh-robotov/landing.js" defer></script>
+</body>
+</html>

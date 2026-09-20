@@ -16,3 +16,4 @@ LOCAL-PLAN.md
 # Node.js (сервер заявок)
 node_modules/
 .env
+data/

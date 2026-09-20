@@ -1,6 +1,7 @@
 import express from "express";
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -29,6 +30,12 @@ const app = express();
 const port = Number(process.env.PORT) || 4173;
 const rateWindowMs = 60_000;
 const attempts = new Map();
+const acceptedRequests = new Map();
+const ALLOWED_FILE_TYPES = new Set([
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/plain",
+]);
 
 const ALLOWED_ORIGINS = new Set([
   "https://algoforge.ru",
@@ -61,6 +68,15 @@ app.use((req, res, next) => {
   next();
 });
 
+// JSON сохраняет совместимость со старой формой, multipart нужен посадочной
+// странице для необязательного файла ТЗ. Ограничение применяется до разбора.
+app.use((req, res, next) => {
+  const contentType = String(req.headers["content-type"] || "").toLowerCase();
+  if (contentType.startsWith("multipart/form-data")) {
+    return express.raw({ type: () => true, limit: "6mb" })(req, res, next);
+  }
+  next();
+});
 app.use(express.json({ limit: "32kb" }));
 
 app.get("/api/health", (_req, res) => {
@@ -89,8 +105,63 @@ function cleanTelegramText(value, max = 1200) {
   return String(value).replace(/[<>\u0000-\u001f\u007f]/g, " ").trim().slice(0, max);
 }
 
-function fallbackPhoneMessage() {
-  return "Онлайн-заявка настраивается. Позвоните +7 950 688-88-62.";
+function parseMultipartBody(buffer, contentType) {
+  const boundaryMatch = contentType.match(/boundary="?([^";]+)"?/i);
+  if (!boundaryMatch || !Buffer.isBuffer(buffer)) throw new Error("Некорректное тело формы.");
+  const boundary = Buffer.from(`--${boundaryMatch[1]}`);
+  const separator = Buffer.from("\r\n\r\n");
+  const fields = {};
+  let file = null;
+  let cursor = 0;
+
+  while (cursor < buffer.length) {
+    const start = buffer.indexOf(boundary, cursor);
+    if (start < 0) break;
+    let partStart = start + boundary.length;
+    if (buffer.slice(partStart, partStart + 2).toString() === "--") break;
+    if (buffer.slice(partStart, partStart + 2).toString() === "\r\n") partStart += 2;
+    const end = buffer.indexOf(boundary, partStart);
+    if (end < 0) break;
+    const part = buffer.slice(partStart, Math.max(partStart, end - 2));
+    const headerEnd = part.indexOf(separator);
+    if (headerEnd < 0) { cursor = end; continue; }
+    const headers = part.slice(0, headerEnd).toString("utf8");
+    const content = part.slice(headerEnd + separator.length);
+    const disposition = headers.match(/content-disposition:\s*form-data;\s*([^\r\n]+)/i)?.[1] || "";
+    const name = disposition.match(/name="([^"]+)"/i)?.[1];
+    const filename = disposition.match(/filename="([^"]*)"/i)?.[1] || "";
+    if (name && filename) {
+      file = { name: path.basename(filename).slice(0, 160), type: headers.match(/content-type:\s*([^\r\n]+)/i)?.[1]?.trim() || "", buffer: content };
+    } else if (name) {
+      fields[name] = content.toString("utf8").trim().slice(0, 2400);
+    }
+    cursor = end;
+  }
+  return { fields, file };
+}
+
+function safeFileExtension(filename) {
+  const extension = path.extname(filename || "").toLowerCase().replace(".", "");
+  return ["pdf", "docx", "txt"].includes(extension) ? extension : "";
+}
+
+async function persistLead(lead, upload) {
+  const dataDir = path.join(__dirname, "data");
+  await fs.promises.mkdir(dataDir, { recursive: true });
+  const leadId = `lead-${Date.now()}-${crypto.randomUUID().slice(0, 8)}`;
+  let storedFile = null;
+  if (upload) {
+    const extension = safeFileExtension(upload.name);
+    if (!extension || (upload.type && !ALLOWED_FILE_TYPES.has(upload.type)) || upload.buffer.length > 5 * 1024 * 1024) {
+      throw new Error("Недопустимый файл ТЗ.");
+    }
+    const fileName = `${leadId}.${extension}`;
+    await fs.promises.writeFile(path.join(dataDir, fileName), upload.buffer, { flag: "wx" });
+    storedFile = { name: upload.name, type: upload.type, size: upload.buffer.length, path: fileName };
+  }
+  const record = { ...lead, id: leadId, stored_file: storedFile, received_at: new Date().toISOString() };
+  await fs.promises.appendFile(path.join(dataDir, "leads.jsonl"), `${JSON.stringify(record)}\n`, "utf8");
+  return { leadId, storedFile };
 }
 
 async function sendTelegramLead(payload) {
@@ -100,13 +171,19 @@ async function sendTelegramLead(payload) {
 
   const lines = [
     "Новая заявка с сайта AlgoForge",
-    `Имя: ${cleanTelegramText(payload.name, 100)}`,
-    `Телефон: ${cleanTelegramText(payload.phone, 40)}`,
+    `Канал: ${cleanTelegramText(payload.contactMethod || "не указан", 30)}`,
   ];
+  if (payload.name) lines.push(`Имя: ${cleanTelegramText(payload.name, 100)}`);
+  if (payload.phone) lines.push(`Телефон: ${cleanTelegramText(payload.phone, 40)}`);
   if (payload.telegram) lines.push(`Telegram: ${cleanTelegramText(payload.telegram, 100)}`);
-  lines.push(`Тип проекта: ${cleanTelegramText(payload.projectTypeLabel, 80)}`);
+  if (payload.exchange) lines.push(`Платформа: ${cleanTelegramText(payload.exchange, 80)}`);
+  if (payload.projectTypeLabel) lines.push(`Тип проекта: ${cleanTelegramText(payload.projectTypeLabel, 80)}`);
   if (payload.timeline) lines.push(`Сроки: ${cleanTelegramText(payload.timeline, 60)}`);
   if (payload.budget) lines.push(`Бюджет: ${cleanTelegramText(payload.budget, 60)}`);
+  if (payload.file) lines.push(`Файл ТЗ: ${cleanTelegramText(payload.file.name, 160)} (${payload.file.size} байт)`);
+  if (payload.landingUrl) lines.push(`Страница: ${cleanTelegramText(payload.landingUrl, 500)}`);
+  if (payload.utm_source) lines.push(`UTM: ${cleanTelegramText([payload.utm_source, payload.utm_medium, payload.utm_campaign, payload.utm_content, payload.utm_term].filter(Boolean).join(" / "), 500)}`);
+  if (payload.yclid) lines.push(`yclid: ${cleanTelegramText(payload.yclid, 200)}`);
   lines.push("", "Описание:", cleanTelegramText(payload.message, 1800));
 
   const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -125,7 +202,8 @@ async function sendTelegramLead(payload) {
 }
 
 app.post("/api/lead", async (req, res) => {
-  if (!req.is("application/json")) {
+  const contentType = String(req.headers["content-type"] || "").toLowerCase();
+  if (!contentType.startsWith("application/json") && !contentType.startsWith("multipart/form-data")) {
     return res.status(415).json({ ok: false, message: "Ожидается JSON." });
   }
 
@@ -137,19 +215,96 @@ app.post("/api/lead", async (req, res) => {
   }
   attempts.set(ip, [...recent, now]);
 
-  const source = req.body && typeof req.body === "object" ? req.body : {};
+  let source = req.body && typeof req.body === "object" ? req.body : {};
+  let upload = null;
+  if (contentType.startsWith("multipart/form-data")) {
+    try {
+      const parsed = parseMultipartBody(req.body, contentType);
+      source = parsed.fields;
+      upload = parsed.file;
+    } catch (error) {
+      return res.status(400).json({ ok: false, message: error.message || "Некорректная форма." });
+    }
+  }
+
+  const formKind = field(source, "form_kind", 60);
+  const isTradingBotLanding = ["trading-bot-landing", "website-landing"].includes(formKind);
   const name = field(source, "name", 100);
   const phone = field(source, "phone", 30);
-  const telegram = field(source, "telegram", 100) || field(source, "company", 100);
+  const telegram = field(source, "telegram", 100);
+  const exchange = field(source, "exchange", 80);
   const projectType = field(source, "project_type", 30);
   const timeline = field(source, "timeline", 60);
   const budget = field(source, "budget", 60);
   const message = field(source, "message", 2000);
   const website = field(source, "website", 200);
   const consent = field(source, "personal_consent", 1);
+  const requestId = field(source, "request_id", 80);
 
-  if (website) return res.json({ ok: true });
+  if (website) return res.json({ ok: true, spam: true });
 
+  if (isTradingBotLanding) {
+    const contactMethod = field(source, "contact_method", 20);
+    if (name.length < 2 || !/^[\p{L}\p{M}\s.'-]{2,100}$/u.test(name)) {
+      return res.status(400).json({ ok: false, message: "Проверьте имя." });
+    }
+    if (contactMethod === "phone" && !/^\+?[\d\s()-]{10,20}$/.test(phone)) {
+      return res.status(400).json({ ok: false, message: "Проверьте номер телефона." });
+    }
+    if (contactMethod === "telegram" && !/^@?[A-Za-z0-9_]{3,32}$/.test(telegram)) {
+      return res.status(400).json({ ok: false, message: "Проверьте Telegram." });
+    }
+    if (!["phone", "telegram"].includes(contactMethod)) {
+      return res.status(400).json({ ok: false, message: "Выберите способ связи." });
+    }
+    if (message.length < 20) {
+      return res.status(400).json({ ok: false, message: "Опишите задачу минимум в 20 символах." });
+    }
+    if (consent !== "1") {
+      return res.status(400).json({ ok: false, message: "Подтвердите согласие на обработку персональных данных." });
+    }
+    const extension = upload ? safeFileExtension(upload.name) : "";
+    if (upload && (!extension || (upload.type && !ALLOWED_FILE_TYPES.has(upload.type)) || upload.buffer.length > 5 * 1024 * 1024)) {
+      return res.status(400).json({ ok: false, message: "Файл должен быть PDF, DOCX или TXT до 5 МБ." });
+    }
+    if (requestId && acceptedRequests.has(requestId)) {
+      return res.json({ ok: true, lead_id: acceptedRequests.get(requestId) });
+    }
+
+    const attribution = {
+      utm_source: field(source, "utm_source", 200),
+      utm_medium: field(source, "utm_medium", 200),
+      utm_campaign: field(source, "utm_campaign", 200),
+      utm_content: field(source, "utm_content", 200),
+      utm_term: field(source, "utm_term", 200),
+      yclid: field(source, "yclid", 200),
+      landing_url: field(source, "landing_url", 500),
+      client_id: field(source, "client_id", 80),
+    };
+    const lead = { form_kind: formKind, request_id: requestId, name, phone, telegram, contact_method: contactMethod, exchange, message, ...attribution };
+    let persisted;
+    try {
+      persisted = await persistLead(lead, upload);
+    } catch (error) {
+      console.error("Lead persistence failed:", error?.message || error);
+      return res.status(500).json({ ok: false, message: "Не удалось сохранить заявку. Попробуйте ещё раз." });
+    }
+    if (requestId) acceptedRequests.set(requestId, persisted.leadId);
+
+    let notification = "not_configured";
+    try {
+      await sendTelegramLead({ ...lead, file: persisted.storedFile, landingUrl: attribution.landing_url, utm_source: attribution.utm_source, utm_medium: attribution.utm_medium, utm_campaign: attribution.utm_campaign, utm_content: attribution.utm_content, utm_term: attribution.utm_term, yclid: attribution.yclid });
+      notification = "sent";
+    } catch (error) {
+      const token = process.env.TELEGRAM_BOT_TOKEN || "";
+      const safeMessage = String(error?.message || "unknown").replaceAll(token, "[redacted]");
+      console.error("Telegram delivery failed; lead is persisted:", safeMessage);
+      notification = "failed";
+    }
+    return res.json({ ok: true, lead_id: persisted.leadId, notification });
+  }
+
+  const legacyTelegram = telegram || field(source, "company", 100);
   if (name.length < 2 || !/^[\p{L}\p{M}\s.'-]{2,100}$/u.test(name)) {
     return res.status(400).json({ ok: false, message: "Проверьте имя." });
   }
@@ -168,21 +323,33 @@ app.post("/api/lead", async (req, res) => {
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) {
-    return res.status(503).json({ ok: false, message: fallbackPhoneMessage() });
-  }
-
   try {
-    await sendTelegramLead({
+    const persisted = await persistLead({
+      form_kind: "legacy-contact-form",
       name,
       phone,
-      telegram,
+      telegram: legacyTelegram,
+      project_type: projectType,
+      timeline,
+      budget,
+      message,
+      landing_url: field(source, "landing_url", 500),
+      client_id: field(source, "client_id", 80),
+    }, null);
+    let notification = "not_configured";
+    if (token && chatId) {
+      await sendTelegramLead({
+      name,
+      phone,
+      telegram: legacyTelegram,
       projectTypeLabel: PROJECT_TYPES[projectType],
       timeline,
       budget,
       message,
-    });
-    res.json({ ok: true });
+      });
+      notification = "sent";
+    }
+    res.json({ ok: true, lead_id: persisted.leadId, notification });
   } catch (error) {
     const safeMessage = String(error?.message || "unknown").replaceAll(token, "[redacted]");
     console.error("Telegram delivery failed:", safeMessage);
@@ -194,6 +361,7 @@ app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+app.use(['/data', '/tools'], (_req, res) => res.sendStatus(404));
 app.use(express.static(__dirname, {
   index: "index.html",
   extensions: ["html"],

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Разработка торговых роботов на заказ по стратегии заказчика: API бирж, риск-менеджмент, тестирование, запуск и передача исходного кода.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#0b111b">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <link rel="canonical" href="https://algoforge.ru/razrabotka-torgovyh-robotov/">
+  <link rel="icon" href="../favicon.png?v=4" type="image/png">
+  <link rel="stylesheet" href="/razrabotka-torgovyh-robotov/landing.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script><script>tailwind.config={theme:{extend:{colors:{neon:{green:'#00ff88'},accent:{400:'#22d3ee'}}}}}</script>
+<link rel="stylesheet" href="/service-brand.css"><link rel="stylesheet" href="/service-pages.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script><script src="/bg-animation.js" defer></script><script src="/nav.js" defer></script>
+  <title>Разработка торговых роботов на заказ — AlgoForge</title>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {"@type":"Organization","@id":"https://algoforge.ru/#organization","name":"AlgoForge","url":"https://algoforge.ru/","logo":"https://algoforge.ru/logo-v3.png?v=1","telephone":"+79506888862","sameAs":["https://t.me/Algo_Forge_S"]},
+      {"@type":"Service","@id":"https://algoforge.ru/razrabotka-torgovyh-robotov/#service","name":"Разработка торговых роботов на заказ","provider":{"@id":"https://algoforge.ru/#organization"},"serviceType":"Разработка программного обеспечения для алгоритмической торговли","areaServed":"RU","url":"https://algoforge.ru/razrabotka-torgovyh-robotov/","description":"Реализация стратегии заказчика, API-интеграции, риск-менеджмент, тестирование и запуск на сервере."},
+      {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"AlgoForge","item":"https://algoforge.ru/"},{"@type":"ListItem","position":2,"name":"Разработка торговых роботов","item":"https://algoforge.ru/razrabotka-torgovyh-robotov/"}]},
+      {"@type":"FAQPage","mainEntity":[
+        {"@type":"Question","name":"Можно ли разработать робота по моей стратегии?","acceptedAnswer":{"@type":"Answer","text":"Да. Мы реализуем описанную заказчиком логику в программном обеспечении: фиксируем правила входа и выхода, ограничения риска, источники данных и сценарии ошибок."}},
+        {"@type":"Question","name":"Как защищаются API-ключи?","acceptedAnswer":{"@type":"Answer","text":"Ключи хранятся вне исходного кода, доступ на вывод средств не нужен. Перед запуском проверяем права ключей, окружения и аварийное отключение."}},
+        {"@type":"Question","name":"Передадите ли вы исходный код?","acceptedAnswer":{"@type":"Answer","text":"Передаём исходный код и инструкции по запуску. Условия передачи прав прописываем в договоре."}},
+        {"@type":"Question","name":"Сколько занимает первичная оценка?","acceptedAnswer":{"@type":"Answer","text":"Пришлите описание стратегии и название биржи. После разбора задачи уточним требования, предложим этапы и рассчитаем стоимость."}}
+      ]}
+    ]
+  }
+  </script>
+  <script src="../ym.js"></script>
+</head>
+<body><canvas id="three-canvas" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main">К содержанию</a>
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <a href="/" class="flex items-center group" aria-label="AlgoForge — на главную">
+                    <img src="/logo-v3.png?v=1" alt="AlgoForge" width="600" height="192" class="relative top-[15px] sm:top-[15px] h-20 sm:h-24 w-auto object-contain transition-opacity duration-300 group-hover:opacity-90" loading="eager" decoding="async">
+                </a>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/#services" class="text-sm text-gray-400 hover:text-white transition-colors">Услуги</a>
+                    <a href="/#about" class="text-sm text-gray-400 hover:text-white transition-colors">О нас</a>
+                    <a href="/#process" class="text-sm text-gray-400 hover:text-white transition-colors">Процесс</a>
+                    <a href="/#tech" class="text-sm text-gray-400 hover:text-white transition-colors">Технологии</a>
+                    <a href="/#portfolio" class="text-sm text-gray-400 hover:text-white transition-colors">Портфолио</a>
+                    <a href="/#faq" class="text-sm text-gray-400 hover:text-white transition-colors">FAQ</a>
+                    <a href="/blog/" class="text-sm text-gray-400 hover:text-white transition-colors">Блог</a>
+                    <a href="/cases/" class="text-sm text-gray-400 hover:text-white transition-colors">Кейсы</a>
+                    <a href="/news/" class="text-sm text-gray-400 hover:text-white transition-colors">Новости</a>
+                    
+                    
+                    <a href="#contact" class="ml-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-sm hover:shadow-lg hover:shadow-neon-green/20 transition-all hover:scale-105">Связаться</a>
+                </div>
+                <div class="flex md:hidden items-center gap-2">
+                    
+                <button id="mobile-menu-btn" class="p-2 rounded-lg border border-white/10 text-gray-300 hover:text-white hover:border-white/20 transition-colors" aria-label="Меню">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                        <line x1="2" y1="5" x2="20" y2="5"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="17" x2="20" y2="17"/>
+                    </svg>
+                </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-strong mx-4 mb-4 rounded-2xl overflow-hidden">
+            <div class="flex flex-col p-4 gap-1">
+                <a href="/#services" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Услуги</a>
+                <a href="/#about" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">О нас</a>
+                <a href="/#process" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Процесс</a>
+                <a href="/#tech" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Технологии</a>
+                <a href="/#portfolio" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Портфолио</a>
+                <a href="/#faq" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">FAQ</a>
+                <a href="/blog/" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Блог</a>
+                <a href="/cases/" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Кейсы</a>
+                <a href="/news/" class="mobile-link px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition-colors">Новости</a>
+                
+                
+                <a href="#contact" class="mobile-link mt-2 px-4 py-3 rounded-xl bg-gradient-to-r from-neon-green/90 to-accent-400/90 text-black font-semibold text-center">Связаться</a>
+            </div>
+        </div>
+    </nav>
+
+
+
+  <main id="main">
+    <section class="hero" id="hero">
+      <div class="container service-breadcrumb"><a href="/">AlgoForge</a><span>/</span><a href="/razrabotka-saytov/">Разработка сайтов</a><span>/</span><span>Торговые алгоритмы</span></div><div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Разработка ПО для алгоритмической торговли</p>
+          <h1>Разработка торговых роботов <span>на заказ</span></h1>
+          <p class="hero-lead">Реализуем вашу торговую логику, подключим API биржи, добавим риск-менеджмент, тестирование и запуск на вашем сервере.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#contact" data-track="form_open">Обсудить торгового робота <span aria-hidden="true">→</span></a>
+            <a class="button button-secondary" href="#contact" data-track="brief_open">Прикрепить ТЗ</a>
+          </div>
+          <p class="hero-note">От описания стратегии до запуска на вашем сервере</p>
+          <div class="quick-contact" aria-label="Быстрый контакт">
+            <span>Или напишите напрямую:</span>
+            <a href="tel:+79506888862" data-track="contact_phone">+7 950 688-88-62</a>
+            <span aria-hidden="true">·</span>
+            <a href="https://t.me/Algo_Forge_S" target="_blank" rel="noopener noreferrer" data-track="contact_telegram">Telegram @Algo_Forge_S</a>
+          </div>
+        </div>
+        <div class="hero-proof" aria-label="Что входит в работу">
+          <div class="proof-card"><span class="proof-index">01</span><strong>Стратегия заказчика</strong><p>Переводим правила входа, выхода и ограничений в понятную спецификацию.</p></div>
+          <div class="proof-card"><span class="proof-index">02</span><strong>Исполнение и контроль</strong><p>Подключаем API, журналирование, тестовые окружения и аварийные сценарии.</p></div>
+          <div class="proof-card"><span class="proof-index">03</span><strong>Запуск на вашей стороне</strong><p>Готовим сервер, проверяем режим paper/live и передаём согласованный результат.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="what-we-build">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Что разрабатываем</p><h2>Торговая стратегия — в работающем коде</h2><p>Разрабатываем ботов для автоматического исполнения сделок, обработки сигналов и контроля позиций. Учитываем особенности стратегии и API выбранной биржи.</p></div>
+        <div class="card-grid card-grid-5">
+          <article class="service-card"><span class="card-number">01</span><h3>Боты по вашей стратегии</h3><p>Правила входа и выхода, позиции, лимиты, расписания и уведомления.</p></article>
+          <article class="service-card"><span class="card-number">02</span><h3>Арбитраж и исполнение сигналов</h3><p>Сценарии для нескольких источников данных и контроль ошибок исполнения.</p></article>
+          <article class="service-card"><span class="card-number">03</span><h3>Grid и DCA</h3><p>Настраиваем механику заявок, ограничения риска и режимы тестирования.</p></article>
+          <article class="service-card"><span class="card-number">04</span><h3>Мониторинг и интеграции</h3><p>Дашборды, логи, уведомления, API бирж и внешние сервисы.</p></article>
+          <article class="service-card"><span class="card-number">05</span><h3>Доработка существующего кода</h3><p>Аудит, исправление нестабильных модулей и подготовка к запуску.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="platforms">
+      <div class="container split-section">
+        <div class="section-heading"><p class="eyebrow">Платформы и API</p><h2>Биржевые API и торговая инфраструктура</h2><p>Подключаем рыночные данные, отправку ордеров и обновление позиций. Обрабатываем лимиты API, разрывы соединения и повторные запросы.</p></div>
+        <div class="platform-list" aria-label="Примеры интеграций"><span>Bybit</span><span>OKX</span><span>Binance</span><span>WebSocket</span><span>REST API</span><span>FIX / gRPC</span></div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="process">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Как работаем</p><h2>Как проходит разработка</h2><p>Сначала разбираем торговую логику и оцениваем проект. Затем разрабатываем, проверяем исполнение и готовим систему к запуску.</p></div>
+        <ol class="process-list">
+          <li><span>01</span><div><h3>Бриф</h3><p>Собираем стратегию, активы, API, ограничения и ожидаемый режим работы.</p></div></li>
+          <li><span>02</span><div><h3>Оценка и ТЗ</h3><p>Фиксируем состав работ, риски, этапы, сроки и критерии готовности.</p></div></li>
+          <li><span>03</span><div><h3>Прототип и разработка</h3><p>Реализуем основную логику в изолированном окружении с журналированием.</p></div></li>
+          <li><span>04</span><div><h3>Тестирование</h3><p>Проверяем paper/live-сценарии, ошибки сети, лимиты и остановку операций.</p></div></li>
+          <li><span>05</span><div><h3>Запуск и поддержка</h3><p>Разворачиваем на согласованном сервере и передаём сопровождение по договору.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" id="security">
+      <div class="container split-section security-section">
+        <div class="section-heading"><p class="eyebrow">Безопасность</p><h2>Доступы, лимиты и остановка торговли</h2><p>Настраиваем права API-ключей, ограничения объёма позиции и обработку сбоев. Добавляем журнал операций и возможность остановить бота.</p></div>
+        <ul class="check-list"><li>API-ключи без права вывода средств</li><li>Секреты не хранятся в исходном коде</li><li>Раздельные тестовые и рабочие окружения</li><li>Журналирование действий и ошибок</li><li>Ограничения риска и аварийное отключение</li><li>Уведомления о сбоях и остановке бота</li></ul>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="cases">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Примеры работ</p><h2>Торговые системы в портфолио</h2><p>Посмотрите, как устроены торговый терминал, арбитражный бот и система исполнения заявок.</p></div>
+        <div class="case-grid">
+          <a class="case-card" href="../cases/okx-market-maker.html"><span>Интеграция</span><h3>OKX Market Maker</h3><p>Исполнение заявок и контроль торгового контура.</p><strong>Открыть описание →</strong></a>
+          <a class="case-card" href="../cases/arbitragex-bot.html"><span>Автоматизация</span><h3>ArbitrageX Bot</h3><p>Арбитражный сценарий и подключение биржевых API.</p><strong>Открыть описание →</strong></a>
+          <a class="case-card" href="../cases/quantterminal-pro.html"><span>Терминал</span><h3>QuantTerminal Pro</h3><p>Рабочее место для анализа и управления торговыми задачами.</p><strong>Открыть описание →</strong></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="conditions">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow">Условия</p><h2>Стоимость после оценки задачи</h2><p>Цена зависит от стратегии, количества интеграций, режима исполнения и требований к инфраструктуре.</p></div>
+        <div class="conditions-grid"><div><strong>Договор и этапы</strong><p>Фиксируем состав работ, сроки и этапную оплату в договоре или ТЗ.</p></div><div><strong>NDA и права на код</strong><p>Состав передачи исходников и права на результат согласуем заранее.</p></div><div><strong>Поддержка после релиза</strong><p>При необходимости подключаем обновления API, мониторинг и доработки.</p></div></div>
+      </div>
+    </section>
+
+    <section class="section section-muted" id="faq">
+      <div class="container narrow">
+        <div class="section-heading"><p class="eyebrow">FAQ</p><h2>Вопросы о разработке</h2></div>
+        <div class="faq-list">
+          <details><summary>Можно ли разработать робота по моей стратегии?</summary><p>Да. Мы реализуем описанную заказчиком логику в программном обеспечении: фиксируем правила входа и выхода, ограничения риска, источники данных и сценарии ошибок.</p></details>
+          <details><summary>Как защищаются API-ключи?</summary><p>Ключи хранятся вне исходного кода, доступ на вывод средств не нужен. Перед запуском проверяем права ключей, окружения и аварийное отключение.</p></details>
+          <details><summary>Передадите ли вы исходный код?</summary><p>Передаём исходный код и инструкции по запуску. Условия передачи прав прописываем в договоре.</p></details>
+          <details><summary>Сколько занимает первичная оценка?</summary><p>Пришлите описание стратегии и название биржи. После разбора задачи уточним требования, предложим этапы и рассчитаем стоимость.</p></details>
+          <details><summary>Можно доработать существующего бота?</summary><p>Да. Изучим исходный код, проверим интеграции и предложим план доработки: от исправления ошибок до подключения новых бирж.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="container contact-grid">
+        <div class="contact-copy"><p class="eyebrow">Первый шаг</p><h2>Расскажите, что должен делать робот</h2><p>Достаточно контакта и короткого описания. Полный бриф можно прислать файлом или обсудить после первого ответа.</p><div class="contact-links"><a href="tel:+79506888862" data-track="contact_phone">+7 950 688-88-62</a><a href="https://t.me/Algo_Forge_S" target="_blank" rel="noopener noreferrer" data-track="contact_telegram">Telegram @Algo_Forge_S</a></div></div>
+        <div>
+          <form id="landing-lead-form" class="lead-form" novalidate>
+            <input type="hidden" name="form_kind" value="trading-bot-landing">
+            <input type="hidden" name="landing_url" value="">
+            <input type="hidden" name="request_id" value="">
+            <label class="honeypot" aria-hidden="true">Ваш сайт<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+            <div class="form-field"><label for="lead-name">Как к вам обращаться <b>*</b></label><input id="lead-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="100" placeholder="Имя"></div>
+            <div class="form-field"><label for="lead-exchange">Биржа или платформа <span>(необязательно)</span></label><select id="lead-exchange" name="exchange"><option value="">Пока не выбрал</option><option>Bybit</option><option>OKX</option><option>Binance</option><option>Bitget</option><option>Gate.io</option><option>MEXC</option><option>KuCoin</option><option>HTX</option><option>Другая</option></select></div>
+            <fieldset class="contact-method"><legend>Контакт для ответа <b>*</b></legend><div class="method-switch"><label><input type="radio" name="contact_method" value="phone" checked><span>Телефон</span></label><label><input type="radio" name="contact_method" value="telegram"><span>Telegram</span></label></div></fieldset>
+            <div class="form-field" data-contact-field="phone"><label for="lead-phone">Телефон</label><input id="lead-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 900 000-00-00"></div>
+            <div class="form-field" data-contact-field="telegram" hidden><label for="lead-telegram">Telegram</label><input id="lead-telegram" name="telegram" type="text" autocomplete="off" placeholder="@username"></div>
+            <div class="form-field full"><label for="lead-message">Что должен делать бот? <b>*</b></label><textarea id="lead-message" name="message" required minlength="20" maxlength="2400" rows="5" placeholder="Опишите вход, выход, активы, биржу и нужные интеграции"></textarea><small>Минимум 20 символов</small></div>
+            <div class="form-field full"><label for="lead-file">Файл ТЗ <span>(необязательно)</span></label><input id="lead-file" name="brief_file" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"><small>PDF, DOCX или TXT до 5 МБ</small><p id="file-error" class="field-error" hidden></p></div>
+            <label class="consent full"><input id="lead-consent" name="personal_consent" type="checkbox" value="1" required><span>Согласен на обработку персональных данных по <a href="../privacy.html" target="_blank" rel="noopener noreferrer">политике конфиденциальности</a> и <a href="../consent.html" target="_blank" rel="noopener noreferrer">согласию</a>.</span></label>
+            <p id="form-status" class="form-status full" role="alert" aria-live="polite" hidden></p>
+            <button class="button button-primary submit-button full" type="submit"><span>Получить оценку разработки</span><span aria-hidden="true">→</span></button>
+          </form>
+          <div id="form-success" class="form-success" hidden aria-live="polite"><div class="success-mark" aria-hidden="true">✓</div><h3>Заявка принята</h3><p>Свяжемся выбранным способом и уточним задачу.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-grid"><div><a class="brand" href="../"><img src="../logo-v3.png?v=1" alt="AlgoForge" width="600" height="192" loading="lazy"></a><p>Разработка программного обеспечения для алгоритмической торговли.</p></div><div class="footer-links"><a href="../privacy.html">Политика конфиденциальности</a><a href="../consent.html">Согласие на обработку ПД</a><a href="../cases/">Портфолио</a></div></div><div class="container risk-notice"><strong>Уведомление о рисках.</strong> AlgoForge оказывает услуги по разработке ПО и реализации стратегии заказчика. Программное обеспечение не гарантирует финансовый результат. Решения о торговле принимает заказчик. Мы не принимаем денежные средства для торговли и не предлагаем финансовые продукты.</div></footer>
+  <script src="/razrabotka-torgovyh-robotov/landing.js" defer></script>
+</body>
+</html>
