@@ -105,6 +105,10 @@ function cleanTelegramText(value, max = 1200) {
   return String(value).replace(/[<>\u0000-\u001f\u007f]/g, " ").trim().slice(0, max);
 }
 
+function isValidName(value) {
+  return value.length >= 2 && value.length <= 100 && /^[A-Za-zА-Яа-яЁё\s.'-]+$/.test(value);
+}
+
 function parseMultipartBody(buffer, contentType) {
   const boundaryMatch = contentType.match(/boundary="?([^";]+)"?/i);
   if (!boundaryMatch || !Buffer.isBuffer(buffer)) throw new Error("Некорректное тело формы.");
@@ -245,7 +249,7 @@ app.post("/api/lead", async (req, res) => {
 
   if (isTradingBotLanding) {
     const contactMethod = field(source, "contact_method", 20);
-    if (name.length < 2 || !/^[\p{L}\p{M}\s.'-]{2,100}$/u.test(name)) {
+    if (!isValidName(name)) {
       return res.status(400).json({ ok: false, message: "Проверьте имя." });
     }
     if (contactMethod === "phone" && !/^\+?[\d\s()-]{10,20}$/.test(phone)) {
@@ -305,7 +309,7 @@ app.post("/api/lead", async (req, res) => {
   }
 
   const legacyTelegram = telegram || field(source, "company", 100);
-  if (name.length < 2 || !/^[\p{L}\p{M}\s.'-]{2,100}$/u.test(name)) {
+  if (!isValidName(name)) {
     return res.status(400).json({ ok: false, message: "Проверьте имя." });
   }
   if (!/^\+?[\d\s()-]{10,20}$/.test(phone)) {
