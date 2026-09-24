@@ -206,8 +206,9 @@ async function sendTelegramLead(payload) {
 }
 
 app.post("/api/lead", async (req, res) => {
-  const contentType = String(req.headers["content-type"] || "").toLowerCase();
-  if (!contentType.startsWith("application/json") && !contentType.startsWith("multipart/form-data")) {
+  const contentType = String(req.headers["content-type"] || "");
+  const contentTypeLower = contentType.toLowerCase();
+  if (!contentTypeLower.startsWith("application/json") && !contentTypeLower.startsWith("multipart/form-data")) {
     return res.status(415).json({ ok: false, message: "Ожидается JSON." });
   }
 
@@ -221,7 +222,7 @@ app.post("/api/lead", async (req, res) => {
 
   let source = req.body && typeof req.body === "object" ? req.body : {};
   let upload = null;
-  if (contentType.startsWith("multipart/form-data")) {
+  if (contentTypeLower.startsWith("multipart/form-data")) {
     try {
       const parsed = parseMultipartBody(req.body, contentType);
       source = parsed.fields;
