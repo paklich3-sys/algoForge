@@ -105,6 +105,33 @@ function cleanTelegramText(value, max = 1200) {
   return String(value).replace(/[<>\u0000-\u001f\u007f]/g, " ").trim().slice(0, max);
 }
 
+function cleanLandingUrl(url) {
+  try {
+    const parsed = new URL(String(url).trim());
+    return `${parsed.origin}${parsed.pathname}`;
+  } catch {
+    return cleanTelegramText(url, 500);
+  }
+}
+
+const CONTACT_METHOD_LABELS = {
+  phone: "Телефон",
+  telegram: "Telegram",
+};
+
+function formatContactMethod(payload) {
+  const method = payload.contact_method || payload.contactMethod;
+  if (method && CONTACT_METHOD_LABELS[method]) return CONTACT_METHOD_LABELS[method];
+  if (method) return cleanTelegramText(method, 30);
+  return "не указан";
+}
+
+function isMeaningfulExchange(value) {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return false;
+  return trimmed.toLowerCase() !== "пока не выбрал";
+}
+
 function isValidName(value) {
   return value.length >= 2 && value.length <= 100 && /^[A-Za-zА-Яа-яЁё\s.'-]+$/.test(value);
 }
@@ -175,19 +202,26 @@ async function sendTelegramLead(payload) {
 
   const lines = [
     "Новая заявка с сайта AlgoForge",
-    `Канал: ${cleanTelegramText(payload.contactMethod || "не указан", 30)}`,
+    `Способ связи: ${formatContactMethod(payload)}`,
   ];
   if (payload.name) lines.push(`Имя: ${cleanTelegramText(payload.name, 100)}`);
   if (payload.phone) lines.push(`Телефон: ${cleanTelegramText(payload.phone, 40)}`);
   if (payload.telegram) lines.push(`Telegram: ${cleanTelegramText(payload.telegram, 100)}`);
-  if (payload.exchange) lines.push(`Платформа: ${cleanTelegramText(payload.exchange, 80)}`);
+  if (isMeaningfulExchange(payload.exchange)) {
+    lines.push(`Платформа: ${cleanTelegramText(payload.exchange, 80)}`);
+  }
   if (payload.projectTypeLabel) lines.push(`Тип проекта: ${cleanTelegramText(payload.projectTypeLabel, 80)}`);
   if (payload.timeline) lines.push(`Сроки: ${cleanTelegramText(payload.timeline, 60)}`);
   if (payload.budget) lines.push(`Бюджет: ${cleanTelegramText(payload.budget, 60)}`);
   if (payload.file) lines.push(`Файл ТЗ: ${cleanTelegramText(payload.file.name, 160)} (${payload.file.size} байт)`);
-  if (payload.landingUrl) lines.push(`Страница: ${cleanTelegramText(payload.landingUrl, 500)}`);
-  if (payload.utm_source) lines.push(`UTM: ${cleanTelegramText([payload.utm_source, payload.utm_medium, payload.utm_campaign, payload.utm_content, payload.utm_term].filter(Boolean).join(" / "), 500)}`);
-  if (payload.yclid) lines.push(`yclid: ${cleanTelegramText(payload.yclid, 200)}`);
+  if (payload.landingUrl) {
+    lines.push(`Страница: ${cleanTelegramText(cleanLandingUrl(payload.landingUrl), 500)}`);
+  }
+  if (payload.utm_source) lines.push(`Источник: ${cleanTelegramText(payload.utm_source, 200)}`);
+  if (payload.utm_campaign) lines.push(`Кампания: ${cleanTelegramText(payload.utm_campaign, 200)}`);
+  if (payload.utm_content) lines.push(`Объявление: ${cleanTelegramText(payload.utm_content, 200)}`);
+  if (payload.utm_term) lines.push(`Ключ: ${cleanTelegramText(payload.utm_term, 200)}`);
+  if (payload.yclid) lines.push(`yclid: ${cleanTelegramText(payload.yclid, 120)}`);
   lines.push("", "Описание:", cleanTelegramText(payload.message, 1800));
 
   const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
