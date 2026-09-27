@@ -239,6 +239,34 @@ async function sendTelegramLead(payload) {
   }
 }
 
+const FILE_MIME_BY_EXTENSION = {
+  pdf: "application/pdf",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  txt: "text/plain",
+};
+
+async function sendTelegramDocument(upload, caption) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) throw new Error("Telegram is not configured");
+
+  const mime = FILE_MIME_BY_EXTENSION[safeFileExtension(upload.name)] || "application/octet-stream";
+  const form = new FormData();
+  form.append("chat_id", chatId);
+  form.append("caption", cleanTelegramText(caption, 1000));
+  form.append("document", new Blob([upload.buffer], { type: mime }), upload.name);
+
+  const response = await fetch(`https://api.telegram.org/bot${token}/sendDocument`, {
+    method: "POST",
+    body: form,
+  });
+
+  if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    throw new Error(`Telegram sendDocument error: ${response.status} ${body.slice(0, 120)}`);
+  }
+}
+
 app.post("/api/lead", async (req, res) => {
   const contentType = String(req.headers["content-type"] || "");
   const contentTypeLower = contentType.toLowerCase();
@@ -303,6 +331,9 @@ app.post("/api/lead", async (req, res) => {
       return res.status(400).json({ ok: false, message: "Подтвердите согласие на обработку персональных данных." });
     }
     const extension = upload ? safeFileExtension(upload.name) : "";
+    if (upload && upload.buffer.length === 0) {
+      return res.status(400).json({ ok: false, message: "Файл ТЗ пустой. Прикрепите другой файл или отправьте заявку без него." });
+    }
     if (upload && (!extension || (upload.type && !ALLOWED_FILE_TYPES.has(upload.type)) || upload.buffer.length > 5 * 1024 * 1024)) {
       return res.status(400).json({ ok: false, message: "Файл должен быть PDF, DOCX или TXT до 5 МБ." });
     }
@@ -339,6 +370,17 @@ app.post("/api/lead", async (req, res) => {
       const safeMessage = String(error?.message || "unknown").replaceAll(token, "[redacted]");
       console.error("Telegram delivery failed; lead is persisted:", safeMessage);
       notification = "failed";
+    }
+    if (upload && notification === "sent") {
+      const contact = phone || telegram || "";
+      try {
+        await sendTelegramDocument(upload, `ТЗ к заявке: ${name}${contact ? `, ${contact}` : ""}`);
+      } catch (error) {
+        const token = process.env.TELEGRAM_BOT_TOKEN || "";
+        const safeMessage = String(error?.message || "unknown").replaceAll(token, "[redacted]");
+        console.error("Telegram document delivery failed; file is persisted:", safeMessage);
+        notification = "sent_without_file";
+      }
     }
     return res.json({ ok: true, lead_id: persisted.leadId, notification });
   }
