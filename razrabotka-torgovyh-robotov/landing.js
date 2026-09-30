@@ -85,7 +85,12 @@
 
   function track(goal) {
     if (typeof window.ym === 'function') {
-      try { window.ym(109257949, 'reachGoal', goal); } catch (_) { /* analytics must not block the form */ }
+      try {
+        window.ym(109257949, 'reachGoal', goal, {
+          service: form.dataset.service || form.elements.form_kind.value,
+          landing_path: window.location.pathname,
+        });
+      } catch (_) { /* analytics must not block the form */ }
     }
   }
 
